@@ -1,20 +1,22 @@
 //------------------------------------ API Request
-
-d3.json(
-  "https://api.spacexdata.com/v3/launches/past?filter=flight_number,launch_year,rocket/rocket_name,rocket/second_stage/payloads/"
-).then(function(data) {
-  console.log(data[0]);
-  drawGraphs(data);
-});
-
+function apiCall() {
+  d3.json(
+    "https://api.spacexdata.com/v3/launches/past?filter=flight_number,launch_year,launch_success,rocket/rocket_name,rocket/second_stage/payloads/,"
+  ).then(function(data) {
+    console.log(data[0]);
+    drawGraphs(data);
+  });
+}
 //------------------------------------ Render All
 
 function drawGraphs(data) {
   var ndx = crossfilter(data);
+  //   var all = dnx.GroupAll();
 
   // Charts
   showPastLaunches(ndx);
   showPayloads(ndx);
+  showLaunchSuccessRate(ndx);
   dc.renderAll();
 }
 
@@ -58,9 +60,10 @@ function showPayloads(ndx) {
     //sum payload weights
     var weight = 0;
     for (var i = 0; i < d["rocket"]["second_stage"]["payloads"].length; i++) {
-      weight = d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
+      weight =
+        d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
     }
-   //  console.log(weight);
+    //  console.log(weight);
     return weight;
   }); //.group() just counts rows
   print_filter(yearGroup);
@@ -85,6 +88,47 @@ function showPayloads(ndx) {
     //  .x(d3.scale.linear().domain([2006, 2019]));
     .xAxis()
     .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
+}
+
+//------------------------Sucess Percentage-------------
+//https://dc-js.github.io/dc.js/docs/stock.html
+
+function showLaunchSuccessRate(ndx) {
+  var launchDimension = ndx.dimension(dc.pluck("launch_success"));
+  var launchGroup = launchDimension.group();
+  var all = ndx.groupAll();
+
+  print_filter(launchGroup);
+  console.log(launchGroup);
+  var pieChart = dc
+    .pieChart("#pieChart")
+    .width(300)
+    .height(180)
+    .dimension(launchDimension)
+    .group(launchGroup)
+    .colors(["#b22222", "#369a43"])
+    //  .colorAccessor(function(d, i) {
+    // return d.value;
+    //  });
+    .label(function(d) {
+      // not working properly
+      if (pieChart.hasFilter() && !pieChart.hasFilter(d.key)) {
+        return d.key;
+      }
+      var label;
+      // Success or Fail instead of true false
+      d.key === true ? label = "Success!" : label = "Oops..";
+      if (all.value()) {
+        label +=
+          " " +
+          d.value +
+          " out of ... or (" +
+          Math.floor((d.value / all.value()) * 100) +
+          "%)"; // replace all.value with total number of launches based on other filters
+        //   label += ' (' + Math.floor((d.value / launchGroup) * 100) + '%)'; // replace all.value with total number of launches
+      }
+      return label;
+    });
 }
 
 //----------------------- Print Filter-----------------------
@@ -118,8 +162,7 @@ function print_filter(filter) {
   );
 }
 
-//---------------------------------------------------------
-
+//--------------------------------------
 // works
 /*
 const d3test = () => {

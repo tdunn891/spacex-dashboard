@@ -22,10 +22,12 @@
 <body>
 
    <h1>SpaceX Launches</h1>
+   <button id="reset""><a href="javascript:dc.filterAll(); dc.renderAll();" class="btn btn-primary active">Reset All</a></button>
    <!-- <button id="d3test" onclick="d3test()">d3 test</button> -->
    <div id="output"></div>
    <div id="chart"><h4>Launches Per Year</h4></div>
    <div id="chart2"><h4>Payload Mass Per Year (kg)</h4></div>
+   <div id="pieChart"><h4>Launch Success Rate</h4></div>
 
 
    <!-- SCRIPTs -->
@@ -57,7 +59,7 @@
    <script src="main.js">
    </script>
    <script>
-      // d3test();
+      apiCall();
    </script>
    <!-- for testing -->
 </body>
