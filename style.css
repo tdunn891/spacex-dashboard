@@ -2,6 +2,14 @@ body {
    /* background-color: gray; */
 }
 
+h4 {
+   display: block;
+}
+
+h1 {
+   text-align: center;
+}
+
 * {
    /* text-align: center; */
 }

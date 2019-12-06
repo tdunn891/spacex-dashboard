@@ -1,9 +1,9 @@
-
 //------------------------------------ API Request
 
 d3.json(
   "https://api.spacexdata.com/v3/launches/past?filter=flight_number,launch_year,rocket/rocket_name,rocket/second_stage/payloads/"
 ).then(function(data) {
+  console.log(data[0]);
   drawGraphs(data);
 });
 
@@ -12,32 +12,29 @@ d3.json(
 function drawGraphs(data) {
   var ndx = crossfilter(data);
 
-// Charts
+  // Charts
   showPastLaunches(ndx);
-
+  showPayloads(ndx);
   dc.renderAll();
 }
 
-//----------------------------------- Show Launches
+//----------------------------------- Show Launches By Year
 
 function showPastLaunches(ndx) {
-  // Dimension
-  var yearDimension = ndx.dimension(function(d) {
-    return d.launch_year;
-  });
-  // Group
+  var yearDimension = ndx.dimension(dc.pluck("launch_year")); //function(d) {
+  //  return d.launch_year;
+  //   });
   var yearGroup = yearDimension.group().reduceCount(); //.group() just counts rows
-
+  print_filter(yearGroup);
   // Chart
-
   var barChart = dc
     .barChart("#chart")
-    .width(768)
-    .height(480)
-   //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
+    .width(600)
+    .height(360)
+    //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup)
-    .yAxisLabel("Launches")
+    .yAxisLabel("Launches") // Add margins
     .xAxisLabel("Year")
     //  .gap(30)
     .barPadding(0.3)
@@ -51,14 +48,43 @@ function showPastLaunches(ndx) {
     .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
 }
 
-
-//---------------------PAYLOADS----------------------------
+//---------------------PAYLOADS By Year----------------------------
 
 function showPayloads(ndx) {
-   var yearDimension = ndx.dimension(function(d) {
-      return d.launch_year;
-    });
+  var yearDimension = ndx.dimension(function(d) {
+    return d.launch_year;
+  });
+  var yearGroup = yearDimension.group().reduceSum(function(d) {
+    //sum payload weights
+    var weight = 0;
+    for (var i = 0; i < d["rocket"]["second_stage"]["payloads"].length; i++) {
+      weight = d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
+    }
+   //  console.log(weight);
+    return weight;
+  }); //.group() just counts rows
+  print_filter(yearGroup);
 
+  // Chart
+  var barChart = dc
+    .barChart("#chart2")
+    .width(600)
+    .height(360)
+    //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
+    .dimension(yearDimension)
+    .group(yearGroup)
+    .yAxisLabel("Payload Mass (kg)")
+    .xAxisLabel("Year")
+    //  .gap(30)
+    .barPadding(0.3)
+    .outerPadding(0)
+    .x(d3.scaleLinear().domain([2005, 2020]))
+    .centerBar(true)
+    .brushOn(false)
+    //  .xUnits(dc.units.ordinal);
+    //  .x(d3.scale.linear().domain([2006, 2019]));
+    .xAxis()
+    .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
 }
 
 //----------------------- Print Filter-----------------------
@@ -91,11 +117,6 @@ function print_filter(filter) {
         .replace("]", "\n]")
   );
 }
-
-
-
-
-
 
 //---------------------------------------------------------
 
