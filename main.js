@@ -6,8 +6,8 @@ function apiCall() {
     "flight_number",
     "launch_year",
     "launch_success",
-   //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
-   //  "rocket/second_stage/payloads",
+    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
+    //  "rocket/second_stage/payloads",
     "rocket",
     "launch_site/site_name_long"
   ];
@@ -52,7 +52,7 @@ function showPastLaunches(ndx) {
   var rocketGroup = yearDimension
     .group()
     .reduce(reduceAdd, reduceRemove, reduceInitial);
-// WIP
+  // WIP
   function reduceAdd(i, d) {
     //i: initial, d: datapoint
     i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
@@ -456,3 +456,96 @@ const d3test = () => {
   );
 };
 */
+// MISSIONS------------------------------------------------
+
+function apiCallMissions() {
+  const fields = [
+    "flight_number",
+    "launch_year",
+    "launch_success",
+    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
+    //  "rocket/second_stage/payloads",
+    "rocket",
+    "launch_site/site_name_long",
+    "mission_name",
+    "mission_id",
+    "links",
+    "details"
+  ];
+  const filters = "?filter=" + fields.join(",");
+
+  d3.json(`https://api.spacexdata.com/v3/launches/past${filters}`).then(
+    function(data) {
+      //  console.log(data[29]);
+      console.log(data[29]);
+      // drawGraphs(data);
+      crossfilterMissionCards(data);
+    }
+  );
+}
+
+function crossfilterMissionCards(data) {
+  var ndx = crossfilter(data); // only necessary if filtering
+  console.log(data[0]);
+  doCards(data);
+  //   loadCards(ndx);
+}
+function doCards(data) {
+  // count of objects in data object
+  totalFlights = getObjectLength(data);
+  console.log("object length: " + getObjectLength(data));
+  //   console.log(data.length());
+
+  for (var i = 0; i < totalFlights; i++) {
+    //create new card (jQuery)
+    //populate it
+    //  console.log(data[i].flight_number);
+    var missionPatch = data[i].links.mission_patch_small;
+    var missionName = data[i].mission_name;
+    var flightNumber = data[i].flight_number;
+    //  var launchYear = data[i].launch_year;
+    var orbit = data[i].rocket.second_stage.payloads[0].orbit;
+    var details = data[i].details;
+    //  $("#missionContainer").append(`<img src="${missionPatch}" style="height: 120px" />`);
+    $("#missions").append(
+      `<div class="card text-left col-2">
+               <img class="card-img-top" src="${missionPatch}" alt="">
+               <div class="card-body">
+                  <h4 class="card-title">${missionName}</h4>
+                  <p class="card-text">
+                  <ul>
+                     <li>Flight Number: ${flightNumber}</li>
+                     <li>Payload Orbit: ${orbit}</li>
+                  </ul>
+                  </p>
+               </div>
+            </div>`
+    );
+  }
+}
+
+function getObjectLength(data) {
+  return Object.keys(data).length;
+}
+
+function loadCards(ndx) {
+  var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //?
+  var rocketGroup = rocketDimension.group(); //?
+  //   print_filter(rocketGroup);
+}
+
+//-------------ROADSTER
+function apiCallRoadster() {
+  const fields = [
+    "speed_kph",
+    "speed_mph",
+    "earth_distance_km",
+    "earth_distance_mi"
+  ];
+  const filters = "?filter=" + fields.join(",");
+  d3.json(`https://api.spacexdata.com/v3/roadster${filters}`).then(function(
+    data
+  ) {
+    console.log(data);
+  });
+}
