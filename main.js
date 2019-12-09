@@ -486,30 +486,36 @@ function apiCallMissions() {
 
 function crossfilterMissionCards(data) {
   var ndx = crossfilter(data); // only necessary if filtering
-  console.log(data[0]);
+  console.log(data[60]);
   doCards(data);
   //   loadCards(ndx);
 }
 function doCards(data) {
   // count of objects in data object
-  totalFlights = getObjectLength(data);
+  var totalFlights = getObjectLength(data);
   console.log("object length: " + getObjectLength(data));
   //   console.log(data.length());
 
   for (var i = 0; i < totalFlights; i++) {
-    //create new card (jQuery)
+    //do in reverse order to show most recent launches first
+    //create new card (jQuery)// button spinner while page loads
     //populate it
+    var row = data[i];
     //  console.log(data[i].flight_number);
-    var missionPatch = data[i].links.mission_patch_small;
-    var missionName = data[i].mission_name;
-    var flightNumber = data[i].flight_number;
+    var missionPatchSmall = row.links.mission_patch_small;
+    var missionPatch = row.links.mission_patch;
+    var missionName = row.mission_name;
+
+    var flightNumber = row.flight_number;
     //  var launchYear = data[i].launch_year;
-    var orbit = data[i].rocket.second_stage.payloads[0].orbit;
-    var details = data[i].details;
+    var orbit = row.rocket.second_stage.payloads[0].orbit;
+    var details = row.details;
+    var articleLink = row.links.article_link;
+    var youtubeLink = row.links.video_link;
     //  $("#missionContainer").append(`<img src="${missionPatch}" style="height: 120px" />`);
     $("#missions").append(
       `<div class="card text-left col-2">
-               <img class="card-img-top" src="${missionPatch}" alt="">
+               <img class="card-img-top" src="${missionPatchSmall}" onclick="populateModalMissionPatch('${missionPatch}', '${missionName}');" alt="Mission Patch" />
                <div class="card-body">
                   <h4 class="card-title">${missionName}</h4>
                   <p class="card-text">
@@ -517,11 +523,21 @@ function doCards(data) {
                      <li>Flight Number: ${flightNumber}</li>
                      <li>Payload Orbit: ${orbit}</li>
                   </ul>
+                  <a href="${youtubeLink}" target="_blank">Vid</a>
+                  <a href="${articleLink}" target="_blank">Article</a>
                   </p>
                </div>
             </div>`
     );
   }
+}
+
+function populateModalMissionPatch(missionPatch, missionName, details) {
+  $("#modal-content").html(
+    `<img src="${missionPatch}" class="mission-patch-large" alt="Mission Patch Large"/>
+    <h4 class="card-title">${missionName}</h4>`
+  );
+  $("#myModal").modal("show");
 }
 
 function getObjectLength(data) {
@@ -548,4 +564,90 @@ function apiCallRoadster() {
   ) {
     console.log(data);
   });
+}
+
+//--------landings.html---------------- doesn't seem to respect filters
+function apiCallLandingPads() {
+  //   const fields = [
+  //   "launch_year",
+  //   "launch_site/site_name_long"
+  //   ];
+  //   const filters = fields.join(",");
+
+  d3.json(`https://api.spacexdata.com/v3/landpads`).then(function(data) {
+    console.log(data[0]);
+    drawLandingGraph(data);
+    addLandingMarkers(data);
+  });
+}
+
+function addLandingMarkers(data) {
+  var totalLandingPads = getObjectLength(data);
+  console.log("object length: " + getObjectLength(data));
+
+  for (var i = 0; i < totalLandingPads; i++) {
+    //for each landing pad, add a marker
+    //get relevant data points
+    var row = data[i];
+    var latLngMarker = {
+      lat: row.location.latitude,
+      lng: row.location.longitude
+    };
+    var fullName = row.full_name;
+    //create marker
+    console.log("TCL: addLandingMarkers -> latLngMarker ", latLngMarker);
+
+    var marker = new google.maps.Marker({
+      position: latLngMarker,
+      map: map,
+      title: fullName
+    });
+  }
+}
+
+//draw landing graph
+function drawLandingGraph(data) {
+  var ndx = crossfilter(data);
+
+  showLandingGraph(ndx);
+  dc.renderAll();
+}
+
+//WIP
+function showLandingGraph(ndx) {
+  var landingPadDimension = ndx.dimension(dc.pluck("full_name"));
+  // var groupOutcome = landingPadDimension.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+  var groupLandSuccess = landingPadDimension.group().reduceSum(function(d) {
+    return +d.successful_landings;
+  });
+  var groupLandFail = landingPadDimension.group().reduceSum(function(d) {
+     return d.attempted_landings - d.successful_landings;
+  })
+  /*
+   function reduceAdd(i, d) {
+      //i: initial, d: datapoint
+      i[d.successful_landings] = (i[d.successful_landings] || 0) + 1;
+      return i;
+    }
+    function reduceRemove(i, d) {
+      i[d.successful_landings] = (i[d.successful_landings] || 0) - 1;
+      return i;
+    }
+    function reduceInitial() {
+      return {};
+    } 
+*/
+  print_filter(groupLandSuccess);
+  print_filter(groupLandFail);
+
+  var rowChart = dc
+    .barChart("#landings-chart")
+    .width(800)
+    .height(500)
+    .x(d3.scaleOrdinal().domain([]))
+    .xUnits(dc.units.ordinal)
+    .elasticX(true)
+    .dimension(landingPadDimension)
+    .group(groupLandSuccess, "Success")
+    .stack(groupLandFail, "Fail");
 }
