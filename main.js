@@ -9,8 +9,6 @@ function apiCall() {
     "mission_name",
     "launch_date_local",
     "launch_date_utc",
-    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
-    //  "rocket/second_stage/payloads",
     "rocket",
     "launch_site/site_name_long"
   ];
@@ -27,6 +25,17 @@ function apiCall() {
 //------------------------------------ Render All
 
 function drawGraphs(data) {
+  // If first stage core is reused, change rocket name to 'Used'
+  //   getObjectLength(data);
+  for (var i = 0; i < getObjectLength(data); i++) {
+    if (data[i].rocket.first_stage.cores[0].reused === true) {
+      // console.log(data[i].rocket.rocket_name);
+      //change name to Used
+      data[i].rocket.rocket_name = "Used Falcon 9";
+    }
+  }
+  // for (var i=)
+
   var ndx = crossfilter(data);
   //   var all = dnx.GroupAll();
   // TODO: use bootstrap spinners while charts load
@@ -38,7 +47,7 @@ function drawGraphs(data) {
   showPastLaunchesBySite(ndx);
   showRowCount(ndx);
   showDataTable(ndx);
-  
+
   // hide spinners
   $(".spinner-grow").hide();
 
@@ -50,14 +59,13 @@ function showDataTable(ndx) {
     return d.dim;
   }); //function(d) {
   var dataTable = dc
-    //  .dataTable("#dataTable")
     .dataTable("#dc-data-table")
     .dimension(dimension1)
     .height(200)
     .width(200)
     .size(Infinity)
     .columns([
-      // simplify with return array
+      // TODO: simplify columns by returning array
       function(d) {
         return d.flight_number;
       },
@@ -103,6 +111,8 @@ function showRowCount(ndx) {
 // var barChart; //test
 function showPastLaunches(ndx) {
   var yearDimension = ndx.dimension(dc.pluck("launch_year")); //function(d) {
+  //   var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //function(d) {
+
   //   var yearDimension = ndx.dimension(function(d) {
   //  return d.launch_year;
   //   });
@@ -112,10 +122,14 @@ function showPastLaunches(ndx) {
   //   });
   //   var yearGroup = yearDimension.group().reduceCount(); //.group() just counts rows
   //  var rocketGroup = rocketDimension.group().reduceCount(); //.group() just counts rows
+
+  // change rocket_name to "Used Falcon 9" if reused
+
   var rocketGroup = yearDimension
     .group()
     .reduce(reduceAdd, reduceRemove, reduceInitial);
   // WIP
+  //   var rocketName = i[d.rocket.rocket_name];
   function reduceAdd(i, d) {
     //i: initial, d: datapoint
     i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
@@ -141,36 +155,30 @@ function showPastLaunches(ndx) {
     .group(rocketGroup, "Falcon 1", function(d) {
       return d.value["Falcon 1"];
     })
-    .stack(rocketGroup, "Falcon 9", function(d) {
+    .stack(rocketGroup, "New Falcon 9", function(d) {
       return d.value["Falcon 9"];
+    })
+    .stack(rocketGroup, "Used Falcon 9", function(d) {
+      return d.value["Used Falcon 9"];
     })
     .stack(rocketGroup, "Falcon Heavy", function(d) {
       return d.value["Falcon Heavy"];
     })
-    .xAxisLabel("Year", 20)
-    //  .xAxisPadding(1000)
+    .xAxisLabel("Year", 35)
     .yAxisLabel("Launches", 25) // Add margins
     .useViewBoxResizing(true)
-    //  .elasticX(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    //  .barPadding(0.3)
-    //  .outerPadding(0)
     .gap(6)
-    //  .centerBar(true)
-    //  .renderLabel(true)
-    //  .label(function(d){
-    //  return d.key;
-    //  })
     .renderTitle(true)
     .title(function(d) {
       //  return rocketGroup;
       //TODO: hide tooltip row if zero
       return [
-        "Falcon 9: " + (d.value["Falcon 9"] || "0"),
+        "New Falcon 9: " + (d.value["Falcon 9"] || "0"),
+        "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
         "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
         "Falcon 1: " + (d.value["Falcon 1"] || "0")
-        //   "Falcon Heavy: " + d.value["Falcon Heavy"]
       ].join("\n");
     })
     //  .valueAccessor(function (d) {
@@ -208,9 +216,27 @@ function showPastLaunches(ndx) {
     )
     //  .legend(dc.legend().x(800).y(10).itemHeight(13))
     .centerBar(true)
+    .legend(
+      dc
+        .legend()
+        .x(145)
+        .y(340)
+        .itemHeight(13)
+        .gap(8)
+        .horizontal(true)
+        .autoItemWidth(true)
+    )
     //  .brushOn(true) //what's brush?
+
     .xAxis()
     .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
+
+  //   barChart.on("renderlet", function(chart) {
+  //     chart.selectAll(".dc-legend-item").on("click", function(d) {
+  //       rocketDimension.filter(d.rocket.rocket_name);
+  //       dc.redrawAll();
+  //     });
+  //   });
 }
 //test---------------------------------LAUNCH ..Pads by Site (vertical Bar?)
 
@@ -226,13 +252,13 @@ function showLaunchSitesByYear(ndx) {
     //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup)
-    .xAxisLabel("Year")
-    .yAxisLabel("Launches") // Add margins
+    .xAxisLabel("Year", 30)
+    .yAxisLabel("Launches", 20) // Add margins
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
     //  .barPadding(0.3)
     //  .outerPadding(0)
-    .gap(10)
+    .gap(1)
     .x(
       d3
         .scaleOrdinal()
@@ -256,7 +282,7 @@ function showLaunchSitesByYear(ndx) {
     )
     .centerBar(true)
     .useViewBoxResizing(true)
-    .brushOn(true)
+    //  .brushOn(true)
     //TODO: Tooltips for all charts
     //TODO: Add Legend
 
@@ -321,11 +347,11 @@ function showPastLaunchesBySite(ndx) {
       }
     )
     .yAxisLabel("Launches", 25) // Add margins
-    .xAxisLabel("Year", 20)
+    .xAxisLabel("Year", 30)
     .renderHorizontalGridLines(true)
     //  .barPadding(0.3)
     //  .outerPadding(0)
-    .gap(10)
+    .gap(6)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .x(
@@ -613,7 +639,7 @@ function apiCallNextLaunch() {
     //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
     //  "rocket/second_stage/payloads",
     "rocket",
-    "launch_site/site_name_long",
+    "launch_site",
     "mission_name",
     "mission_id",
     "links",
@@ -624,10 +650,14 @@ function apiCallNextLaunch() {
   d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
     function(data) {
       getNextLaunch(data);
+      //call api one launchpad to get map marker details
+      // console.log(data);
+      // console.log(data.launch_site.site_id);
+      apiCallOneLaunchPad(data.launch_site.site_id);
     }
   );
 }
-
+// --------------------------------
 function getNextLaunch(data) {
   var launchDateUnix = data.launch_date_unix * 1000; // millisecond since unix epoch
   var flightNumber = data.flight_number; // millisecond since unix epoch
@@ -635,11 +665,11 @@ function getNextLaunch(data) {
   var launchSite = data.launch_site; // millisecond since unix epoch
   var plannedLaunchDate = data.launch_date_local; // millisecond since unix epoch
   var customer = data.rocket.second_stage.payloads[0].customers.toString(); // millisecond since unix epoch
+  var siteID = data.launch_site.site_id;
+  // console.log("TCL: getNextLaunch -> siteID", siteID)
 
   //   customerString = customer.toString();
-
   //--https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
-
   var countDownDate = launchDateUnix;
   // Update the count down every 1 second
   var x = setInterval(function() {
@@ -666,11 +696,49 @@ function getNextLaunch(data) {
       document.getElementById("nextLaunchCountdown").innerHTML = "LIFT OFF!";
     }
   }, 1000);
-  //-----
+  //--
 
   $("#flightNumber").html(flightNumber);
   //  $("#flightNumber").html(flightNumber);
   //   $("#nextLaunch").append("<p>foo</p>");
+}
+
+//test---------------apiCallLaunchPads---------------
+function apiCallOneLaunchPad(site_id) {
+  d3.json(`https://api.spacexdata.com/v3/launchpads/${site_id}`).then(function(
+    data
+  ) {
+    addNextLaunchMarkerToMap(data);
+  });
+}
+
+//--------------------AddNextLaunchMarkerToMap
+function addNextLaunchMarkerToMap(data) {
+  var launchSite = data.site_name_long;
+
+  //   var row = data[0];
+  var latLngMarker = {
+    lat: data.location.latitude,
+    lng: data.location.longitude
+  };
+
+  //initialise map
+  map = new google.maps.Map(document.getElementById("map"), {
+   //  center: { lat: 38, lng: -100.8 },
+    center: latLngMarker,
+    zoom: 12
+  });
+  //   var fullName = data[0].full_name;
+  //create marker
+  //   console.log("TCL: addLandingMarkers -> latLngMarker ", latLngMarker);
+  var marker = new google.maps.Marker({
+    position: latLngMarker,
+    map: map,
+    title: launchSite
+  });
+  //center map on marker
+  //   map.setCenter = latLngMarker;
+  //   console.log("TCL: addNextLaunchMarkerToMap -> map.center", map.center)
 }
 
 //-------------ROADSTER
@@ -792,7 +860,6 @@ function drawPayloadGraphs(data) {
 
   // hide spinners
   $(".spinner-grow").hide();
-
 
   dc.renderAll();
 }
