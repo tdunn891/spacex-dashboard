@@ -17,67 +17,77 @@
       integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="style.css">
-   <title>SpaceX</title>
+   <title>SpaceX Dashboard - Launches</title>
 </head>
 
 <body>
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">SpaceX Data Dashboard</a>
+   <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="#">SpaceX Dashboard</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Lanches<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Rockets<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Payloads</a>
+            <a class="nav-item nav-link active" href="#">Launches<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#">Rockets</a>
+            <a class="nav-item nav-link" href="payloads.html">Payloads</a>
+            <a class="nav-item nav-link" href="landings.html">Landings</a>
             <a class="nav-item nav-link" href="missions.html">Missions</a>
-            <!-- <h1>SpaceX Launches</h1> -->
-            <a href="javascript:dc.filterAll(); dc.renderAll();" class="btn btn-primary active">Reset</a>
+            <!-- <a href="javascript:dc.filterAll(); dc.renderAll();" class="btn btn-primary active">Reset</a> -->
          </div>
       </div>
    </nav>
-   <!-- <h1>SpaceX Launches</h1> -->
-   <!-- <button id="reset""><a href=" javascript:dc.filterAll(); dc.renderAll();" class="btn btn-primary active">Reset -->
-   <!-- All</a></button> -->
-   <!-- <button id="d3test" onclick="d3test()">d3 test</button> -->
-   <!-- <div id="output"></div> -->
    <div class="container-fluid">
       <div class="row">
-         <div class="col-6">
-            <div id="chart">
-               <h4>Launches Per Year By Vehicle</h4>
-               <a href="javascript: dc.filterAll(); dc.redrawAll();">Reset</a> <!-- how to target specific chart?-->
+         <div class="col-lg-6">
+            <div class="chart" id="chartLaunchesPerYearByVehicle">
+               <h3>Launches Per Year By Vehicle</h3>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+               <!-- <a href="javascript: dc.filterAll(); dc.redrawAll();">Reset</a> how to target specific chart? -->
             </div>
          </div>
-         <div class="col-5">
-            <div id="chart2">
-               <h4>Payload Mass Per Year (kg)</h4>
-               <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset</a> <!-- how to target specific chart?-->
+         <div class="col-lg-6">
+            <div class="chart" id="chartLaunchSites">
+               <h3>Launch Per Year By Launch Site</h3>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+               <!-- <a href="javascript:barChart.filter(); dc.redrawAll();">Reset</a> -->
             </div>
          </div>
-         <div class="col-1">
-            <img src="falcon9.png" alt="falcon9" onclick="javascript: dc.filterAll(); redrawAll();" />
-         </div>
+         <!-- <img src="falcon9.png" alt="falcon9" onclick="javascript: dc.filterAll(); redrawAll();" /> -->
       </div>
       <div class="row">
+
          <div class="col-6">
-            <div id="chartLaunchSites">
-               <h4>Launch Per Year By Launch Site</h4>
-               <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset</a> <!-- how to target specific chart?-->
+            <div class="chart" id="chartPayloadPerYear">
+               <h3>Payload Mass Per Year (kg)</h3>
+               <!-- <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset</a> how to target specific chart? -->
             </div>
          </div>
-         <div class="col-5">
-            <div id="pieChart">
-               <h4>Launch Success Rate</h4>
-               <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset</a> <!-- how to target specific chart?-->
+         <div class="col-6">
+            <div class="chart" id="pieChartLaunchSuccess">
+               <h3>Launch Success Rate</h3>
+               <!-- <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset</a> how to target specific chart? -->
             </div>
          </div>
       </div>
       <div class="row">
          <div class="col">
-            <div id="#dataTable"></div>
+            <div class="dc-data-count">
+               <span class="filter-count"></span>
+               <span class="total-count"></span>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col">
+            <table id="dc-data-table" class="table">
+               <!-- TODO: add headers to data table -->
+            </table>
          </div>
       </div>
    </div>
@@ -87,11 +97,17 @@
    <!-- d3 (check) -->
    <script src="https://d3js.org/d3.v5.min.js"></script>
    <!-- crossfilter -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.7/crossfilter.js"
-      integrity="sha256-RoQTnKdGMXVF8ICmLlVj4jdPEuypp4pUIFwDqq0QQy4=" crossorigin="anonymous"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.7/crossfilter.js" -->
+   <!-- integrity="sha256-RoQTnKdGMXVF8ICmLlVj4jdPEuypp4pUIFwDqq0QQy4=" crossorigin="anonymous"></script> -->
+   <!-- min crossfilter -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
+      integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
    <!-- dc.js (check) -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.js"
-      integrity="sha256-AxL1jsPAp9qMImTV2THtSehUDOmMEox/+VTDdEH9NKI=" crossorigin="anonymous"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.js" -->
+   <!-- integrity="sha256-AxL1jsPAp9qMImTV2THtSehUDOmMEox/+VTDdEH9NKI=" crossorigin="anonymous"></script> -->
+   <!-- min dc.js -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
+      integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
    <!-- test d3 -->
    <!-- <script src="dc.js"></script> -->
    <!-- bootstrap -->
@@ -115,5 +131,9 @@
    </script>
    <!-- for testing -->
 </body>
+<footer>
+   <!-- <p>Thomas Dunn</p> -->
+   <p>Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></p>
+</footer>
 
 </html>
