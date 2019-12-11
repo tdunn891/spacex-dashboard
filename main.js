@@ -38,6 +38,10 @@ function drawGraphs(data) {
   showPastLaunchesBySite(ndx);
   showRowCount(ndx);
   showDataTable(ndx);
+  
+  // hide spinners
+  $(".spinner-grow").hide();
+
   dc.renderAll();
 }
 //------------------------------------ Data Table
@@ -53,6 +57,7 @@ function showDataTable(ndx) {
     .width(200)
     .size(Infinity)
     .columns([
+      // simplify with return array
       function(d) {
         return d.flight_number;
       },
@@ -128,8 +133,8 @@ function showPastLaunches(ndx) {
   // Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesPerYearByVehicle")
-    .width(500)
-    .height(260)
+    .width(600) //TODO: change chart heights and widths to percentages
+    .height(360)
     //   .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     //  .group(yearGroup)
@@ -142,12 +147,17 @@ function showPastLaunches(ndx) {
     .stack(rocketGroup, "Falcon Heavy", function(d) {
       return d.value["Falcon Heavy"];
     })
-    .xAxisLabel("Year")
-    .yAxisLabel("Launches") // Add margins
+    .xAxisLabel("Year", 20)
+    //  .xAxisPadding(1000)
+    .yAxisLabel("Launches", 25) // Add margins
+    .useViewBoxResizing(true)
+    //  .elasticX(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    .barPadding(0.3)
-    .outerPadding(0)
+    //  .barPadding(0.3)
+    //  .outerPadding(0)
+    .gap(6)
+    //  .centerBar(true)
     //  .renderLabel(true)
     //  .label(function(d){
     //  return d.key;
@@ -211,8 +221,8 @@ function showLaunchSitesByYear(ndx) {
   // Chart
   var barChart = dc
     .barChart("#chart")
-    .width(500)
-    .height(260)
+    .width(600)
+    .height(360)
     //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup)
@@ -220,8 +230,9 @@ function showLaunchSitesByYear(ndx) {
     .yAxisLabel("Launches") // Add margins
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    .barPadding(0.3)
-    .outerPadding(0)
+    //  .barPadding(0.3)
+    //  .outerPadding(0)
+    .gap(10)
     .x(
       d3
         .scaleOrdinal()
@@ -244,9 +255,10 @@ function showLaunchSitesByYear(ndx) {
         ])
     )
     .centerBar(true)
+    .useViewBoxResizing(true)
     .brushOn(true)
-    //TODO: Tooltip
-    //TODO: Legend
+    //TODO: Tooltips for all charts
+    //TODO: Add Legend
 
     .xAxis()
     .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
@@ -281,8 +293,8 @@ function showPastLaunchesBySite(ndx) {
   // Chart
   var stackedBar = dc
     .barChart("#chartLaunchSites")
-    .width(500)
-    .height(260)
+    .width(600)
+    .height(360)
     //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup, "Kwajalein Atoll Omelek Island", function(d) {
@@ -308,11 +320,13 @@ function showPastLaunchesBySite(ndx) {
         return d.value["Kennedy Space Center Historic Launch Complex 39A"];
       }
     )
-    .yAxisLabel("Launches") // Add margins
-    .xAxisLabel("Year")
+    .yAxisLabel("Launches", 25) // Add margins
+    .xAxisLabel("Year", 20)
     .renderHorizontalGridLines(true)
-    .barPadding(0.3)
-    .outerPadding(0)
+    //  .barPadding(0.3)
+    //  .outerPadding(0)
+    .gap(10)
+    .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .x(
       d3
@@ -488,6 +502,7 @@ function apiCallMissions() {
     "flight_number",
     "launch_year",
     "launch_success",
+    "launch_date_local",
     //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
     //  "rocket/second_stage/payloads",
     "rocket",
@@ -529,22 +544,35 @@ function doCards(data) {
     var missionPatchSmall = row.links.mission_patch_small;
     var missionPatch = row.links.mission_patch;
     var missionName = row.mission_name;
+    var launchDate = row.launch_date_local.substring(0, 10); //).substring(0, 10);
+    //  var launchSuccess = row.launch_success;
+
+    var launchOutcome = row.launch_success
+      ? "LAUNCH SUCCESS"
+      : "LAUNCH FAILURE";
+    var launchOutcomeClass = row.launch_success ? "success" : "failure";
 
     var flightNumber = row.flight_number;
     var orbit = row.rocket.second_stage.payloads[0].orbit;
     var details = row.details;
     var articleLink = row.links.article_link;
     var youtubeLink = row.links.video_link;
+    //TODO youtube logo for each card
+    //TODO article logo for each card
+    //TODO launch success symbol for each card
+    // create next mission card
+
     //create cards
     $("#missions").append(
       `<div class="card text-left col-2">
                <img class="card-img-top" src="${missionPatchSmall}" onclick="populateModalMissionPatch('${missionPatch}', '${missionName}');" alt="Mission Patch" />
                <div class="card-body">
                   <h4 class="card-title">${missionName}</h4>
+                  <span class="${launchOutcomeClass}">${launchOutcome}</span>
                   <p class="card-text">
                   <ul>
                      <li>Flight Number: ${flightNumber}</li>
-                     <li>Payload Orbit: ${orbit}</li>
+                     <li>Launch Date: ${launchDate}</li>
                   </ul>
                   <a href="${youtubeLink}" target="_blank">Vid</a>
                   <a href="${articleLink}" target="_blank">Article</a>
@@ -573,6 +601,78 @@ function loadCards(ndx) {
   //   print_filter(rocketGroup);
 }
 
+//--------------apiCALL Next Mission----------------------------
+
+function apiCallNextLaunch() {
+  const fields = [
+    "flight_number",
+    "launch_year",
+    "launch_success",
+    "launch_date_local",
+    "launch_date_unix",
+    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
+    //  "rocket/second_stage/payloads",
+    "rocket",
+    "launch_site/site_name_long",
+    "mission_name",
+    "mission_id",
+    "links",
+    "details"
+  ];
+  const filters = "?filter=" + fields.join(",");
+
+  d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
+    function(data) {
+      getNextLaunch(data);
+    }
+  );
+}
+
+function getNextLaunch(data) {
+  var launchDateUnix = data.launch_date_unix * 1000; // millisecond since unix epoch
+  var flightNumber = data.flight_number; // millisecond since unix epoch
+  var missionName = data.mission_name; // millisecond since unix epoch
+  var launchSite = data.launch_site; // millisecond since unix epoch
+  var plannedLaunchDate = data.launch_date_local; // millisecond since unix epoch
+  var customer = data.rocket.second_stage.payloads[0].customers.toString(); // millisecond since unix epoch
+
+  //   customerString = customer.toString();
+
+  //--https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
+
+  var countDownDate = launchDateUnix;
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+    // Get today's date and time
+    var now = new Date().getTime();
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Output the result in an element with id="demo"
+    //   document.getElementById("nextLaunchCountdown").innerHTML = `${days} : ${hours} : ${minutes} : ${seconds}`;
+    document.getElementById("days").innerHTML = days;
+    document.getElementById("minutes").innerHTML = minutes;
+    document.getElementById("hours").innerHTML = hours;
+    document.getElementById("seconds").innerHTML = seconds;
+    // If the count down is over, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("nextLaunchCountdown").innerHTML = "LIFT OFF!";
+    }
+  }, 1000);
+  //-----
+
+  $("#flightNumber").html(flightNumber);
+  //  $("#flightNumber").html(flightNumber);
+  //   $("#nextLaunch").append("<p>foo</p>");
+}
+
 //-------------ROADSTER
 function apiCallRoadster() {
   const fields = [
@@ -591,12 +691,6 @@ function apiCallRoadster() {
 
 //--------landings.html---------------- doesn't seem to respect filters
 function apiCallLandingPads() {
-  //   const fields = [
-  //   "launch_year",
-  //   "launch_site/site_name_long"
-  //   ];
-  //   const filters = fields.join(",");
-
   d3.json(`https://api.spacexdata.com/v3/landpads`).then(function(data) {
     console.log(data[0]);
     drawLandingGraph(data);
@@ -664,18 +758,18 @@ function showLandingGraph(ndx) {
 */
   var rowChart = dc
     .barChart("#landings-chart")
+    //  .rowChart("#landings-chart")
     .width(800)
     .height(500)
     .x(d3.scaleOrdinal().domain([]))
     .xUnits(dc.units.ordinal)
     .elasticX(true)
+    //  .useViewBoxResizing(true)
     .dimension(landingPadDimension)
     .group(groupLandSuccess, "Success")
     .stack(groupLandFail, "Fail");
   //  .colors(["#b22222", "#369a43"]);
-
   //show percentage landing success
-
   // console.log(groupLandSuccess);
   // $('#landings-success-rate').html(function(d){
   // console.log(d.successful_landings / d.attempted_landings);
@@ -696,6 +790,10 @@ function drawPayloadGraphs(data) {
   var ndx = crossfilter(data);
   showPayloadGraph(ndx);
 
+  // hide spinners
+  $(".spinner-grow").hide();
+
+
   dc.renderAll();
 }
 
@@ -707,6 +805,10 @@ function showPayloadGraph(ndx) {
   });
   var manufacturerDimension = ndx.dimension(function(d) {
     return d.manufacturer || "N/A";
+  });
+
+  var payloadTypeDimension = ndx.dimension(function(d) {
+    return d.payload_type || "N/A";
   });
   //   console.log(orbitDimension);
   var burstOrbitManuDimension = ndx.dimension(function(d) {
@@ -720,6 +822,7 @@ function showPayloadGraph(ndx) {
   var groupOrbit = orbitDimension.group().reduceCount();
   var groupNationality = nationalityDimension.group().reduceCount();
   var groupManufacturer = manufacturerDimension.group().reduceCount();
+  var groupPayloadType = payloadTypeDimension.group().reduceCount();
 
   var groupBurst = burstOrbitManuDimension.group().reduceCount(function(d) {
     return d.manufacturer;
@@ -737,11 +840,12 @@ function showPayloadGraph(ndx) {
   print_filter(groupManufacturer);
   print_filter(groupBurst);
 
-  var pieChart = dc
+  var rowChart = dc
     //  .pieChart("#pieChartPayloadByOrbit")
     .rowChart("#pieChartPayloadByOrbit")
     .width(400)
-    .height(400)
+    .height(300)
+    .useViewBoxResizing(true)
     //  .minAngleForLabel(0.15)
     //  .drawPaths(true)
     //  .slicesCap(7)
@@ -751,31 +855,45 @@ function showPayloadGraph(ndx) {
     .dimension(orbitDimension)
     .group(groupOrbit);
 
-  var pieChartPayloadNationality = dc
+  var rowChartPayloadNationality = dc
     //  .pieChart("#pieChartPayloadNationality")
     .rowChart("#pieChartPayloadNationalityUSvsROW")
-    .width(400)
+    .width(300)
     .height(100)
+    //  .useViewBoxResizing(true) // doesnt work with this graph for some reason
     //  .minAngleForLabel(0.12)
     //  .slicesCap(7)
     .cap(1)
     .dimension(nationalityDimension)
     .group(groupNationality);
 
-  var pieChartManufacturer = dc
+  var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
     .width(400)
-    .height(400)
+    .height(300)
+    .useViewBoxResizing(true)
     .cap(7)
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
-  var piChartNationality = dc.pieChart("#pieChartPayloadNationality")
+  var pieChartNationality = dc
+    .pieChart("#pieChartPayloadNationality")
     .width(400)
-    .height(400)
+    .height(300)
     .cap(7)
+    //  .useViewBoxResizing(true)
     .dimension(nationalityDimension)
     .group(groupNationality);
+
+  var rowChartPayloadType = dc
+    .rowChart("#rowChartPayloadType")
+    .width(400)
+    .height(200)
+    //  .labelOffsetX()
+    .useViewBoxResizing(true)
+    .dimension(payloadTypeDimension)
+    .group(groupPayloadType);
+
   /*
   var sunBurst = dc
     .sunburstChart("#sunburstChartOrbitManu")
