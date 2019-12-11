@@ -1,16 +1,232 @@
 body {
-   /* background-color: gray; */
+  background-color: darkgray;
 }
 
-h4 {
-   display: block;
-   text-align: center;
+#chartPayloadPerYear,
+#pieChartLaunchSuccess {
+  display: none;
 }
 
+#sunburstChartOrbitManu {
+  text-align: center;
+}
+
+.chart {
+  background-color: rgba(46, 49, 49, 0.65);
+  /* margin: 0 auto; */
+  margin-top: 18px;
+  text-align: center;
+}
+
+/* axis tick lines */
+.axis path, .tick line {
+  stroke: whitesmoke !important;
+  /* color: whitesmoke !important; */
+}
+
+/* ticks */
+.tick {
+   color: whitesmoke;
+}
+
+/* Axis Labels */
+.y-axis-label,
+.x-axis-label {
+  fill: whitesmoke !important;
+  /* padding: 10px !important; */
+}
+
+.x-axis-label {
+   /* margin-top: 20px !important; */
+   /* padding: 20px !important; */
+   transform: translate(200,240) !important;
+}
+
+/* mission cards */
+.card {
+  margin: auto 6px;
+  height: fit-content;
+  padding: 2px;
+}
+
+#nextMissionCard {
+  /* margin: auto 100px; */
+  text-align: center;
+  /* display: block; */
+  /* width: 300px; */
+  /* width: ; */
+}
+
+.card-title {
+  padding: 4px;
+  margin: 4px;
+}
+.card-body {
+  padding: 0.6rem;
+}
+/* Chart Label Color */
+.dc-chart g.row text {
+  fill: black;
+}
+
+.dc-data-count {
+  margin-right: 26px;
+  margin-left: auto;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.twitter-timeline {
+  display: none;
+}
+.mission-patch-large {
+  width: 60%;
+  height: auto;
+}
+
+.card-title {
+  text-align: center;
+}
+
+.test-card {
+  display: none;
+}
+/* launch success */
+
+.success {
+  display: block;
+  border: 1px solid green;
+  padding: 2px 10px;
+  text-align: center;
+  color: green;
+}
+.failure {
+  display: block;
+  border: 1px solid darkred;
+  padding: 2px 10px;
+  color: darkred;
+  text-align: center;
+}
+#youtube-icon {
+  height: 26px;
+}
+
+#map {
+  height: 500px;
+  width: 800px;
+}
+/* small patches */
+/* img { */
+.card-image-top {
+  margin: 15px auto;
+  height: auto;
+  width: auto;
+}
+
+#nextLaunchCountdown table {
+  margin: 0 auto;
+  text-align: center;
+  color: whitesmoke;
+  font-size: 22px;
+  animation: fadein 3s;
+  -moz-animation: fadein 3s; /* Firefox */
+  -webkit-animation: fadein 3s; /* Safari and Chrome */
+  -o-animation: fadein 3s; /* Opera */
+}
+
+#counter td {
+  font-size: 2.5rem;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  /* Firefox */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  /* Safari and Chrome */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  /* Opera */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#nextLaunchCountdown table tr td {
+  /* width: 30px !important; */
+}
 h1 {
-   text-align: center;
+  text-align: center;
+  font-family: "Share Tech", sans-serif;
+  color: whitesmoke;
 }
 
+h2 {
+  font-family: "Share Tech", sans-serif;
+  color: whitesmoke;
+  text-align: center;
+  margin: 6px auto;
+  padding: 6px;
+  display: block;
+}
+
+/* chart titles */
+h3 {
+  text-align: center;
+  display: block;
+  margin: 6px auto;
+  padding-top: 6px;
+  padding-bottom: 0px;
+  font-family: "Share Tech", sans-serif;
+  color: whitesmoke;
+}
+section {
+  height: 80vh !important;
+}
+.navbar-brand {
+  font-family: "Share Tech", sans-serif !important;
+}
+
+.navbar {
+   background-color: black !important;
+}
+
+footer {
+  display: none;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background-color: black;
+  color: white;
+  height: 70px;
+  text-align: center;
+}
 * {
-   text-align: center;
+  /* outline: 1px solid grey; */
+  /* outline-offset: -1px; */
 }
