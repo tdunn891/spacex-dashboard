@@ -19,27 +19,30 @@ body {
 }
 
 /* axis tick lines */
-.axis path, .tick line {
+.axis path,
+.tick line {
   stroke: whitesmoke !important;
   /* color: whitesmoke !important; */
 }
 
 /* ticks */
 .tick {
-   color: whitesmoke;
+  color: whitesmoke;
+  /* font-family: "Share Tech", sans-serif; */
 }
 
 /* Axis Labels */
 .y-axis-label,
 .x-axis-label {
   fill: whitesmoke !important;
+  font-family: "Share Tech", sans-serif;
   /* padding: 10px !important; */
 }
 
 .x-axis-label {
-   /* margin-top: 20px !important; */
-   /* padding: 20px !important; */
-   transform: translate(200,240) !important;
+  /* margin-top: 20px !important; */
+  /* padding: 20px !important; */
+  /* transform: translate(200,240) !important; */
 }
 
 /* mission cards */
@@ -50,8 +53,9 @@ body {
 }
 
 #nextMissionCard {
+  font-family: "Share Tech", sans-serif;
   /* margin: auto 100px; */
-  text-align: center;
+  /* text-align: center; */
   /* display: block; */
   /* width: 300px; */
   /* width: ; */
@@ -208,25 +212,43 @@ h3 {
 section {
   height: 80vh !important;
 }
+#map {
+   /* display: block; */
+   /* margin: 10px; */
+   /* padding: 20px; */
+   width: 100%;
+   height: 100%;
+   /* max-height: 250px; */
+}
 .navbar-brand {
   font-family: "Share Tech", sans-serif !important;
+  font-size: 28px;
 }
 
 .navbar {
-   background-color: black !important;
+  background-color: black !important;
 }
 
 footer {
-  display: none;
-  position: absolute;
+  /* display: none; */
+  /* position: absolute; */
   width: 100%;
   bottom: 0;
   background-color: black;
-  color: white;
+  color: whitesmoke;
+  /* vertical-align: middle; */
+  margin: auto;
   height: 70px;
   text-align: center;
 }
+
+footer p {
+  /* vertical-align: middle; */
+  margin-top: 20px !important;
+  display: block;
+}
+
 * {
-  /* outline: 1px solid grey; */
-  /* outline-offset: -1px; */
+  outline: 1px solid grey;
+  outline-offset: -1px;
 }
