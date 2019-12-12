@@ -1,6 +1,5 @@
 //------------------------------------ API Request
-// var barChart;
-
+//TODO: catch apicall errors
 function apiCall() {
   const fields = [
     "flight_number",
@@ -16,7 +15,6 @@ function apiCall() {
 
   d3.json(`https://api.spacexdata.com/v3/launches/past?filter=${filters}`).then(
     function(data) {
-      //  console.log(data[29]);
       console.log(data[29]);
       drawGraphs(data);
     }
@@ -25,19 +23,15 @@ function apiCall() {
 //------------------------------------ Render All
 
 function drawGraphs(data) {
-  // If first stage core is reused, change rocket name to 'Used'
-  //   getObjectLength(data);
+  // If first stage core is reused, change rocket name to 'Used Falcon 9''
   for (var i = 0; i < getObjectLength(data); i++) {
     if (data[i].rocket.first_stage.cores[0].reused === true) {
-      // console.log(data[i].rocket.rocket_name);
       //change name to Used
       data[i].rocket.rocket_name = "Used Falcon 9";
     }
   }
-  // for (var i=)
 
   var ndx = crossfilter(data);
-  //   var all = dnx.GroupAll();
   // TODO: use bootstrap spinners while charts load
 
   // Charts
@@ -48,6 +42,8 @@ function drawGraphs(data) {
   showRowCount(ndx);
   showDataTable(ndx);
 
+//   showPieChartByRocket(ndx);
+
   // hide spinners
   $(".spinner-grow").hide();
 
@@ -57,7 +53,7 @@ function drawGraphs(data) {
 function showDataTable(ndx) {
   var dimension1 = ndx.dimension(function(d) {
     return d.dim;
-  }); //function(d) {
+  }); 
   var dataTable = dc
     .dataTable("#dc-data-table")
     .dimension(dimension1)
@@ -65,7 +61,7 @@ function showDataTable(ndx) {
     .width(200)
     .size(Infinity)
     .columns([
-      // TODO: simplify columns by returning array
+      // TODO: simplify columns by returning array?
       function(d) {
         return d.flight_number;
       },
@@ -105,31 +101,22 @@ function showRowCount(ndx) {
     });
   //   https://dc-js.github.io/dc.js/docs/stock.html
 }
-
+// -----pie chart by rocket
+//TODO: write showPieChartByRocket() 
+// function showPieChartByRocket(ndx) {
+//   var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //function(d) {
+//   var groupRocket = rocketDimension.group().reduceCount();
+//   print_filter(groupRocket);
+// }
 //----------------------------------- Show Launches Per Year By Rocket
 
-// var barChart; //test
 function showPastLaunches(ndx) {
   var yearDimension = ndx.dimension(dc.pluck("launch_year")); //function(d) {
-  //   var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //function(d) {
-
-  //   var yearDimension = ndx.dimension(function(d) {
-  //  return d.launch_year;
-  //   });
-  //   var rocketDimension = ndx.dimension(dc.pluck("rocket_name"));
-  //   var rocketDimension = ndx.dimension(function(d) {
-  //  return d.rocket.rocket_name;
-  //   });
-  //   var yearGroup = yearDimension.group().reduceCount(); //.group() just counts rows
-  //  var rocketGroup = rocketDimension.group().reduceCount(); //.group() just counts rows
-
-  // change rocket_name to "Used Falcon 9" if reused
 
   var rocketGroup = yearDimension
     .group()
     .reduce(reduceAdd, reduceRemove, reduceInitial);
-  // WIP
-  //   var rocketName = i[d.rocket.rocket_name];
+
   function reduceAdd(i, d) {
     //i: initial, d: datapoint
     i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
@@ -149,9 +136,7 @@ function showPastLaunches(ndx) {
     .barChart("#chartLaunchesPerYearByVehicle")
     .width(600) //TODO: change chart heights and widths to percentages
     .height(360)
-    //   .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
-    //  .group(yearGroup)
     .group(rocketGroup, "Falcon 1", function(d) {
       return d.value["Falcon 1"];
     })
@@ -165,7 +150,7 @@ function showPastLaunches(ndx) {
       return d.value["Falcon Heavy"];
     })
     .xAxisLabel("Year", 35)
-    .yAxisLabel("Launches", 25) // Add margins
+    .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
@@ -181,18 +166,6 @@ function showPastLaunches(ndx) {
         "Falcon 1: " + (d.value["Falcon 1"] || "0")
       ].join("\n");
     })
-    //  .valueAccessor(function (d) {
-    //   return d.value.avg;
-    //  })
-    //  .legend(
-    //    dc
-    //      .legend()
-    //      .x(800)
-    //      .y(10)
-    //      .itemHeight(13)
-    //    //   .gap(5)
-    //  ) //testing
-    //  .brushOn(false)
     .x(
       d3
         .scaleOrdinal()
@@ -214,7 +187,6 @@ function showPastLaunches(ndx) {
           2019
         ])
     )
-    //  .legend(dc.legend().x(800).y(10).itemHeight(13))
     .centerBar(true)
     .legend(
       dc
@@ -226,38 +198,25 @@ function showPastLaunches(ndx) {
         .horizontal(true)
         .autoItemWidth(true)
     )
-    //  .brushOn(true) //what's brush?
-
     .xAxis()
-    .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
-
-  //   barChart.on("renderlet", function(chart) {
-  //     chart.selectAll(".dc-legend-item").on("click", function(d) {
-  //       rocketDimension.filter(d.rocket.rocket_name);
-  //       dc.redrawAll();
-  //     });
-  //   });
+    .tickFormat(d3.format("0000"));
 }
-//test---------------------------------LAUNCH ..Pads by Site (vertical Bar?)
+//test---------------------------------Launch Sites by Year 
 
 function showLaunchSitesByYear(ndx) {
   var yearDimension = ndx.dimension(dc.pluck("launch_year"));
-  var yearGroup = yearDimension.group().reduceCount(); //.group() just counts rows
-  //   print_filter(yearGroup);
-  // Chart
+  var yearGroup = yearDimension.group().reduceCount();
+  // Bar Chart
   var barChart = dc
     .barChart("#chart")
     .width(600)
     .height(360)
-    //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup)
     .xAxisLabel("Year", 30)
     .yAxisLabel("Launches", 20) // Add margins
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    //  .barPadding(0.3)
-    //  .outerPadding(0)
     .gap(1)
     .x(
       d3
@@ -282,25 +241,23 @@ function showLaunchSitesByYear(ndx) {
     )
     .centerBar(true)
     .useViewBoxResizing(true)
-    //  .brushOn(true)
     //TODO: Tooltips for all charts
     //TODO: Add Legend
 
     .xAxis()
-    .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
+    .tickFormat(d3.format("0000"));
 }
 
-//test----------------------------------- Show Launches By Launch Site
+//----------------------------------- Show Launches By Launch Site
 
 function showPastLaunchesBySite(ndx) {
-  var yearDimension = ndx.dimension(dc.pluck("launch_year")); //function(d) {            dc.pluck is the accessor function?
-  var siteDimension = ndx.dimension(dc.pluck("site_name_long")); //test
+  var yearDimension = ndx.dimension(dc.pluck("launch_year"));
+//   var siteDimension = ndx.dimension(dc.pluck("site_name_long")); 
   var yearGroup = yearDimension
     .group()
     .reduce(reduceAdd, reduceRemove, reduceInitial);
 
   function reduceAdd(i, d) {
-    //i: initial, d: datapoint
     i[d.launch_site.site_name_long] =
       (i[d.launch_site.site_name_long] || 0) + 1;
     return i;
@@ -314,14 +271,11 @@ function showPastLaunchesBySite(ndx) {
     return {};
   }
 
-  //   print_filter(yearDimension.filterExact(2019));
-
-  // Chart
+  // Bar Chart
   var stackedBar = dc
     .barChart("#chartLaunchSites")
     .width(600)
     .height(360)
-    //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup, "Kwajalein Atoll Omelek Island", function(d) {
       return d.value["Kwajalein Atoll Omelek Island"];
@@ -333,7 +287,6 @@ function showPastLaunchesBySite(ndx) {
     .stack(
       yearGroup,
       "Vandenberg Air Force Base",
-      // "Cape Canaveral Air Force Station Space Launch Complex 40_test",
       function(d) {
         return d.value["Vandenberg Air Force Base Space Launch Complex 4E"];
       }
@@ -341,16 +294,13 @@ function showPastLaunchesBySite(ndx) {
     .stack(
       yearGroup,
       "Kennedy Space Center",
-      // "Cape Canaveral Air Force Station Space Launch Complex 40_test",
       function(d) {
         return d.value["Kennedy Space Center Historic Launch Complex 39A"];
       }
     )
-    .yAxisLabel("Launches", 25) // Add margins
+    .yAxisLabel("Launches", 25) // Add internal axis margins/paddingj
     .xAxisLabel("Year", 30)
     .renderHorizontalGridLines(true)
-    //  .barPadding(0.3)
-    //  .outerPadding(0)
     .gap(6)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
@@ -393,27 +343,21 @@ function showPayloads(ndx) {
       weight =
         d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
     }
-    //  console.log(weight);
     return weight;
-  }); //.group() just counts rows
-  //   print_filter(yearGroup);
+  }); 
 
   // Chart
   var barChart = dc
     .barChart("#chartPayloadPerYear")
     .width(500)
     .height(260)
-    //  .margins({ top: 0, bottom: 0, right: 0, left: 0 })
     .dimension(yearDimension)
     .group(yearGroup)
     .yAxisLabel("Payload Mass (kg)")
     .xAxisLabel("Year")
     .renderHorizontalGridLines(true)
-    //  .gap(30)
-    .barPadding(0.3)
-    .outerPadding(0)
+     .gap(10)
     .xUnits(dc.units.ordinal)
-    //  .x(d3.scaleLinear().domain([2005, 2020]))
     .x(
       d3
         .scaleOrdinal()
@@ -437,10 +381,8 @@ function showPayloads(ndx) {
     )
     .centerBar(true)
     .brushOn(false)
-    //  .xUnits(dc.units.ordinal);
-    //  .x(d3.scale.linear().domain([2006, 2019]));
     .xAxis()
-    .tickFormat(d3.format("0000")); //formats year to 2019 instead of 2,019
+    .tickFormat(d3.format("0000")); 
 }
 
 //------------------------Sucess Percentage------------- could show this just as Text percentage (like crimestats)
@@ -451,8 +393,6 @@ function showLaunchSuccessRate(ndx) {
   var launchGroup = launchDimension.group();
   var all = ndx.groupAll();
 
-  //   print_filter(launchGroup);
-  //   console.log(launchGroup);
   var pieChart = dc
     .pieChart("#pieChartLaunchSuccess")
     .width(300)
@@ -460,9 +400,6 @@ function showLaunchSuccessRate(ndx) {
     .dimension(launchDimension)
     .group(launchGroup)
     .colors(["#b22222", "#369a43"])
-    //  .colorAccessor(function(d, i) {
-    // return d.value;
-    //  });
     .label(function(d) {
       // not working properly
       if (pieChart.hasFilter() && !pieChart.hasFilter(d.key)) {
@@ -476,21 +413,14 @@ function showLaunchSuccessRate(ndx) {
           " " +
           d.value +
           " out of ... or (" +
-          Math.floor((d.value / all.value()) * 100) + // running groupAll on the dimension with the active filter gives all rows bc it ignores filters placed on its own dimension.
-          "%)"; // replace all.value with total number of launches based on other filters   .. try data.size to get total rows
-        //   label += ' (' + Math.floor((d.value / launchGroup) * 100) + '%)'; // replace all.value with total number of launches
+          Math.floor((d.value / all.value()) * 100) +
+          "%)"; 
       }
       return label;
     });
 }
 
-// ---------------------Data Table-----------------------
-
-function showTable(ndx) {
-  // var dim = ndx.dimension();
-}
-
-//----------------------- Print Filter-----------------------
+//----------------------- Print Filter -----------------------
 
 function print_filter(filter) {
   var f = eval(filter);
@@ -521,7 +451,7 @@ function print_filter(filter) {
   );
 }
 
-// MISSIONS------------------------------------------------
+// -------------- API CALL MISSIONS (technically launches) ------------------------------------------------
 
 function apiCallMissions() {
   const fields = [
@@ -529,8 +459,6 @@ function apiCallMissions() {
     "launch_year",
     "launch_success",
     "launch_date_local",
-    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
-    //  "rocket/second_stage/payloads",
     "rocket",
     "launch_site/site_name_long",
     "mission_name",
@@ -542,36 +470,27 @@ function apiCallMissions() {
 
   d3.json(`https://api.spacexdata.com/v3/launches/past${filters}`).then(
     function(data) {
-      //  console.log(data[29]);
       console.log(data[29]);
-      // drawGraphs(data);
       crossfilterMissionCards(data);
     }
   );
 }
 
 function crossfilterMissionCards(data) {
-  var ndx = crossfilter(data); // only necessary if filtering
+  var ndx = crossfilter(data);  
   console.log(data[60]);
   doCards(data);
-  //   loadCards(ndx);
 }
 function doCards(data) {
-  // count of objects in data object
-  var totalFlights = getObjectLength(data);
   console.log("object length: " + getObjectLength(data));
-  //   console.log(data.length());
-
-  for (var i = 0; i < totalFlights; i++) {
+  for (var i = 0; i < getObjectLength(data); i++) {
     //do in reverse order to show most recent launches first
     //create new card (jQuery)// button spinner while page loads
-    //populate it
     var row = data[i];
     var missionPatchSmall = row.links.mission_patch_small;
     var missionPatch = row.links.mission_patch;
     var missionName = row.mission_name;
     var launchDate = row.launch_date_local.substring(0, 10); //).substring(0, 10);
-    //  var launchSuccess = row.launch_success;
 
     var launchOutcome = row.launch_success
       ? "LAUNCH SUCCESS"
@@ -585,10 +504,8 @@ function doCards(data) {
     var youtubeLink = row.links.video_link;
     //TODO youtube logo for each card
     //TODO article logo for each card
-    //TODO launch success symbol for each card
-    // create next mission card
 
-    //create cards
+    // create mission cards
     $("#missions").append(
       `<div class="card text-left col-2">
                <img class="card-img-top" src="${missionPatchSmall}" onclick="populateModalMissionPatch('${missionPatch}', '${missionName}');" alt="Mission Patch" />
@@ -608,7 +525,7 @@ function doCards(data) {
     );
   }
 }
-
+// ------------- populates modal with large mission patch, mission name
 function populateModalMissionPatch(missionPatch, missionName, details) {
   $("#modal-content").html(
     `<img src="${missionPatch}" class="mission-patch-large" alt="Mission Patch Large"/>
@@ -617,6 +534,7 @@ function populateModalMissionPatch(missionPatch, missionName, details) {
   $("#myModal").modal("show");
 }
 
+// -- get Object Length function -----
 function getObjectLength(data) {
   return Object.keys(data).length;
 }
@@ -624,7 +542,6 @@ function getObjectLength(data) {
 function loadCards(ndx) {
   var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //?
   var rocketGroup = rocketDimension.group(); //?
-  //   print_filter(rocketGroup);
 }
 
 //--------------apiCALL Next Mission----------------------------
@@ -636,8 +553,7 @@ function apiCallNextLaunch() {
     "launch_success",
     "launch_date_local",
     "launch_date_unix",
-    //  "rocket/rocket_name", //rocket_name isn't being returned...for now just get all rocket/
-    //  "rocket/second_stage/payloads",
+    "launch_date_utc",
     "rocket",
     "launch_site",
     "mission_name",
@@ -649,28 +565,56 @@ function apiCallNextLaunch() {
 
   d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
     function(data) {
-      getNextLaunch(data);
-      //call api one launchpad to get map marker details
-      // console.log(data);
-      // console.log(data.launch_site.site_id);
+       // get details (lat/long) of launch pad
       apiCallOneLaunchPad(data.launch_site.site_id);
+      // populate next mission's details
+      populateNextMissionCard(data);
+      // compute and populate countdown until next launch
+      populateCountDown(data.launch_date_unix);
     }
   );
 }
-// --------------------------------
-function getNextLaunch(data) {
-  var launchDateUnix = data.launch_date_unix * 1000; // millisecond since unix epoch
-  var flightNumber = data.flight_number; // millisecond since unix epoch
-  var missionName = data.mission_name; // millisecond since unix epoch
-  var launchSite = data.launch_site; // millisecond since unix epoch
-  var plannedLaunchDate = data.launch_date_local; // millisecond since unix epoch
-  var customer = data.rocket.second_stage.payloads[0].customers.toString(); // millisecond since unix epoch
-  var siteID = data.launch_site.site_id;
-  // console.log("TCL: getNextLaunch -> siteID", siteID)
+// ------------- poopulateNextMissionCard
+function populateNextMissionCard(data) {
+  //if rocket is reused, show 'Used Falcon 9'
+  //TODO replace Reddit Thread with Reddit Logo
+  //TODO catch error if reddit thread is null
+  var rocketName;
+  if (data.rocket.first_stage.cores[0].reused === true) {
+    rocketName = "Used Falcon 9";
+  } else {
+    rocketName = data.rocket.rocket_name;
+  }
+  $("#nextMissionCard").html(
+    `<div class="card-body">
+<h4 class="card-title">${data.mission_name}</h4>
+<p class="card-text">
+   <ul>
+      <li><strong>Flight Number:</strong> ${data.flight_number}</li>
+      <li><strong>Rocket:</strong> ${rocketName}</li>
+      <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
+      <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
+      <li><strong>Details:</strong> ${data.details}</li>
+      <li><a href=${data.links.reddit_campaign} target="_blank">Reddit Thread</a></li>
+   </ul>
+</p>
+</div>`
+  );
 
-  //   customerString = customer.toString();
+  // Add To Calendar event details
+  $("#addeventatc1 .title").text(`SpaceX Launch - ${data.mission_name}`);
+  $("#addeventatc1 .start").text(data.launch_date_utc);
+  $("#addeventatc1 .location").text(data.launch_site.site_name_long);
+  $("#addeventatc1 .description").text(
+    `Rocket: ${data.rocket.rocket_name} \n Details: ${data.details}`
+  );
+}
+
+// ----------------populateCountDown---
+function populateCountDown(launchDateUnix) {
+  var countDownDate = launchDateUnix * 1000; // millisecond since unix epoch
+
   //--https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
-  var countDownDate = launchDateUnix;
   // Update the count down every 1 second
   var x = setInterval(function() {
     // Get today's date and time
@@ -685,7 +629,6 @@ function getNextLaunch(data) {
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     // Output the result in an element with id="demo"
-    //   document.getElementById("nextLaunchCountdown").innerHTML = `${days} : ${hours} : ${minutes} : ${seconds}`;
     document.getElementById("days").innerHTML = days;
     document.getElementById("minutes").innerHTML = minutes;
     document.getElementById("hours").innerHTML = hours;
@@ -696,14 +639,9 @@ function getNextLaunch(data) {
       document.getElementById("nextLaunchCountdown").innerHTML = "LIFT OFF!";
     }
   }, 1000);
-  //--
-
-  $("#flightNumber").html(flightNumber);
-  //  $("#flightNumber").html(flightNumber);
-  //   $("#nextLaunch").append("<p>foo</p>");
 }
 
-//test---------------apiCallLaunchPads---------------
+//---------------apiCallLaunchPads---------------
 function apiCallOneLaunchPad(site_id) {
   d3.json(`https://api.spacexdata.com/v3/launchpads/${site_id}`).then(function(
     data
@@ -712,36 +650,31 @@ function apiCallOneLaunchPad(site_id) {
   });
 }
 
-//--------------------AddNextLaunchMarkerToMap
+//--------------------AddNextLaunchMarkerToMap------------
 function addNextLaunchMarkerToMap(data) {
   var launchSite = data.site_name_long;
 
-  //   var row = data[0];
   var latLngMarker = {
     lat: data.location.latitude,
     lng: data.location.longitude
   };
 
-  //initialise map
+  //initialise map, centered on launch site
   map = new google.maps.Map(document.getElementById("map"), {
-   //  center: { lat: 38, lng: -100.8 },
     center: latLngMarker,
+    mapTypeId: "hybrid",
     zoom: 12
   });
-  //   var fullName = data[0].full_name;
-  //create marker
-  //   console.log("TCL: addLandingMarkers -> latLngMarker ", latLngMarker);
+
+  // create marker of launch site
   var marker = new google.maps.Marker({
     position: latLngMarker,
     map: map,
     title: launchSite
   });
-  //center map on marker
-  //   map.setCenter = latLngMarker;
-  //   console.log("TCL: addNextLaunchMarkerToMap -> map.center", map.center)
 }
 
-//-------------ROADSTER
+//-------------ROADSTER (BONUS: probably not necessary)
 function apiCallRoadster() {
   const fields = [
     "speed_kph",
@@ -766,31 +699,30 @@ function apiCallLandingPads() {
   });
 }
 
-function addLandingMarkers(data) {
-  var totalLandingPads = getObjectLength(data);
-  console.log("object length: " + getObjectLength(data));
+// function addLandingMarkers(data) {
+//   var totalLandingPads = getObjectLength(data);
+//   console.log("object length: " + getObjectLength(data));
 
-  for (var i = 0; i < totalLandingPads; i++) {
-    //for each landing pad, add a marker
-    //get relevant data points
-    var row = data[i];
-    var latLngMarker = {
-      lat: row.location.latitude,
-      lng: row.location.longitude
-    };
-    var fullName = row.full_name;
-    //create marker
-    console.log("TCL: addLandingMarkers -> latLngMarker ", latLngMarker);
+//   for (var i = 0; i < totalLandingPads; i++) {
+//     //for each landing pad, add a marker
+//     //get relevant data points
+//     var row = data[i];
+//     var latLngMarker = {
+//       lat: row.location.latitude,
+//       lng: row.location.longitude
+//     };
+//     var fullName = row.full_name;
 
-    var marker = new google.maps.Marker({
-      position: latLngMarker,
-      map: map,
-      title: fullName
-    });
-  }
-}
+//     //create marker
+//     var marker = new google.maps.Marker({
+//       position: latLngMarker,
+//       map: map,
+//       title: fullName
+//     });
+//   }
+// }
 
-//draw landing graph
+// draw landing graph
 function drawLandingGraph(data) {
   var ndx = crossfilter(data);
 
@@ -811,7 +743,6 @@ function showLandingGraph(ndx) {
 
   print_filter(groupLandSuccess);
   print_filter(groupLandFail);
-  //get landing success percentage  (find easier way to get this, mb using dc)
   /*var totalSuccessArray = groupLandSuccess.all();
   var totalFailArray = groupLandFail.all();
   var totalSuccess = 0;
@@ -822,35 +753,24 @@ function showLandingGraph(ndx) {
   };
   var totalAttempts = totalSuccess + totalFail;
   var landSuccessRate = parseFloat(totalSuccess / (totalSuccess + totalFail)*100).toFixed(2)+"%";
-  $('#landings-success-rate').html(`<p>Success Rate: ${landSuccessRate}</p>`); //doesn't update
 */
   var rowChart = dc
     .barChart("#landings-chart")
-    //  .rowChart("#landings-chart")
     .width(800)
     .height(500)
     .x(d3.scaleOrdinal().domain([]))
     .xUnits(dc.units.ordinal)
     .elasticX(true)
-    //  .useViewBoxResizing(true)
     .dimension(landingPadDimension)
     .group(groupLandSuccess, "Success")
     .stack(groupLandFail, "Fail");
-  //  .colors(["#b22222", "#369a43"]);
-  //show percentage landing success
-  // console.log(groupLandSuccess);
-  // $('#landings-success-rate').html(function(d){
-  // console.log(d.successful_landings / d.attempted_landings);
-  // });
 }
 
 //----------------PAYLOADS.html--------------------------
 function apiCallPayloads() {
   d3.json("https://api.spacexdata.com/v3/payloads").then(function(data) {
-    //  console.log(data[29]);
     console.log(data[5]);
     drawPayloadGraphs(data);
-    //  crossfilterMissionCards(data);
   });
 }
 
@@ -864,6 +784,7 @@ function drawPayloadGraphs(data) {
   dc.renderAll();
 }
 
+//--------------- Payloads by Orbit-----------------
 function showPayloadGraph(ndx) {
   var orbitDimension = ndx.dimension(dc.pluck("orbit"));
   // if null, "N/A"
@@ -877,7 +798,6 @@ function showPayloadGraph(ndx) {
   var payloadTypeDimension = ndx.dimension(function(d) {
     return d.payload_type || "N/A";
   });
-  //   console.log(orbitDimension);
   var burstOrbitManuDimension = ndx.dimension(function(d) {
     return [d.orbit || "N/A", d.manufacturer || "N/A"];
   });
@@ -908,28 +828,18 @@ function showPayloadGraph(ndx) {
   print_filter(groupBurst);
 
   var rowChart = dc
-    //  .pieChart("#pieChartPayloadByOrbit")
     .rowChart("#pieChartPayloadByOrbit")
     .width(400)
     .height(300)
     .useViewBoxResizing(true)
-    //  .minAngleForLabel(0.15)
-    //  .drawPaths(true)
-    //  .slicesCap(7)
-    //  .externalLabels(30)
-    //  .externalRadiusPadding(50)
     .cap(7)
     .dimension(orbitDimension)
     .group(groupOrbit);
 
   var rowChartPayloadNationality = dc
-    //  .pieChart("#pieChartPayloadNationality")
     .rowChart("#pieChartPayloadNationalityUSvsROW")
     .width(300)
     .height(100)
-    //  .useViewBoxResizing(true) // doesnt work with this graph for some reason
-    //  .minAngleForLabel(0.12)
-    //  .slicesCap(7)
     .cap(1)
     .dimension(nationalityDimension)
     .group(groupNationality);
@@ -960,16 +870,3 @@ function showPayloadGraph(ndx) {
     .useViewBoxResizing(true)
     .dimension(payloadTypeDimension)
     .group(groupPayloadType);
-
-  /*
-  var sunBurst = dc
-    .sunburstChart("#sunburstChartOrbitManu")
-    .width(800)
-    .height(800)
-    .innerRadius(100)
-    .radius(300)
-    .minAngleForLabel(0.1)
-    .dimension(burstNationalityManuDimension)
-    .group(groupBurst2);
-    */
-}
