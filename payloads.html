@@ -12,17 +12,19 @@
    <!-- bootstrap -->
    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-   <!-- dc css ( not sure if this is necessary) -->
+   <!-- dc css (necessary?) -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.css"
       integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
+   <!-- google font -->
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="style.css">
-   <title>SpaceX - Payloads</title>
+   <!-- style.css -->
+   <link rel="stylesheet" href="assets/css/style.css">
+   <title>SpaceX Dashboard - Payloads</title>
 </head>
 
 <body>
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">SpaceX Data Dashboard</a>
+      <a class="navbar-brand" href="#">SpaceX Dashboard</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
@@ -34,76 +36,92 @@
             <a class="nav-item nav-link active" href="#">Payloads<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" href="landings.html">Landings</a>
             <a class="nav-item nav-link" href="missions.html">Missions</a>
-            <!-- <h1>SpaceX Launches</h1> -->
             <a href="javascript:dc.filterAll(); dc.renderAll();" class="btn btn-primary active">Reset</a>
          </div>
       </div>
    </nav>
 
    <div class="container-fluid">
-      <!-- <h4>Payloads</h4> -->
       <div class="row">
-         <div class="col">
-            <h4>Payloads by Orbit</h4>
-            <div id="pieChartPayloadByOrbit"></div>
+         <div class="col-lg-4">
+            <div class="chart" id="pieChartPayloadByOrbit">
+               <h3>Payloads by Orbit</h3>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+            </div>
          </div>
-         <div class="col">
-            <h4>Payloads by Manufacturer</h4>
-            <div id="pieChartPayloadManufacturer"></div>
+         <div class="col-lg-4">
+            <div class="chart" id="pieChartPayloadManufacturer">
+               <h3>Payloads by Manufacturer</h3>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-4">
+            <!-- <div id="sunburstChartOrbitManu"></div> -->
+            <div class="chart" id="rowChartPayloadType">
+               <h3>Payloads by Type</h3>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+            </div>
          </div>
       </div>
       <div class="row">
          <div class="col">
-            <h4>Payload Customers By Nationality & Manufacturer</h4>
-            <div id="sunburstChartOrbitManu"></div>
+            <!-- <h4>Payloads by Nationality: US vs Rest of World</h4> -->
+            <!-- <div id="pieChartPayloadNationalityUSvsROW"></div> -->
          </div>
-      </div>
-      <div class="row">
          <div class="col">
-               <div id="pieChartPayloadNationality"></div>
+            <!-- <h4>Payload Nationality Breakdown</!-->
+            <!-- <div id="pieChartPayloadNationality"></div> -->
          </div>
       </div>
    </div>
 
    <!-- SCRIPTs -->
-   <!-- Use minified versions of all to increse speed -->
-   <!-- d3 (check) -->
+   <!-- d3 -->
    <script src="https://d3js.org/d3.v5.min.js"></script>
    <!-- crossfilter -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.7/crossfilter.js"
-      integrity="sha256-RoQTnKdGMXVF8ICmLlVj4jdPEuypp4pUIFwDqq0QQy4=" crossorigin="anonymous"></script>
-   <!-- dc.js (check) -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.js"
-      integrity="sha256-AxL1jsPAp9qMImTV2THtSehUDOmMEox/+VTDdEH9NKI=" crossorigin="anonymous"></script>
-   <!-- test d3 -->
-   <!-- <script src="dc.js"></script> -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
+      integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
+   <!-- dc.js -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
+      integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
    <!-- bootstrap -->
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"></script>
-
-   <script>
-      function print_filter(filter) {
-         var f = eval(filter);
-         if (typeof (f.length) != "undefined") { } else { }
-         if (typeof (f.top) != "undefined") { f = f.top(Infinity); } else { }
-         if (typeof (f.dimension) != "undefined") { f = f.dimension(function (d) { return ""; }).top(Infinity); } else { }
-         console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
-      }
-   </script>
-   <!-- Google Maps API  with API KEY-->
-   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap" -->
-      <!-- async defer></script> -->
-   <script src="main.js">
-   </script>
+   <!-- main.js -->
+   <script src="assets/js/main.js"></script>
    <script>
       apiCallPayloads();
    </script>
-   <!-- for testing -->
 </body>
 <footer>
-
-   <p>Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></p>
+   <!-- YouTube -->
+   <script src="https://apis.google.com/js/platform.js"></script>
+   <ul id="footer-list">
+      <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
+      <li><a href="https://www.spacex.com" target="_blank"><img src="assets/img/spacex_logo_white.png" /></a></li>
+      <!-- <a href="https://www.youtube.com/user/spacexchannel/">SpaceX YouTube Channel</a> -->
+      <li>
+         <div class="g-ytsubscribe" data-channel="spacexchannel" data-layout="full" data-theme="dark"
+            data-count="default"></div>
+      </li>
+      <!-- SpaceX Tweets -->
+      <!-- <a class="twitter-timeline" data-width="400px" data-height="500px" data-dnt="true" data-theme="dark" -->
+      <!-- href="https://twitter.com/SpaceX?ref_src=twsrc%5Etfw">Tweets by SpaceX</a> -->
+      <!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+      <!-- SpaceX Follow on Twitter -->
+      <li><a href="https://twitter.com/SpaceX?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false"
+            target="_blank">Follow @SpaceX</a></li>
+   </ul>
+   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+   <!-- </div> -->
+   <span>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank">GitHub</a></span>
 </footer>
 
 </html>

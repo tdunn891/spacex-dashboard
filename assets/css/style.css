@@ -1,9 +1,9 @@
 body {
+   /* TODO gradient background color spacey grey */
   background-color: darkgray;
 }
 
-#chartPayloadPerYear,
-#pieChartLaunchSuccess {
+#chartPayloadPerYear, #pieChartLaunchSuccess, #chartLaunchSites {
   display: none;
 }
 
@@ -12,8 +12,8 @@ body {
 }
 
 .chart {
+   /* TODO Add box shadow to chart cards */
   background-color: rgba(46, 49, 49, 0.65);
-  /* margin: 0 auto; */
   margin-top: 18px;
   text-align: center;
 }
@@ -36,13 +36,6 @@ body {
 .x-axis-label {
   fill: whitesmoke !important;
   font-family: "Share Tech", sans-serif;
-  /* padding: 10px !important; */
-}
-
-.x-axis-label {
-  /* margin-top: 20px !important; */
-  /* padding: 20px !important; */
-  /* transform: translate(200,240) !important; */
 }
 
 /* mission cards */
@@ -54,11 +47,21 @@ body {
 
 #nextMissionCard {
   font-family: "Share Tech", sans-serif;
-  /* margin: auto 100px; */
-  /* text-align: center; */
-  /* display: block; */
-  /* width: 300px; */
-  /* width: ; */
+}
+
+#addeventatc1 {
+   text-align: center;
+   display: block;
+   margin: 10px auto;
+   font-family: "Share Tech", sans-serif;
+   color: whitesmoke !important;
+   background-color: darkblue;
+   /* width: 100px; */
+   color: blue;
+}
+
+#addeventatc1 .addeventatc_icon {
+  background-color:whitesmoke !important;
 }
 
 .card-title {
@@ -68,14 +71,33 @@ body {
 .card-body {
   padding: 0.6rem;
 }
+
 /* Chart Label Color */
 .dc-chart g.row text {
   fill: black;
 }
 
 .dc-data-count {
-  margin-right: 26px;
-  margin-left: auto;
+  margin-right: 26px !important;
+  /* display: inline-block; */
+  /* margin-left: auto; */
+}
+
+.dc-legend-item text {
+   /* color: whitesmoke !important; */
+   /* background-color: yellow !important; */
+   font-size: 12px;
+   font-family: "Share Tech", sans-serif;
+   /* stroke: white; */
+   /* color: aquamarine !important; */
+   fill: whitesmoke !important;
+}
+
+/* launches by site */
+#chartLaunchesBySiteAndRocket .x.axis text {
+   text-anchor: end !important;
+   transform: rotate(-30deg);
+   font-size: 10px;
 }
 
 ul {
@@ -84,8 +106,10 @@ ul {
 }
 
 .twitter-timeline {
-  display: none;
+  display: block !important;
+  margin: 10px auto !important;
 }
+
 .mission-patch-large {
   width: 60%;
   height: auto;
@@ -123,7 +147,6 @@ ul {
   width: 800px;
 }
 /* small patches */
-/* img { */
 .card-image-top {
   margin: 15px auto;
   height: auto;
@@ -131,14 +154,14 @@ ul {
 }
 
 #nextLaunchCountdown table {
-  margin: 0 auto;
+  margin: 20px auto;
   text-align: center;
   color: whitesmoke;
   font-size: 22px;
-  animation: fadein 3s;
-  -moz-animation: fadein 3s; /* Firefox */
-  -webkit-animation: fadein 3s; /* Safari and Chrome */
-  -o-animation: fadein 3s; /* Opera */
+  animation: fadein 4s;
+  -moz-animation: fadein 4s; /* Firefox */
+  -webkit-animation: fadein 4s; /* Safari and Chrome */
+  -o-animation: fadein 4s; /* Opera */
 }
 
 #counter td {
@@ -181,9 +204,6 @@ ul {
   }
 }
 
-#nextLaunchCountdown table tr td {
-  /* width: 30px !important; */
-}
 h1 {
   text-align: center;
   font-family: "Share Tech", sans-serif;
@@ -213,12 +233,8 @@ section {
   height: 80vh !important;
 }
 #map {
-   /* display: block; */
-   /* margin: 10px; */
-   /* padding: 20px; */
    width: 100%;
    height: 100%;
-   /* max-height: 250px; */
 }
 .navbar-brand {
   font-family: "Share Tech", sans-serif !important;
@@ -230,25 +246,27 @@ section {
 }
 
 footer {
-  /* display: none; */
-  /* position: absolute; */
   width: 100%;
   bottom: 0;
   background-color: black;
   color: whitesmoke;
-  /* vertical-align: middle; */
   margin: auto;
-  height: 70px;
+  height: fit-content;
   text-align: center;
-}
+} 
 
-footer p {
-  /* vertical-align: middle; */
-  margin-top: 20px !important;
-  display: block;
+#footer-list {
+   list-style-type: none;
+   padding: 20px 2px;
+}
+#footer-list li {
+   padding: 0 16px;
+   vertical-align: middle;
+   /* float: left; */
+   display: inline-block;
 }
 
 * {
-  outline: 1px solid grey;
-  outline-offset: -1px;
+  /* outline: 1px solid grey; */
+  /* outline-offset: -1px; */
 }

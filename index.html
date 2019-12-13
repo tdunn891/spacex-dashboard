@@ -40,7 +40,17 @@
    </nav>
    <div class="container-fluid">
       <div class="row">
-         <div class="col-lg-6">
+         <div class="col-ld-12">
+            <!-- TODO align data count to right -->
+            <div class="dc-data-count">
+               <span class="filter-count"></span>
+               <span class="total-count"></span>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <!-- TODO ensure chart colours are not green or red (success/fail) -->
+         <div class="col-lg-4">
             <div class="chart" id="chartLaunchesPerYearByVehicle">
                <h3>Launches By Year</h3>
                <div class="spinner-grow" role="status">
@@ -48,7 +58,7 @@
                </div>
             </div>
          </div>
-         <div class="col-lg-6">
+         <div class="col-lg-4">
             <!-- <div class="chart" id="chartLaunchSites"> -->
             <div class="chart" id="pieChartLaunchesByRocket">
                <!-- <h3>Launches Per Year By Launch Site</h3> -->
@@ -58,40 +68,48 @@
                </div>
             </div>
          </div>
-      </div>
-      <div class="row">
-         <div class="col-lg-6">
-            <div class="chart" id="chartPayloadPerYear">
-               <!-- <h3>Payload Mass Per Year (kg)</h3> -->
-            </div>
-         </div>
-         <div class="col-lg-6">
-            <h3>Percentage Launch Success</h3>
-            <div id="numberDisplayLaunchSuccessRate" style="font-size: 20px; text-align: center;"></div>
-            <div id="numberDisplayLaunchSuccessTotal" style="font-size: 20px; text-align: center;"></div>
-            <div id="numberDisplayLaunchPercent"></div>
+         <div class="col-lg-4">
             <div class="chart" id="chartLaunchesBySiteAndRocket">
                <h3>Launches By Site</h3>
-            </div>
-            <div class="chart" id="pieChartLaunchesByRocket">
-               <!-- <div class="chart" id="pieChartLaunchSuccess"> -->
-               <!-- <h3>Launch Success Rate</h3> -->
-            </div>
-         </div>
-         <div class="row">
-            <div class="col">
-               <div class="dc-data-count">
-                  <span class="filter-count"></span>
-                  <span class="total-count"></span>
+               <div class="spinner-grow" role="status">
+                  <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
-         <div class="row">
-            <div class="col">
-               <table id="dc-data-table" class="table">
-                  <!-- TODO: add headers to data table -->
-               </table>
+      </div>
+      <div class="row">
+         <!-- TODO test for screen shake.. -->
+         <!-- <div class="col-lg-6"> -->
+
+         <!-- <div class="chart" id="chartPayloadPerYear"> -->
+         <!-- <h3>Payload Mass Per Year (kg)</h3> -->
+         <!-- </div> -->
+         <!-- </div> -->
+         <div class="col-lg-4">
+            <div class="chart">
+               <h3>Percentage Launch Success</h3>
+               <div id="numberDisplayLaunchSuccessRate" style="font-size: 20px; text-align: center;"></div>
+               <div id="numberDisplayLaunchSuccessTotal" style="font-size: 20px; text-align: center;"></div>
+               <div id="numberDisplayLaunchPercent"></div>
             </div>
+
+            <!-- <div class="chart" id="pieChartLaunchesByRocket"> -->
+            <!-- <div class="chart" id="pieChartLaunchSuccess"> -->
+            <!-- <h3>Launch Success Rate</h3> -->
+            <!-- </div> -->
+         </div>
+         <div class="col-lg-4">
+            <div class="chart" id="rowChartLaunchSuccess">
+               <h3>Launch Outcome</h3>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+         <div class="col">
+            <table id="dc-data-table" class="table">
+               <!-- TODO: add headers to data table -->
+            </table>
          </div>
       </div>
    </div>
@@ -116,7 +134,7 @@
    </script>
 </body>
 <footer>
-   <!-- <div class="footer"> -->
+   <!-- YouTube -->
    <script src="https://apis.google.com/js/platform.js"></script>
    <ul id="footer-list">
       <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
