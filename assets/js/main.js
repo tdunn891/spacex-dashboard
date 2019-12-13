@@ -1,5 +1,6 @@
 //------------------------------------ API Request
 //TODO: catch apicall errors
+
 function apiCall() {
   const fields = [
     "flight_number",
@@ -28,32 +29,105 @@ function drawGraphs(data) {
     if (data[i].rocket.first_stage.cores[0].reused === true) {
       //change name to Used
       data[i].rocket.rocket_name = "Used Falcon 9";
-    }
+    } //else
+    // data[i].rocket.rocket_name = "New Falcon 9";
   }
 
   var ndx = crossfilter(data);
-  // TODO: use bootstrap spinners while charts load
 
   // Charts
   showPastLaunches(ndx);
-  showPayloads(ndx);
+//   showPayloads(ndx);
   showLaunchSuccessRate(ndx);
-  showPastLaunchesBySite(ndx);
+  //   showPastLaunchesBySite(ndx);
   showRowCount(ndx);
-  showDataTable(ndx);
+  //   showDataTable(ndx);
+  showPieChartByRocket(ndx);
 
-//   showPieChartByRocket(ndx);
-
+  showLaunchSuccessPercentage(ndx);
+  //test
+  showLaunchesBySiteByRocket(ndx);
   // hide spinners
   $(".spinner-grow").hide();
 
   dc.renderAll();
 }
+//test----------------launches by site by rocket
+// doesn't work
+function showLaunchesBySiteByRocket(ndx) {
+  var siteDimension = ndx.dimension(function(d) {
+    return d.launch_site.site_name_long;
+  });
+  var rocketGroup = siteDimension
+    .group()
+    .reduce(reduceAdd, reduceRemove, reduceInitial);
+
+  function reduceAdd(i, d) {
+    //i: initial, d: datapoint
+    i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
+    return i;
+  }
+  function reduceRemove(i, d) {
+    i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) - 1;
+    return i;
+  }
+  function reduceInitial() {
+    return {};
+  }
+  print_filter(rocketGroup);
+  var barChart = dc
+    .barChart("#chartLaunchesBySiteAndRocket")
+    .width(600)
+    .height(360)
+    .dimension(siteDimension)
+    .group(rocketGroup, "Falcon 1", function(d) {
+      return d.value["Falcon 1"];
+    })
+    .stack(rocketGroup, "New Falcon 9", function(d) {
+      return d.value["Falcon 9"];
+    })
+    .stack(rocketGroup, "Used Falcon 9", function(d) {
+      return d.value["Used Falcon 9"];
+    })
+    .stack(rocketGroup, "Falcon Heavy", function(d) {
+      return d.value["Falcon Heavy"];
+    })
+    .xAxisLabel("Launch Site", 100)
+    .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
+    //  .useViewBoxResizing(true)
+    .xUnits(dc.units.ordinal)
+    .renderHorizontalGridLines(true)
+    .gap(20)
+    .elasticX(true)
+     .renderTitle(true)
+     .title(function(d) {
+      //  return rocketGroup;
+      //TODO: hide tooltip row if zero
+      return [
+        "New Falcon 9: " + (d.value["Falcon 9"] || "0"),
+        "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
+        "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
+        "Falcon 1: " + (d.value["Falcon 1"] || "0")
+      ].join("\n");
+    })
+    .x(
+      d3
+        .scaleOrdinal()
+        .domain([
+           "Kwajalein Atoll Omelek Island",
+           "Vandenberg Air Force Base Space Launch Complex 4E",
+          "Kennedy Space Center Historic Launch Complex 39A",
+          "Cape Canaveral Air Force Station Space Launch Complex 40"
+        ])
+    );
+}
+
 //------------------------------------ Data Table
+//TODO: improve data table
 function showDataTable(ndx) {
   var dimension1 = ndx.dimension(function(d) {
     return d.dim;
-  }); 
+  });
   var dataTable = dc
     .dataTable("#dc-data-table")
     .dimension(dimension1)
@@ -85,6 +159,46 @@ function showDataTable(ndx) {
       return d.flight_number;
     });
 }
+//test------------ show launch success percentage as single number
+//TODO figure out how to show percentage launch success as single number
+function showLaunchSuccessPercentage(ndx) {
+  var successDimension = ndx.dimension(dc.pluck("launch_success"));
+  var groupSuccess = successDimension.group();
+  var all = ndx.groupAll();
+
+  print_filter(groupSuccess);
+
+  var launchSuccessPercentage = dc
+    .numberDisplay("#numberDisplayLaunchSuccessRate")
+    .width(100)
+    .height(100)
+    //  .dimension(successDimension)
+    //  .crossfilter(ndx)
+    //  .groupAll(all);
+    .group(groupSuccess)
+    //   .formatNumber(d3.format(".0%")) //TODO format successes display to integer
+    .valueAccessor(function(d) {
+      return d.value;
+    })
+    .html({
+      one: "Launch Success: %number",
+      some: "Launch Successes: %number",
+      none: "No Success"
+    });
+
+  //total records
+  var numRecords = ndx.groupAll();
+  var numDisplay = dc.numberDisplay("#numberDisplayLaunchSuccessTotal");
+  numDisplay
+    .group(numRecords)
+    .html({
+      one: "Launch Attempts: %number",
+      some: "Launch Attempts: %number",
+      none: "No Launch Attempts"
+    })
+    .valueAccessor(x => x);
+  console.log(numRecords);
+}
 
 //----------------------------------- Row Count
 function showRowCount(ndx) {
@@ -102,12 +216,42 @@ function showRowCount(ndx) {
   //   https://dc-js.github.io/dc.js/docs/stock.html
 }
 // -----pie chart by rocket
-//TODO: write showPieChartByRocket() 
-// function showPieChartByRocket(ndx) {
-//   var rocketDimension = ndx.dimension(dc.pluck("rocket_name")); //function(d) {
-//   var groupRocket = rocketDimension.group().reduceCount();
-//   print_filter(groupRocket);
-// }
+function showPieChartByRocket(ndx) {
+  var rocketDimension = ndx.dimension(function(d) {
+    return d.rocket.rocket_name;
+  });
+  var groupRocket = rocketDimension.group();
+
+  var pieChart = dc
+    .pieChart("#pieChartLaunchesByRocket")
+    //  .externalLabels(10)
+    //   .colors(d3.scale.ordinal().range(["#3182bc", "#fd8c3d", "#e6550e"]))
+    //  .drawPaths(true)
+    //  .innerRadius(10)
+    .externalRadiusPadding(30)
+    .minAngleForLabel(0.1)
+    .dimension(rocketDimension)
+    .group(groupRocket)
+    //  .colors(d3.scaleOrdinal())
+    //  .range(["#1f78b4", "#b2df8a", "#cab2d6", "#ff4d4d"])
+    .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    .height(360)
+    .width(600)
+    .legend(
+      dc
+        .legend()
+        .x(20)
+        .y(95)
+        //   .horizontal(true)
+        .autoItemWidth(true)
+        .itemHeight(26)
+        .gap(16)
+    )
+    //  .transitionDuration(800)
+    //  .radius(150)
+    .useViewBoxResizing(true);
+  //  .render();
+}
 //----------------------------------- Show Launches Per Year By Rocket
 
 function showPastLaunches(ndx) {
@@ -129,12 +273,12 @@ function showPastLaunches(ndx) {
   function reduceInitial() {
     return {};
   }
-  print_filter(rocketGroup);
+  //   print_filter(rocketGroup);
 
   // Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesPerYearByVehicle")
-    .width(600) //TODO: change chart heights and widths to percentages
+    .width(600)
     .height(360)
     .dimension(yearDimension)
     .group(rocketGroup, "Falcon 1", function(d) {
@@ -188,20 +332,24 @@ function showPastLaunches(ndx) {
         ])
     )
     .centerBar(true)
-    .legend(
-      dc
-        .legend()
-        .x(145)
-        .y(340)
-        .itemHeight(13)
-        .gap(8)
-        .horizontal(true)
-        .autoItemWidth(true)
-    )
+    //  .legend(
+    //    dc
+    //      .legend()
+    //      .x(145)
+    //      .y(340)
+    //      .itemHeight(13)
+    //      .gap(8)
+    //      .horizontal(true)
+    //      .autoItemWidth(true)
+    //  )
     .xAxis()
     .tickFormat(d3.format("0000"));
+
+  // test pi
+
+  //   print_filter(rocketGroup);
 }
-//test---------------------------------Launch Sites by Year 
+//test---------------------------------Launch Sites by Year
 
 function showLaunchSitesByYear(ndx) {
   var yearDimension = ndx.dimension(dc.pluck("launch_year"));
@@ -252,7 +400,7 @@ function showLaunchSitesByYear(ndx) {
 
 function showPastLaunchesBySite(ndx) {
   var yearDimension = ndx.dimension(dc.pluck("launch_year"));
-//   var siteDimension = ndx.dimension(dc.pluck("site_name_long")); 
+  //   var siteDimension = ndx.dimension(dc.pluck("site_name_long"));
   var yearGroup = yearDimension
     .group()
     .reduce(reduceAdd, reduceRemove, reduceInitial);
@@ -284,20 +432,12 @@ function showPastLaunchesBySite(ndx) {
       return d
         .value["Cape Canaveral Air Force Station Space Launch Complex 40"];
     })
-    .stack(
-      yearGroup,
-      "Vandenberg Air Force Base",
-      function(d) {
-        return d.value["Vandenberg Air Force Base Space Launch Complex 4E"];
-      }
-    )
-    .stack(
-      yearGroup,
-      "Kennedy Space Center",
-      function(d) {
-        return d.value["Kennedy Space Center Historic Launch Complex 39A"];
-      }
-    )
+    .stack(yearGroup, "Vandenberg Air Force Base", function(d) {
+      return d.value["Vandenberg Air Force Base Space Launch Complex 4E"];
+    })
+    .stack(yearGroup, "Kennedy Space Center", function(d) {
+      return d.value["Kennedy Space Center Historic Launch Complex 39A"];
+    })
     .yAxisLabel("Launches", 25) // Add internal axis margins/paddingj
     .xAxisLabel("Year", 30)
     .renderHorizontalGridLines(true)
@@ -344,7 +484,7 @@ function showPayloads(ndx) {
         d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
     }
     return weight;
-  }); 
+  });
 
   // Chart
   var barChart = dc
@@ -356,7 +496,7 @@ function showPayloads(ndx) {
     .yAxisLabel("Payload Mass (kg)")
     .xAxisLabel("Year")
     .renderHorizontalGridLines(true)
-     .gap(10)
+    .gap(10)
     .xUnits(dc.units.ordinal)
     .x(
       d3
@@ -382,7 +522,7 @@ function showPayloads(ndx) {
     .centerBar(true)
     .brushOn(false)
     .xAxis()
-    .tickFormat(d3.format("0000")); 
+    .tickFormat(d3.format("0000"));
 }
 
 //------------------------Sucess Percentage------------- could show this just as Text percentage (like crimestats)
@@ -414,7 +554,7 @@ function showLaunchSuccessRate(ndx) {
           d.value +
           " out of ... or (" +
           Math.floor((d.value / all.value()) * 100) +
-          "%)"; 
+          "%)";
       }
       return label;
     });
@@ -477,10 +617,11 @@ function apiCallMissions() {
 }
 
 function crossfilterMissionCards(data) {
-  var ndx = crossfilter(data);  
+  var ndx = crossfilter(data);
   console.log(data[60]);
   doCards(data);
 }
+
 function doCards(data) {
   console.log("object length: " + getObjectLength(data));
   for (var i = 0; i < getObjectLength(data); i++) {
@@ -502,13 +643,16 @@ function doCards(data) {
     var details = row.details;
     var articleLink = row.links.article_link;
     var youtubeLink = row.links.video_link;
+    var flickrArray = row.links.flickr_images; // deal with null
+    console.log(flickrArray);
+    //  console.log(typeof(flickrArray));
     //TODO youtube logo for each card
     //TODO article logo for each card
 
     // create mission cards
     $("#missions").append(
       `<div class="card text-left col-2">
-               <img class="card-img-top" src="${missionPatchSmall}" onclick="populateModalMissionPatch('${missionPatch}', '${missionName}');" alt="Mission Patch" />
+               <img class="card-img-top" src="${missionPatchSmall}" onclick="populateModal([${flickrArray}]);" alt="Mission Patch" />
                <div class="card-body">
                   <h4 class="card-title">${missionName}</h4>
                   <span class="${launchOutcomeClass}">${launchOutcome}</span>
@@ -517,7 +661,7 @@ function doCards(data) {
                      <li>Flight Number: ${flightNumber}</li>
                      <li>Launch Date: ${launchDate}</li>
                   </ul>
-                  <a href="${youtubeLink}" target="_blank">Vid</a>
+                  <a href="${youtubeLink}" target="_blank"><img src="assets/img/youtube_social_red.png" width="24px" /></a>
                   <a href="${articleLink}" target="_blank">Article</a>
                   </p>
                </div>
@@ -526,14 +670,39 @@ function doCards(data) {
   }
 }
 // ------------- populates modal with large mission patch, mission name
-function populateModalMissionPatch(missionPatch, missionName, details) {
+function populateModal(params) {
+  //missionPatch, missionName, details
+  //get flickr image array
+  //   var flickrImages = data[i].links.flickr_images;
+  console.log(params);
+  var flickrImageCount = params.length();
+
+  // if array not empty, create gallery in modal
   $("#modal-content").html(
-    `<img src="${missionPatch}" class="mission-patch-large" alt="Mission Patch Large"/>
-    <h4 class="card-title">${missionName}</h4>`
+    `<div id="carousel" class="carousel slide" data-ride="carousel">
+     <div class="carousel-inner">
+     </div>
+   </div>`
   );
+
+  for (var i = 0; i < flickrImageCount; i++) {
+    //add carousel item
+    var flickrImageURL = params[i];
+    $(".carousel-inner").append(
+      `<div class="carousel-item">
+        <img src="${flickrImageURL}" class="d-block w-100" alt="Launch Image">
+       </div>`
+    );
+    //might need an active class for carousel item
+    //-----------------
+    //   $("#modal-content").html(
+    //     `<img src="${missionPatch}" class="mission-patch-large" alt="Mission Patch Large"/>
+    //     <h4 class="card-title">${missionName}</h4>`
+    //   );
+  }
+
   $("#myModal").modal("show");
 }
-
 // -- get Object Length function -----
 function getObjectLength(data) {
   return Object.keys(data).length;
@@ -565,7 +734,7 @@ function apiCallNextLaunch() {
 
   d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
     function(data) {
-       // get details (lat/long) of launch pad
+      // get details (lat/long) of launch pad
       apiCallOneLaunchPad(data.launch_site.site_id);
       // populate next mission's details
       populateNextMissionCard(data);
@@ -595,7 +764,7 @@ function populateNextMissionCard(data) {
       <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
       <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
       <li><strong>Details:</strong> ${data.details}</li>
-      <li><a href=${data.links.reddit_campaign} target="_blank">Reddit Thread</a></li>
+      <li><a href=${data.links.reddit_campaign} target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
    </ul>
 </p>
 </div>`
@@ -741,8 +910,8 @@ function showLandingGraph(ndx) {
     return d.attempted_landings - d.successful_landings;
   });
 
-  print_filter(groupLandSuccess);
-  print_filter(groupLandFail);
+  //   print_filter(groupLandSuccess);
+  //   print_filter(groupLandFail);
   /*var totalSuccessArray = groupLandSuccess.all();
   var totalFailArray = groupLandFail.all();
   var totalSuccess = 0;
@@ -754,13 +923,15 @@ function showLandingGraph(ndx) {
   var totalAttempts = totalSuccess + totalFail;
   var landSuccessRate = parseFloat(totalSuccess / (totalSuccess + totalFail)*100).toFixed(2)+"%";
 */
-  var rowChart = dc
+  var barChart = dc
     .barChart("#landings-chart")
-    .width(800)
-    .height(500)
+    .width(400)
+    .height(200)
     .x(d3.scaleOrdinal().domain([]))
     .xUnits(dc.units.ordinal)
     .elasticX(true)
+    .ordinalColors(["#2db92d", "#cd0000"])
+    .useViewBoxResizing(true)
     .dimension(landingPadDimension)
     .group(groupLandSuccess, "Success")
     .stack(groupLandFail, "Fail");
@@ -822,17 +993,18 @@ function showPayloadGraph(ndx) {
     });
 
   var all = ndx.groupAll();
-  print_filter(groupOrbit);
-  print_filter(groupNationality);
-  print_filter(groupManufacturer);
-  print_filter(groupBurst);
+  //   print_filter(groupOrbit);
+  //   print_filter(groupNationality);
+  //   print_filter(groupManufacturer);
+  //   print_filter(groupBurst);
 
   var rowChart = dc
     .rowChart("#pieChartPayloadByOrbit")
-    .width(400)
-    .height(300)
+    .width(300)
+    .height(160)
     .useViewBoxResizing(true)
     .cap(7)
+    .gap(2)
     .dimension(orbitDimension)
     .group(groupOrbit);
 
@@ -846,10 +1018,11 @@ function showPayloadGraph(ndx) {
 
   var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
-    .width(400)
-    .height(300)
+    .width(300)
+    .height(160)
     .useViewBoxResizing(true)
     .cap(7)
+    .gap(2)
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
@@ -864,9 +1037,11 @@ function showPayloadGraph(ndx) {
 
   var rowChartPayloadType = dc
     .rowChart("#rowChartPayloadType")
-    .width(400)
-    .height(200)
+    .width(300)
+    .height(160)
+    .gap(2)
     //  .labelOffsetX()
     .useViewBoxResizing(true)
     .dimension(payloadTypeDimension)
     .group(groupPayloadType);
+}
