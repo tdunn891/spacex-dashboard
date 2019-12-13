@@ -37,7 +37,7 @@ function drawGraphs(data) {
 
   // Charts
   showPastLaunches(ndx);
-//   showPayloads(ndx);
+  //   showPayloads(ndx);
   showLaunchSuccessRate(ndx);
   //   showPastLaunchesBySite(ndx);
   showRowCount(ndx);
@@ -94,13 +94,13 @@ function showLaunchesBySiteByRocket(ndx) {
     })
     .xAxisLabel("Launch Site", 100)
     .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
-    //  .useViewBoxResizing(true)
+    .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
     .gap(20)
     .elasticX(true)
-     .renderTitle(true)
-     .title(function(d) {
+    .renderTitle(true)
+    .title(function(d) {
       //  return rocketGroup;
       //TODO: hide tooltip row if zero
       return [
@@ -114,8 +114,8 @@ function showLaunchesBySiteByRocket(ndx) {
       d3
         .scaleOrdinal()
         .domain([
-           "Kwajalein Atoll Omelek Island",
-           "Vandenberg Air Force Base Space Launch Complex 4E",
+          "Kwajalein Atoll Omelek Island",
+          "Vandenberg Air Force Base Space Launch Complex 4E",
           "Kennedy Space Center Historic Launch Complex 39A",
           "Cape Canaveral Air Force Station Space Launch Complex 40"
         ])
@@ -533,6 +533,7 @@ function showLaunchSuccessRate(ndx) {
   var launchGroup = launchDimension.group();
   var all = ndx.groupAll();
 
+// pieChart not used, consider removing
   var pieChart = dc
     .pieChart("#pieChartLaunchSuccess")
     .width(300)
@@ -558,6 +559,27 @@ function showLaunchSuccessRate(ndx) {
       }
       return label;
     });
+
+  // launch success yes no as rowChart
+  var rowChart = dc
+    .rowChart("#rowChartLaunchSuccess")
+    .width(500)
+    .height(160)
+    .gap(10)
+    .dimension(launchDimension)
+    .ordinalColors(["#2db92d", "#cd0000"])
+    .useViewBoxResizing(true)
+   //  .label(false)
+   .label(function(d) {
+      // if (rowChart.hasFilter() && !rowChart.hasFilter(d.key)) {
+         // return d.key;
+      //  } 
+       var label;
+       d.key === true ? (label = "Lift-Off!") : (label = "Oops...");
+       return label;
+   })
+   //  .renderTitle(false)
+    .group(launchGroup);
 }
 
 //----------------------- Print Filter -----------------------
