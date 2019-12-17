@@ -110,6 +110,22 @@ ul {
   margin: 10px auto !important;
 }
 
+/* .youtube-icon-small, .wiki-icon-small { */
+.link-icon-small {
+  /* height: auto; */
+  height: 22px;
+}
+
+.mission-patch-small {
+  /* width: 30%; */
+  /* height: auto; */
+  height: 50%;
+  width: auto;
+  /* margin-top: 1px; */
+  /* margin-bottom: 1px; */
+  /* padding-top: 0px; */
+  /* padding-bottom: 0px; */
+}
 .mission-patch-large {
   width: 60%;
   height: auto;

@@ -12,9 +12,11 @@ function apiCall() {
     "rocket",
     "launch_site/site_name_long"
   ];
-  const filters = fields.join(",");
+  var filters = "?filter=" + fields.join(",");
+  filters = "";
 
-  d3.json(`https://api.spacexdata.com/v3/launches/past?filter=${filters}`).then(
+  //   d3.json(`https://api.spacexdata.com/v3/launches/past?filter=${filters}`).then(
+  d3.json(`https://api.spacexdata.com/v3/launches/past${filters}`).then(
     function(data) {
       console.log(data[29]);
       drawGraphs(data);
@@ -34,26 +36,44 @@ function drawGraphs(data) {
   }
 
   var ndx = crossfilter(data);
-
   // Charts
   showPastLaunches(ndx);
   //   showPayloads(ndx);
   showLaunchSuccessRate(ndx);
   //   showPastLaunchesBySite(ndx);
   showRowCount(ndx);
-  //   showDataTable(ndx);
+  showDataTable(ndx);
+  //  showDataTable2(ndx);
   showPieChartByRocket(ndx);
-
   showLaunchSuccessPercentage(ndx);
-  //test
   showLaunchesBySiteByRocket(ndx);
   // hide spinners
   $(".spinner-grow").hide();
 
   dc.renderAll();
 }
-//test----------------launches by site by rocket
-// doesn't work
+
+// test doesn't work ------------ Show DataTable2---------------
+function showDataTable2(ndx) {
+  var dim1 = ndx.dimension(function(d) {
+    return d.dim;
+  });
+  var dataTable2 = dataTable("#dataTable2")
+    .dimension(dim1)
+    .height(200)
+    .width(200)
+    .size(Infinity)
+    .columns([
+      function(d) {
+        return d.flight_number;
+      }
+    ])
+    .sortBy(function(d) {
+      return d.flight_number;
+    });
+}
+
+//----------------launches by site by rocket
 function showLaunchesBySiteByRocket(ndx) {
   var siteDimension = ndx.dimension(function(d) {
     return d.launch_site.site_name_long;
@@ -134,32 +154,99 @@ function showDataTable(ndx) {
     .height(200)
     .width(200)
     .size(Infinity)
+    //TODO Paginate
     .columns([
-      // TODO: simplify columns by returning array?
-      function(d) {
-        return d.flight_number;
+      {
+        label: "Flight #",
+        format: function(d) {
+          return d.flight_number;
+        }
       },
-      function(d) {
-        return d.launch_year;
+      {
+        label: "Mission Patch",
+        format: function(d) {
+          return `<img src="${d.links.mission_patch_small}" class='mission-patch-small' alt="Mission Patch" title="Mission Patch"></img>`; //d.launch_success;
+        }
       },
-      function(d) {
-        return d.mission_name;
+      {
+         label: "Mission",
+         format: function(d) {
+           return d.mission_name;
+         }
+       },
+      {
+        label: "Launch Date",
+        format: function(d) {
+          return d.launch_date_local.substring(0, 10);
+        }
       },
-      function(d) {
-        return d.rocket.rocket_name;
+      {
+        label: "Launch Site",
+        format: function(d) {
+          return `<span title='${d.launch_site.site_name_long}'>${d.launch_site.site_name}</span>`;
+        }
       },
-      function(d) {
-        return d.launch_date_local;
+ 
+      {
+        label: "Rocket",
+        format: function(d) {
+          return d.rocket.rocket_name;
+        }
       },
-      function(d) {
-        return d.launch_success;
+      {
+        label: "Launch Status",
+        format: function(d) {
+          //   return d.launch_success;
+          var launchOutcome = d.launch_success ? "SUCCESS" : "FAIL";
+          return launchOutcome;
+        }
+      },
+      {
+        label: "Details",
+        format: function(d) {
+          return d.details;
+        }
+      },
+      {
+        label: "Links",
+        format: function(d) {
+          //return horizontal ordered list, incl modal gallery
+          //https://www.iconspedia.com/icon/news-icon-22850.html
+          return `<ul class='launch-links'>
+                     <li><a href='${d.links.video_link}' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
+                     <li><a href='${d.links.wikipedia}' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
+                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"></a></li>
+                    </ul>`;
+        }
       }
     ])
+    //  .columns([
+    //    // TODO: simplify columns by returning array?
+    //    function(d) {
+    //      return d.flight_number;
+    //    },
+    //    function(d) {
+    //      return d.launch_year;
+    //    },
+    //    function(d) {
+    //      return d.mission_name;
+    //    },
+    //    function(d) {
+    //      return d.rocket.rocket_name;
+    //    },
+    //    function(d) {
+    //      return d.launch_date_local;
+    //    },
+    //    function(d) {
+    //      return d.launch_success;
+    //    }
+    //  ])
     .sortBy(function(d) {
       return d.flight_number;
     });
 }
-//test------------ show launch success percentage as single number
+
+//------------ show launch success percentage as single number
 //TODO figure out how to show percentage launch success as single number
 function showLaunchSuccessPercentage(ndx) {
   var successDimension = ndx.dimension(dc.pluck("launch_success"));
@@ -390,7 +477,6 @@ function showLaunchSitesByYear(ndx) {
     .centerBar(true)
     .useViewBoxResizing(true)
     //TODO: Tooltips for all charts
-    //TODO: Add Legend
 
     .xAxis()
     .tickFormat(d3.format("0000"));
@@ -465,6 +551,7 @@ function showPastLaunchesBySite(ndx) {
           2019
         ])
     )
+    //TODO Ensure the year 2020 is in all ordinal scales. if possible make domain automatic
     .centerBar(true)
     .brushOn(false)
     .xAxis()
@@ -533,7 +620,7 @@ function showLaunchSuccessRate(ndx) {
   var launchGroup = launchDimension.group();
   var all = ndx.groupAll();
 
-// pieChart not used, consider removing
+  // pieChart not used, consider removing
   var pieChart = dc
     .pieChart("#pieChartLaunchSuccess")
     .width(300)
@@ -569,16 +656,16 @@ function showLaunchSuccessRate(ndx) {
     .dimension(launchDimension)
     .ordinalColors(["#2db92d", "#cd0000"])
     .useViewBoxResizing(true)
-   //  .label(false)
-   .label(function(d) {
+    //  .label(false)
+    .label(function(d) {
       // if (rowChart.hasFilter() && !rowChart.hasFilter(d.key)) {
-         // return d.key;
-      //  } 
-       var label;
-       d.key === true ? (label = "Lift-Off!") : (label = "Oops...");
-       return label;
-   })
-   //  .renderTitle(false)
+      // return d.key;
+      //  }
+      var label;
+      d.key === true ? (label = "Success") : (label = "Failure");
+      return label;
+    })
+    //  .renderTitle(false)
     .group(launchGroup);
 }
 
