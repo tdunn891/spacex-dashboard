@@ -40,7 +40,7 @@
    </nav>
    <div class="container-fluid">
       <div class="row">
-         <div class="col-ld-12">
+         <div class="col-12">
             <!-- TODO align data count to right -->
             <div class="dc-data-count">
                <span class="filter-count"></span>
@@ -108,7 +108,13 @@
       <div class="row">
          <div class="col-12">
             <!-- TODO Make datatable responsive -->
-            <h3>Past Launches</h3>
+            <h3 class="chart">Past Launches</h3>
+            <div id="paging">
+               Showing Launches <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
+                  id="totalsize"></span>
+               <input id="prev" class="btn" type="Button" value="Previous" />
+               <input id="next" class="btn" type="button" value="Next" />
+            </div>
             <table id="dc-data-table" class="table">
             </table>
          </div>

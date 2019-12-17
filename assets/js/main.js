@@ -169,11 +169,11 @@ function showDataTable(ndx) {
         }
       },
       {
-         label: "Mission",
-         format: function(d) {
-           return d.mission_name;
-         }
-       },
+        label: "Mission",
+        format: function(d) {
+          return d.mission_name;
+        }
+      },
       {
         label: "Launch Date",
         format: function(d) {
@@ -186,7 +186,7 @@ function showDataTable(ndx) {
           return `<span title='${d.launch_site.site_name_long}'>${d.launch_site.site_name}</span>`;
         }
       },
- 
+
       {
         label: "Rocket",
         format: function(d) {
@@ -241,9 +241,59 @@ function showDataTable(ndx) {
     //      return d.launch_success;
     //    }
     //  ])
-    .sortBy(function(d) {
-      return d.flight_number;
-    });
+    //Test Pagination
+    //  https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
+    //TODO DataTable: make reverse sort flight number
+    .order(d3.descending)
+    .showSections(false)
+    .on("preRender", update_offset)
+    .on("preRedraw", update_offset)
+    .on("pretransition", display);
+  //  .sortBy(function(d) {
+  // return d.flight_number;
+  //  });
+  // how many records to show
+  var ofs = 0,
+    pag = 10;
+
+  function update_offset() {
+    var totFilteredRecs = ndx.groupAll().value();
+    var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+    ofs =
+      ofs >= totFilteredRecs
+        ? Math.floor((totFilteredRecs - 1) / pag) * pag
+        : ofs;
+    ofs = ofs < 0 ? 0 : ofs;
+    dataTable.beginSlice(ofs);
+    dataTable.endSlice(ofs + pag);
+  }
+  function display() {
+    var totFilteredRecs = ndx.groupAll().value();
+    var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+    d3.select("#begin").text(end === 0 ? ofs : ofs + 1);
+    d3.select("#end").text(end);
+    d3.select("#last").attr("disabled", ofs - pag < 0 ? "true" : null);
+    d3.select("#next").attr(
+      "disabled",
+      ofs + pag >= totFilteredRecs ? "true" : null
+    );
+    d3.select("#size").text(totFilteredRecs);
+    if (totFilteredRecs != ndx.size()) {
+      d3.select("#totalsize").text("(Unfiltered Total: " + ndx.size() + " )");
+    } else {
+      d3.select("#totalsize").text("");
+    }
+  }
+  $("#next").on("click", function() {
+    ofs += pag;
+    update_offset();
+    dataTable.redraw();
+  });
+  $("#prev").on("click", function() {
+    ofs -= pag;
+    update_offset();
+    dataTable.redraw();
+  });
 }
 
 //------------ show launch success percentage as single number
@@ -297,7 +347,7 @@ function showRowCount(ndx) {
     .html({
       some:
         "<strong>%filter-count</strong> of <strong>%total-count</strong> launches selected" +
-        " | <a href='javascript:dc.filterAll(); dc.renderAll();'>Reset All</a>", //consider redraw instead of renderall
+        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>", //consider redraw instead of renderall
       all: "All launches selected - click to filter."
     });
   //   https://dc-js.github.io/dc.js/docs/stock.html

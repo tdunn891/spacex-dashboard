@@ -1,9 +1,30 @@
+html {
+   height: 100%;
+}
 body {
-   /* TODO gradient background color spacey grey */
-  background-color: darkgray;
+/* html { */
+   /* height: 100%; */
+  /* TODO gradient background color spacey grey */
+  /* background-color: darkgray; */
+  /* https://cssgradient.io/ */
+  /* position: fixed; */
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    180deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 129, 255, 1) 100%
+  );
+  background-attachment: fixed;
 }
 
-#chartPayloadPerYear, #pieChartLaunchSuccess, #chartLaunchSites {
+.col-lg-4 {
+   padding: 0 2px;
+}
+
+#chartPayloadPerYear,
+#pieChartLaunchSuccess,
+#chartLaunchSites {
   display: none;
 }
 
@@ -12,8 +33,8 @@ body {
 }
 
 .chart {
-   /* TODO Add box shadow to chart cards */
-  background-color: rgba(46, 49, 49, 0.65);
+  /* TODO Add box shadow to chart cards */
+  background-color: rgba(46, 49, 49, 0.55);
   margin-top: 18px;
   text-align: center;
 }
@@ -50,18 +71,18 @@ body {
 }
 
 #addeventatc1 {
-   text-align: center;
-   display: block;
-   margin: 10px auto;
-   font-family: "Share Tech", sans-serif;
-   color: whitesmoke !important;
-   background-color: darkblue;
-   /* width: 100px; */
-   color: blue;
+  text-align: center;
+  display: block;
+  margin: 10px auto;
+  font-family: "Share Tech", sans-serif;
+  color: whitesmoke !important;
+  background-color: darkblue;
+  /* width: 100px; */
+  color: blue;
 }
 
 #addeventatc1 .addeventatc_icon {
-  background-color:whitesmoke !important;
+  background-color: whitesmoke !important;
 }
 
 .card-title {
@@ -72,32 +93,61 @@ body {
   padding: 0.6rem;
 }
 
+#numberDisplayLaunchSuccessRate, #numberDisplayLaunchSuccessTotal {
+   /* font-size: 10px; */
+   color: whitesmoke;
+}
 /* Chart Label Color */
 .dc-chart g.row text {
   fill: black;
 }
 
+#dc-data-table {
+   /* color: teal !important; */
+   background-color: teal
+}
+/* removes unnecessary table row */
+.dc-table-label {
+   display: none;
+}
+#prev, #next {
+   /* margin-right: 0px !important; */
+   color: whitesmoke;
+   font-weight: bold;
+}
+#paging {
+   /* align-content: right; */
+   text-align: right;
+   color: whitesmoke;
+}
+.dc-table-head {
+   /* TODO make table links clickable */
+   color: whitesmoke;
+   text-align: center;
+}
+/* table body font */
+.dc-table-row {
+   color: whitesmoke;
+}
+
+
 .dc-data-count {
-  margin-right: 26px !important;
-  /* display: inline-block; */
-  /* margin-left: auto; */
+   margin-top: 1px;
+   /* margin-bottom: 2px !important; */
+  color: whitesmoke;
 }
 
 .dc-legend-item text {
-   /* color: whitesmoke !important; */
-   /* background-color: yellow !important; */
-   font-size: 12px;
-   font-family: "Share Tech", sans-serif;
-   /* stroke: white; */
-   /* color: aquamarine !important; */
-   fill: whitesmoke !important;
+  font-size: 12px;
+  font-family: "Share Tech", sans-serif;
+  fill: whitesmoke !important;
 }
 
 /* launches by site */
 #chartLaunchesBySiteAndRocket .x.axis text {
-   text-anchor: end !important;
-   transform: rotate(-30deg);
-   font-size: 10px;
+  text-anchor: end !important;
+  transform: rotate(-30deg);
+  font-size: 10px;
 }
 
 ul {
@@ -117,14 +167,8 @@ ul {
 }
 
 .mission-patch-small {
-  /* width: 30%; */
-  /* height: auto; */
   height: 50%;
   width: auto;
-  /* margin-top: 1px; */
-  /* margin-bottom: 1px; */
-  /* padding-top: 0px; */
-  /* padding-bottom: 0px; */
 }
 .mission-patch-large {
   width: 60%;
@@ -139,7 +183,6 @@ ul {
   display: none;
 }
 /* launch success */
-
 .success {
   display: block;
   border: 1px solid green;
@@ -239,8 +282,8 @@ h2 {
 h3 {
   text-align: center;
   display: block;
-  margin: 6px auto;
-  padding-top: 6px;
+  margin: 4px auto;
+  padding-top: 4px;
   padding-bottom: 0px;
   font-family: "Share Tech", sans-serif;
   color: whitesmoke;
@@ -249,8 +292,8 @@ section {
   height: 80vh !important;
 }
 #map {
-   width: 100%;
-   height: 100%;
+  width: 100%;
+  height: 100%;
 }
 .navbar-brand {
   font-family: "Share Tech", sans-serif !important;
@@ -269,17 +312,17 @@ footer {
   margin: auto;
   height: fit-content;
   text-align: center;
-} 
+}
 
 #footer-list {
-   list-style-type: none;
-   padding: 20px 2px;
+  list-style-type: none;
+  padding: 20px 2px;
 }
 #footer-list li {
-   padding: 0 16px;
-   vertical-align: middle;
-   /* float: left; */
-   display: inline-block;
+  padding: 0 16px;
+  vertical-align: middle;
+  /* float: left; */
+  display: inline-block;
 }
 
 * {
