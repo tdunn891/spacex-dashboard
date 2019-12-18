@@ -146,7 +146,10 @@ body {
   font-family: "Share Tech", sans-serif;
   fill: whitesmoke !important;
 }
-
+/* Bar chart */
+.title-row {
+   /* text-anchor: start !important; */
+}
 /* Launches by Site text */
 #chartLaunchesBySiteAndRocket .x.axis text {
   text-anchor: end !important;
@@ -172,7 +175,7 @@ ul {
 
 /* Data table mission patch images */
 .mission-patch-small {
-  width: 6vw;
+  width: 5vw;
 }
 
 /* Modal large mission patch images */

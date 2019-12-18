@@ -370,6 +370,7 @@ function showPieChartByRocket(ndx) {
     .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
     .height(360)
     .width(600)
+    .cx(340)
     .legend(
       dc
         .legend()
@@ -875,10 +876,9 @@ function showLandingGraph(ndx) {
     .stack(groupLandFail, "Fail");
 }
 
-//----------------PAYLOADS.html--------------------------
+// API Call Payloads
 function apiCallPayloads() {
   d3.json("https://api.spacexdata.com/v3/payloads").then(function(data) {
-    //  console.log(data[5]);
     drawPayloadGraphs(data);
   });
 }
@@ -889,6 +889,7 @@ function drawPayloadGraphs(data) {
   //   Show graphs
   showPayloadGraph(ndx);
   showRowCountPayloads(ndx);
+
   // Hide loading spinners
   $(".spinner-grow").hide();
 
@@ -935,13 +936,17 @@ function showPayloadGraph(ndx) {
 
   var rowChart = dc
     .rowChart("#pieChartPayloadByOrbit")
-    .width(300)
-    .height(160)
+    .width(600)
+    .height(360)
     .useViewBoxResizing(true)
-    .cap(7)
+    .cap(10)
     .gap(2)
     .dimension(orbitDimension)
     .group(groupOrbit);
+   //  .renderTitleLabel(true);
+   //  .title(function(d){
+      //  return d.orbit_params.regime;
+   //  });
 
   //   var rowChartPayloadNationality = dc
   //     .rowChart("#pieChartPayloadNationalityUSvsROW")
@@ -953,10 +958,10 @@ function showPayloadGraph(ndx) {
 
   var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
-    .width(300)
-    .height(160)
+    .width(600)
+    .height(360)
     .useViewBoxResizing(true)
-    .cap(7)
+    .cap(10)
     .gap(2)
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
@@ -972,8 +977,8 @@ function showPayloadGraph(ndx) {
 
   var rowChartPayloadType = dc
     .rowChart("#rowChartPayloadType")
-    .width(300)
-    .height(160)
+    .width(600)
+    .height(360)
     .gap(2)
     //  .labelOffsetX()
     .useViewBoxResizing(true)
