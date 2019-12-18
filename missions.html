@@ -12,14 +12,11 @@
    <!-- bootstrap -->
    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-   <!-- dc css (necessary?) -->
+   <!-- dc css -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.css"
       integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
    <!-- google fonts -->
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
-   <!-- font awesome (check if this is too resource intensive-->
-   <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" -->
-   <!-- integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
    <!-- calendar js -->
    <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
    <!-- style.css -->
@@ -105,50 +102,29 @@
             </div>
          </div>
       </div>
-      <!-- </section> -->
-      <div class="row">
-         <div class="col-12">
-            <h2>Past Missions</h2>
-            <!-- $('#myModal').modal('show') -->
-            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large
-               modal</button> -->
-            <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
-               aria-labelledby="myLargeModalLabel" aria-hidden="true">
-               <div class="modal-dialog modal-lg">
-                  <div class="modal-content" id=modal-content>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="row">
-         <div id="missionContainer"></div>
-      </div>
-      <div class="row" id="missions">
-      </div>
-   </div>
-   <!-- SCRIPTs -->
-   <!-- d3js -->
-   <script src="https://d3js.org/d3.v5.min.js"></script>
-   <!-- crossfilter -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
-      integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
-   <!-- dc.js -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
-      integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
-   <!-- bootstrap -->
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"></script>
-   <!-- font awesome (find smaller filesize) -->
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap"
-      async defer></script>
-   <!-- main.js -->
-   <script src="assets/js/main.js"></script>
-   <script>
-      apiCallNextLaunch();
-      apiCallMissions();
-   </script>
+
+      <!-- SCRIPTs -->
+      <!-- d3js -->
+      <script src="https://d3js.org/d3.v5.min.js"></script>
+      <!-- crossfilter -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
+         integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
+      <!-- dc.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
+         integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
+      <!-- bootstrap -->
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+         crossorigin="anonymous"></script>
+      <!-- font awesome (find smaller filesize) -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap"
+         async defer></script>
+      <!-- main.js -->
+      <script src="assets/js/main.js"></script>
+      <script>
+         apiCallNextLaunch();
+         apiCallMissions();
+      </script>
 </body>
 <footer>
    <!-- YouTube -->

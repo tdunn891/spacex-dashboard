@@ -2,9 +2,6 @@ html {
   height: 100%;
 }
 body {
-  /* html { */
-  /* height: 100%; */
-  /* TODO gradient background color spacey grey */
   /* background-color: darkgray; */
   /* https://cssgradient.io/ */
   /* position: fixed; */
@@ -37,19 +34,18 @@ body {
   /* TODO Add box shadow to chart cards */
   /* background-color: rgba(46, 49, 49, 0.55); */
   background-color: rgba(48, 62, 66, 0.55); /* outerspace */
-
+/* box-shadow: violet; */
   margin-top: 18px;
   text-align: center;
 }
 
-/* axis tick lines */
+/* Axis tick lines */
 .axis path,
 .tick line {
   stroke: whitesmoke !important;
-  /* color: whitesmoke !important; */
 }
 
-/* ticks */
+/* chart ticks */
 .tick {
   color: whitesmoke;
   /* font-family: "Share Tech", sans-serif; */
@@ -62,17 +58,11 @@ body {
   font-family: "Share Tech", sans-serif;
 }
 
-/* mission cards */
-.card {
-  margin: auto 6px;
-  height: fit-content;
-  padding: 2px;
-}
-
 #nextMissionCard {
   font-family: "Share Tech", sans-serif;
 }
 
+/* Add Launch to Calendar Button */
 #addeventatc1 {
   text-align: center;
   display: block;
@@ -80,7 +70,6 @@ body {
   font-family: "Share Tech", sans-serif;
   color: whitesmoke !important;
   background-color: darkblue;
-  /* width: 100px; */
   color: blue;
 }
 
@@ -96,52 +85,50 @@ body {
   padding: 0.6rem;
 }
 
+/* Launch Success Number Displays */
 #numberDisplayLaunchSuccessRate,
 #numberDisplayLaunchSuccessTotal {
   /* font-size: 10px; */
   color: whitesmoke;
 }
-/* Chart Label Color */
-.dc-chart g.row text {
-  fill: black;
-}
 
 #dc-data-table {
-  /* color: teal !important; */
-  /* background-color: teal; */
   background-color:rgba(75, 102, 107, 0.55);
   text-align: center;
   font-size: 14px;
-  /* align-items: center !important; */
 }
 
 .dc-table-column {
   padding: 0 0 !important;
 }
 
+/* Data Table content */
 .table td {
   vertical-align: middle;
 }
-/* removes unnecessary table row */
+
+/* Hides unnecessary table row */
 .dc-table-label {
   display: none;
 }
+
+/* Pagination buttons */
 #prev,
 #next {
-  /* margin-right: 0px !important; */
   color: whitesmoke;
   font-weight: bold;
 }
 #paging {
-  /* align-content: right; */
   text-align: right;
   color: whitesmoke;
 }
+
+/* Data table headers */
 .dc-table-head {
-  /* TODO make table links clickable */
   color: whitesmoke;
   text-align: center;
 }
+
 /* table body font */
 .dc-table-row {
   color: whitesmoke;
@@ -149,7 +136,6 @@ body {
 
 .dc-data-count {
   margin-top: 1px;
-  /* margin-bottom: 2px !important; */
   color: whitesmoke;
 }
 
@@ -159,97 +145,87 @@ body {
   fill: whitesmoke !important;
 }
 
-/* launches by site */
+/* Launches by Site text */
 #chartLaunchesBySiteAndRocket .x.axis text {
   text-anchor: end !important;
   transform: rotate(-30deg);
   font-size: 10px;
 }
 
+/* Launch Success chart text */
+.dc-chart g.row text {
+   fill: whitesmoke;
+}
+
+/* unordered lists in footer and data table links  */
 ul {
   list-style-type: none;
   padding-left: 0;
 }
 
-.twitter-timeline {
-  display: block !important;
-  margin: 10px auto !important;
-}
-
-/* .youtube-icon-small, .wiki-icon-small { */
+/* Data table link icons */
 .link-icon-small {
-  /* height: auto; */
   height: 22px;
 }
 
+/* Data table mission patch images */
 .mission-patch-small {
-  /* height: 50%; */
   width: 6vw;
-  /* width: auto; */
 }
+
+/* Modal large mission patch images */
 .mission-patch-large {
   width: 60%;
   height: auto;
 }
 
+/* Next Launch Card Title */
 .card-title {
   text-align: center;
 }
 
-.test-card {
-  display: none;
-}
-/* launch success */
+/* Launch success text */
 .success {
-  /* display: block; */
-  /* border: 1px solid green; */
   border: 1px solid whitesmoke;
   padding: 2px 10px;
   text-align: center;
-  /* color: green; */
   color: whitesmoke;
   background-color: green;
 }
+
+/* Launch failure text */
 .failure {
-  /* display: block; */
-  /* border: 1px solid darkred; */
   border: 1px solid whitesmoke;
   padding: 2px 10px;
-  /* color: darkred; */
   color: whitesmoke;
   background-color: darkred;
   text-align: center;
 }
-#youtube-icon {
-  height: 26px;
-}
+
 .details-card {
    background-color: whitesmoke;
    color: black;
    text-align: justify;
 }
+
+/* Modal content */
 .modal-content {
+   /* TODO Add spacey background to modal */
   align-items: center;
   background-color: teal;
-  /* TODO space background to modal */
-  /* height: 200%; */
-  /* text-align: center; */
 }
 .modal-content img {
   /* padding: 20px auto; */
   margin: 30px auto;
 }
+
+/* Next launch location map */
 #map {
-  height: 500px;
-  width: 800px;
-}
-/* small patches */
-.card-image-top {
-  margin: 15px auto;
-  height: auto;
-  width: auto;
+  width: 100%;
+  height: 100%;
 }
 
+/* Next launch coundown */
 #nextLaunchCountdown table {
   margin: 20px auto;
   text-align: center;
@@ -265,6 +241,7 @@ ul {
   font-size: 2.5rem;
 }
 
+/* Fade in transitions for coundown */
 @keyframes fadein {
   from {
     opacity: 0;
@@ -316,34 +293,29 @@ h2 {
   display: block;
 }
 
-/* chart titles */
+/* Chart titles */
 h3 {
   text-align: center;
   display: block;
+  font-size: 25px;
   margin: 4px auto;
   padding-top: 4px;
   padding-bottom: 0px;
   font-family: "Share Tech", sans-serif;
   color: whitesmoke;
 }
-section {
-  height: 80vh !important;
-}
-#map {
-  width: 100%;
-  height: 100%;
-}
+
+/* Navbar title */
 .navbar-brand {
   font-family: "Share Tech", sans-serif !important;
   font-size: 28px;
 }
-
+/* Navbar  */
 .navbar {
-  /* background-color: black !important; */
   background-color: rgba(0,0,0,0.6) !important;
-  /* background-color: rgba(47, 57, 57, 0.8) !important; */
 }
 
+/* Footer */
 footer {
   width: 100%;
   bottom: 0;
@@ -354,14 +326,16 @@ footer {
   text-align: center;
 }
 
+/* Footer list */
 #footer-list {
   list-style-type: none;
   padding: 20px 2px;
 }
+
+/* Footer list items */
 #footer-list li {
   padding: 0 16px;
   vertical-align: middle;
-  /* float: left; */
   display: inline-block;
 }
 
