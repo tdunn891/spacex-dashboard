@@ -1,25 +1,26 @@
 html {
-   height: 100%;
+  height: 100%;
 }
 body {
-/* html { */
-   /* height: 100%; */
+  /* html { */
+  /* height: 100%; */
   /* TODO gradient background color spacey grey */
   /* background-color: darkgray; */
   /* https://cssgradient.io/ */
   /* position: fixed; */
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    180deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 9, 121, 1) 35%,
-    rgba(0, 129, 255, 1) 100%
-  );
+  /* background: rgb(2, 0, 36); */
+  background: rgb(24, 33, 65); /* yankees blue
+  /* background: linear-gradient( */
+    /* 180deg, */
+    /* rgba(2, 0, 36, 1) 0%, */
+    /* rgba(9, 9, 121, 1) 35%, */
+    /* rgba(0, 129, 255, 1) 100% */
+  /* ); */
   background-attachment: fixed;
 }
 
 .col-lg-4 {
-   padding: 0 2px;
+  padding: 0 2px;
 }
 
 #chartPayloadPerYear,
@@ -34,7 +35,9 @@ body {
 
 .chart {
   /* TODO Add box shadow to chart cards */
-  background-color: rgba(46, 49, 49, 0.55);
+  /* background-color: rgba(46, 49, 49, 0.55); */
+  background-color: rgba(48, 62, 66, 0.55); /* outerspace */
+
   margin-top: 18px;
   text-align: center;
 }
@@ -93,9 +96,10 @@ body {
   padding: 0.6rem;
 }
 
-#numberDisplayLaunchSuccessRate, #numberDisplayLaunchSuccessTotal {
-   /* font-size: 10px; */
-   color: whitesmoke;
+#numberDisplayLaunchSuccessRate,
+#numberDisplayLaunchSuccessTotal {
+  /* font-size: 10px; */
+  color: whitesmoke;
 }
 /* Chart Label Color */
 .dc-chart g.row text {
@@ -103,42 +107,54 @@ body {
 }
 
 #dc-data-table {
-   /* color: teal !important; */
-   background-color: teal
+  /* color: teal !important; */
+  /* background-color: teal; */
+  background-color:rgba(75, 102, 107, 0.55);
+  text-align: center;
+  font-size: 14px;
+  /* align-items: center !important; */
+}
+
+.dc-table-column {
+  padding: 0 0 !important;
+}
+
+.table td {
+  vertical-align: middle;
 }
 /* removes unnecessary table row */
 .dc-table-label {
-   display: none;
+  display: none;
 }
-#prev, #next {
-   /* margin-right: 0px !important; */
-   color: whitesmoke;
-   font-weight: bold;
+#prev,
+#next {
+  /* margin-right: 0px !important; */
+  color: whitesmoke;
+  font-weight: bold;
 }
 #paging {
-   /* align-content: right; */
-   text-align: right;
-   color: whitesmoke;
+  /* align-content: right; */
+  text-align: right;
+  color: whitesmoke;
 }
 .dc-table-head {
-   /* TODO make table links clickable */
-   color: whitesmoke;
-   text-align: center;
+  /* TODO make table links clickable */
+  color: whitesmoke;
+  text-align: center;
 }
 /* table body font */
 .dc-table-row {
-   color: whitesmoke;
+  color: whitesmoke;
 }
 
-
 .dc-data-count {
-   margin-top: 1px;
-   /* margin-bottom: 2px !important; */
+  margin-top: 1px;
+  /* margin-bottom: 2px !important; */
   color: whitesmoke;
 }
 
 .dc-legend-item text {
-  font-size: 12px;
+  font-size: 15px;
   font-family: "Share Tech", sans-serif;
   fill: whitesmoke !important;
 }
@@ -167,8 +183,9 @@ ul {
 }
 
 .mission-patch-small {
-  height: 50%;
-  width: auto;
+  /* height: 50%; */
+  width: 6vw;
+  /* width: auto; */
 }
 .mission-patch-large {
   width: 60%;
@@ -184,23 +201,44 @@ ul {
 }
 /* launch success */
 .success {
-  display: block;
-  border: 1px solid green;
+  /* display: block; */
+  /* border: 1px solid green; */
+  border: 1px solid whitesmoke;
   padding: 2px 10px;
   text-align: center;
-  color: green;
+  /* color: green; */
+  color: whitesmoke;
+  background-color: green;
 }
 .failure {
-  display: block;
-  border: 1px solid darkred;
+  /* display: block; */
+  /* border: 1px solid darkred; */
+  border: 1px solid whitesmoke;
   padding: 2px 10px;
-  color: darkred;
+  /* color: darkred; */
+  color: whitesmoke;
+  background-color: darkred;
   text-align: center;
 }
 #youtube-icon {
   height: 26px;
 }
-
+.details-card {
+   background-color: whitesmoke;
+   color: black;
+   text-align: justify;
+}
+.modal-content {
+  align-items: center;
+  background-color: teal;
+  /* TODO space background to modal */
+  /* height: 200%; */
+  /* text-align: center; */
+}
+.modal-content img {
+  /* padding: 20px auto; */
+  margin: 30px auto;
+}
 #map {
   height: 500px;
   width: 800px;
@@ -301,7 +339,9 @@ section {
 }
 
 .navbar {
-  background-color: black !important;
+  /* background-color: black !important; */
+  background-color: rgba(0,0,0,0.6) !important;
+  /* background-color: rgba(47, 57, 57, 0.8) !important; */
 }
 
 footer {

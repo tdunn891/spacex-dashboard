@@ -31,8 +31,12 @@ function drawGraphs(data) {
     if (data[i].rocket.first_stage.cores[0].reused === true) {
       //change name to Used
       data[i].rocket.rocket_name = "Used Falcon 9";
-    } //else
-    // data[i].rocket.rocket_name = "New Falcon 9";
+    } else if (data[i].rocket.rocket_name === "Falcon 9") {
+      data[i].rocket.rocket_name = "New Falcon 9";
+    } else {
+      //donothing
+      console.log("test");
+    }
   }
 
   var ndx = crossfilter(data);
@@ -47,6 +51,8 @@ function drawGraphs(data) {
   showPieChartByRocket(ndx);
   showLaunchSuccessPercentage(ndx);
   showLaunchesBySiteByRocket(ndx);
+  //test
+  //   showLandSuccessRate(ndx);
   // hide spinners
   $(".spinner-grow").hide();
 
@@ -104,7 +110,7 @@ function showLaunchesBySiteByRocket(ndx) {
       return d.value["Falcon 1"];
     })
     .stack(rocketGroup, "New Falcon 9", function(d) {
-      return d.value["Falcon 9"];
+      return d.value["New Falcon 9"];
     })
     .stack(rocketGroup, "Used Falcon 9", function(d) {
       return d.value["Used Falcon 9"];
@@ -124,7 +130,7 @@ function showLaunchesBySiteByRocket(ndx) {
       //  return rocketGroup;
       //TODO: hide tooltip row if zero
       return [
-        "New Falcon 9: " + (d.value["Falcon 9"] || "0"),
+        "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
         "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
         "Falcon 1: " + (d.value["Falcon 1"] || "0")
@@ -143,7 +149,6 @@ function showLaunchesBySiteByRocket(ndx) {
 }
 
 //------------------------------------ Data Table
-//TODO: improve data table
 function showDataTable(ndx) {
   var dimension1 = ndx.dimension(function(d) {
     return d.dim;
@@ -164,14 +169,28 @@ function showDataTable(ndx) {
       },
       {
         label: "Mission Patch",
+        // href is void(0) to allow hand cursor on mouseover
         format: function(d) {
-          return `<img src="${d.links.mission_patch_small}" class='mission-patch-small' alt="Mission Patch" title="Mission Patch"></img>`; //d.launch_success;
+          return `<a href=javascript:void(0);><img src="${
+            d.links.mission_patch_small
+          }" class='mission-patch-small menu_links' alt="Mission Patch" title="Mission Patch" onclick="showModal('${
+            d.links.mission_patch
+          }')"></img></a>`; //d.launch_success;
         }
       },
       {
         label: "Mission",
         format: function(d) {
-          return d.mission_name;
+          //  return d.mission_name;
+          var buttonType = d.launch_success ? "btn-success" : "btn-danger";
+          return `<a class="btn ${buttonType}" title="Click for Details" data-toggle="collapse" href="#collapse${d.flight_number}" role="button" aria-expanded="false" aria-controls="collapseExample">
+    ${d.mission_name}
+  </a>
+  <div class="collapse" id="collapse${d.flight_number}">
+          <div class="card card-body details-card">
+          ${d.details}
+          </div>
+        </div>`;
         }
       },
       {
@@ -183,7 +202,9 @@ function showDataTable(ndx) {
       {
         label: "Launch Site",
         format: function(d) {
-          return `<span title='${d.launch_site.site_name_long}'>${d.launch_site.site_name}</span>`;
+          return `<span title="${d.launch_site.site_name_long}">${
+            d.launch_site.site_name
+          }</span>`;
         }
       },
 
@@ -197,61 +218,46 @@ function showDataTable(ndx) {
         label: "Launch Status",
         format: function(d) {
           //   return d.launch_success;
-          var launchOutcome = d.launch_success ? "SUCCESS" : "FAIL";
-          return launchOutcome;
+          var launchOutcome = d.launch_success ? "SUCCESS" : "FAILURE";
+          var launchOutcomeClass = launchOutcome.toLowerCase();
+          var details = d.details;
+          return `<span class='${launchOutcomeClass}' title="${details}">${launchOutcome}</span>`;
         }
       },
-      {
-        label: "Details",
-        format: function(d) {
-          return d.details;
-        }
-      },
+      // {
+      //   label: "Details",
+      //   format: function(d) {
+      //     return d.details;
+      //   }
+      // },
       {
         label: "Links",
         format: function(d) {
           //return horizontal ordered list, incl modal gallery
           //https://www.iconspedia.com/icon/news-icon-22850.html
           return `<ul class='launch-links'>
-                     <li><a href='${d.links.video_link}' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
-                     <li><a href='${d.links.wikipedia}' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
-                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"></a></li>
+                     <li><a href='${
+                       d.links.video_link
+                     }' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
+                     <li><a href='${
+                       d.links.wikipedia
+                     }' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
+                     <li><a href='${
+                       d.links.article_link
+                     }' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
                     </ul>`;
         }
       }
     ])
-    //  .columns([
-    //    // TODO: simplify columns by returning array?
-    //    function(d) {
-    //      return d.flight_number;
-    //    },
-    //    function(d) {
-    //      return d.launch_year;
-    //    },
-    //    function(d) {
-    //      return d.mission_name;
-    //    },
-    //    function(d) {
-    //      return d.rocket.rocket_name;
-    //    },
-    //    function(d) {
-    //      return d.launch_date_local;
-    //    },
-    //    function(d) {
-    //      return d.launch_success;
-    //    }
-    //  ])
+
     //Test Pagination
     //  https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
-    //TODO DataTable: make reverse sort flight number
     .order(d3.descending)
     .showSections(false)
     .on("preRender", update_offset)
     .on("preRedraw", update_offset)
     .on("pretransition", display);
-  //  .sortBy(function(d) {
-  // return d.flight_number;
-  //  });
+
   // how many records to show
   var ofs = 0,
     pag = 10;
@@ -279,7 +285,7 @@ function showDataTable(ndx) {
     );
     d3.select("#size").text(totFilteredRecs);
     if (totFilteredRecs != ndx.size()) {
-      d3.select("#totalsize").text("(Unfiltered Total: " + ndx.size() + " )");
+      d3.select("#totalsize").text("(Unfiltered Total: " + ndx.size() + ")");
     } else {
       d3.select("#totalsize").text("");
     }
@@ -309,11 +315,7 @@ function showLaunchSuccessPercentage(ndx) {
     .numberDisplay("#numberDisplayLaunchSuccessRate")
     .width(100)
     .height(100)
-    //  .dimension(successDimension)
-    //  .crossfilter(ndx)
-    //  .groupAll(all);
     .group(groupSuccess)
-    //   .formatNumber(d3.format(".0%")) //TODO format successes display to integer
     .valueAccessor(function(d) {
       return d.value;
     })
@@ -371,6 +373,7 @@ function showPieChartByRocket(ndx) {
     .group(groupRocket)
     //  .colors(d3.scaleOrdinal())
     //  .range(["#1f78b4", "#b2df8a", "#cab2d6", "#ff4d4d"])
+    //TODO Fix colours
     .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
     .height(360)
     .width(600)
@@ -379,15 +382,11 @@ function showPieChartByRocket(ndx) {
         .legend()
         .x(20)
         .y(95)
-        //   .horizontal(true)
         .autoItemWidth(true)
         .itemHeight(26)
         .gap(16)
     )
-    //  .transitionDuration(800)
-    //  .radius(150)
     .useViewBoxResizing(true);
-  //  .render();
 }
 //----------------------------------- Show Launches Per Year By Rocket
 
@@ -410,7 +409,6 @@ function showPastLaunches(ndx) {
   function reduceInitial() {
     return {};
   }
-  //   print_filter(rocketGroup);
 
   // Bar Chart
   var barChart = dc
@@ -422,7 +420,7 @@ function showPastLaunches(ndx) {
       return d.value["Falcon 1"];
     })
     .stack(rocketGroup, "New Falcon 9", function(d) {
-      return d.value["Falcon 9"];
+      return d.value["New Falcon 9"];
     })
     .stack(rocketGroup, "Used Falcon 9", function(d) {
       return d.value["Used Falcon 9"];
@@ -441,7 +439,7 @@ function showPastLaunches(ndx) {
       //  return rocketGroup;
       //TODO: hide tooltip row if zero
       return [
-        "New Falcon 9: " + (d.value["Falcon 9"] || "0"),
+        "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
         "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
         "Falcon 1: " + (d.value["Falcon 1"] || "0")
@@ -469,22 +467,8 @@ function showPastLaunches(ndx) {
         ])
     )
     .centerBar(true)
-    //  .legend(
-    //    dc
-    //      .legend()
-    //      .x(145)
-    //      .y(340)
-    //      .itemHeight(13)
-    //      .gap(8)
-    //      .horizontal(true)
-    //      .autoItemWidth(true)
-    //  )
     .xAxis()
     .tickFormat(d3.format("0000"));
-
-  // test pi
-
-  //   print_filter(rocketGroup);
 }
 //test---------------------------------Launch Sites by Year
 
@@ -623,7 +607,7 @@ function showPayloads(ndx) {
     return weight;
   });
 
-  // Chart
+  // Bar Chart
   var barChart = dc
     .barChart("#chartPayloadPerYear")
     .width(500)
@@ -719,6 +703,26 @@ function showLaunchSuccessRate(ndx) {
     .group(launchGroup);
 }
 
+//Test show land success rate
+// function showLandSuccessRate(ndx) {
+//   var landSuccessDimension = ndx.dimension(function(d) {
+//     return d.rocket.first_stage.cores[0].land_success;
+//   });
+//   var groupLandSuccess = landSuccessDimension.group().reduceCount();
+
+//   print_filter(groupLandSuccess);
+// }
+//test ---------------------Show Modal2-------------
+
+function showModal(missionPatchLarge) {
+  console.log(missionPatchLarge);
+  // if array not empty, create gallery in modal
+  $("#modal-content").html(
+    `<img src="${missionPatchLarge}" class="mission-patch-large" alt="Mission Patch Large"/>`
+  );
+
+  $("#myModal").modal("show");
+}
 //----------------------- Print Filter -----------------------
 
 function print_filter(filter) {
@@ -923,7 +927,9 @@ function populateNextMissionCard(data) {
       <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
       <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
       <li><strong>Details:</strong> ${data.details}</li>
-      <li><a href=${data.links.reddit_campaign} target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
+      <li><a href=${
+        data.links.reddit_campaign
+      } target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
    </ul>
 </p>
 </div>`
@@ -1152,10 +1158,6 @@ function showPayloadGraph(ndx) {
     });
 
   var all = ndx.groupAll();
-  //   print_filter(groupOrbit);
-  //   print_filter(groupNationality);
-  //   print_filter(groupManufacturer);
-  //   print_filter(groupBurst);
 
   var rowChart = dc
     .rowChart("#pieChartPayloadByOrbit")

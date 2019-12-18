@@ -30,7 +30,6 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
          <div class="navbar-nav">
             <a class="nav-item nav-link active" href="#">LAUNCHES<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">ROCKETS</a>
             <a class="nav-item nav-link" href="payloads.html">PAYLOADS</a>
             <a class="nav-item nav-link" href="landings.html">LANDINGS</a>
             <a class="nav-item nav-link" href="missions.html">MISSIONS</a>
@@ -79,12 +78,6 @@
       </div>
       <div class="row">
          <!-- TODO test for screen shake.. -->
-         <!-- <div class="col-lg-6"> -->
-
-         <!-- <div class="chart" id="chartPayloadPerYear"> -->
-         <!-- <h3>Payload Mass Per Year (kg)</h3> -->
-         <!-- </div> -->
-         <!-- </div> -->
          <div class="col-lg-4">
             <div class="chart">
                <h3>Percentage Launch Success</h3>
@@ -92,11 +85,6 @@
                <div id="numberDisplayLaunchSuccessTotal" style="font-size: 20px; text-align: center;"></div>
                <div id="numberDisplayLaunchPercent"></div>
             </div>
-
-            <!-- <div class="chart" id="pieChartLaunchesByRocket"> -->
-            <!-- <div class="chart" id="pieChartLaunchSuccess"> -->
-            <!-- <h3>Launch Success Rate</h3> -->
-            <!-- </div> -->
          </div>
          <div class="col-lg-4">
             <div class="chart" id="rowChartLaunchSuccess">
@@ -104,28 +92,35 @@
             </div>
          </div>
       </div>
-
       <div class="row">
          <div class="col-12">
             <!-- TODO Make datatable responsive -->
             <h3 class="chart">Past Launches</h3>
             <div id="paging">
-               Showing Launches <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
+               Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
                   id="totalsize"></span>
-               <input id="prev" class="btn" type="Button" value="Previous" />
-               <input id="next" class="btn" type="button" value="Next" />
+               <input id="prev" class="btn btn-info" type="Button" value="Previous" />
+               <!-- <button id="prev" class="btn btn-primary" type="Button" value="Previous">Previous</button> -->
+               <input id="next" class="btn btn-info" type="button" value="Next" />
+               <!-- <button id="next" class="btn btn-primary" type="button" value="Next">Next</button> -->
             </div>
             <table id="dc-data-table" class="table">
+               <!-- <col width="10px"> -->
             </table>
          </div>
       </div>
       <div class="row">
          <div class="col-12">
-            <!-- <div id="missions"></div> -->
-            <!-- <div id="dc-data-table"></div> -->
             <table id="dataTable2" class="table">
             </table>
-            <!-- <h3>Past Launches (WIP)</h3> -->
+            <!-- modal test -->
+            <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
+               aria-labelledby="myLargeModalLabel" aria-hidden="true">
+               <div class="modal-dialog modal-lg">
+                  <div class="modal-content" id=modal-content>
+                  </div>
+               </div>
+            </div>
          </div>
       </div>
    </div>

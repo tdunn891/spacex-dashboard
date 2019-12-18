@@ -133,6 +133,7 @@ Potential Feature 3 -
 - [Git](https://git-scm.com/) : used for version control.
 - [GitHub](https://github.com) : used to host code repository and to deploy project (via GitHub Pages).
 - [VSCode](https://code.visualstudio.com) : preferred text editor.
+- [Postman](https://www.getpostman.com/) : used for api testing.
 - [Favicon Generator](https://www.favicon-generator.org) : used to create a 16x16 icon, displayed next to page title.
 - [FontAwesome](https://fontawesome.com) : used for icons.
 - [Material Icons](https://material.io/resources/icons) : used for icons.
