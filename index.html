@@ -17,6 +17,8 @@
       integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
    <!-- google fonts -->
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
+   <!-- calendar js -->
+   <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
    <!-- style.css -->
    <link rel="stylesheet" href="assets/css/style.css">
    <title>SpaceX Dashboard</title>
@@ -29,7 +31,7 @@
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
          <div class="navbar-nav">
             <a class="nav-item nav-link active" href="#">LAUNCHES<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" href="payloads.html">PAYLOADS</a>
@@ -42,6 +44,7 @@
    <div class="container-fluid">
       <div class="row">
          <div class="col-12">
+            <h2>Launch Explorer</h2>
             <div class="dc-data-count">
                <span class="filter-count"></span>
                <span class="total-count"></span>
@@ -93,7 +96,7 @@
       <div class="row">
          <div class="col-12">
             <!-- TODO Make datatable more responsive -->
-            <h3 class="chart">Past Launches</h3>
+            <!-- <h3 class="chart">Past Launches</h3> -->
             <div id="paging">
                Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
                   id="totalsize"></span>
@@ -102,15 +105,108 @@
             </div>
             <table id="dc-data-table" class="table">
             </table>
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-12">
+            <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                aria-hidden="true">
                <div class="modal-dialog modal-lg">
                   <div class="modal-content" id=modal-content>
                   </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+         <div class="col-12">
+            <h2>Upcoming Launch</h2>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-md-6">
+            <div class="card" id="nextMissionCard">
+               <div class="card-body">
+                  <h4 class="card-title"></h4>
+                  <p class="card-text">
+                     <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                     </ul>
+                  </p>
+               </div>
+            </div>
+            <!-- <div id="nextLaunch"> -->
+            <!-- https://www.addevent.com/add-to-calendar-button -->
+            <div title="Add to Calendar" class="addeventatc" id=addToCalendar>
+               <!-- TODO: Fix calendar invite -->
+               Add Launch to Calendar
+               <span class="timezone">Europe/London</span>
+            </div>
+            <!-- </div> -->
+         </div>
+         <div class="col-md-6">
+            <div id="map"></div>
+            <script>
+               //TODO: move map; to main.js
+               // initialise map variable
+               var map;
+            </script>
+         </div>
+      </div>
+      <!-- Countdown to next launch -->
+      <div class="row">
+         <div class="col-12">
+            <div id="nextLaunchCountdown">
+               <table>
+                  <col width="80px">
+                  <col width="80px">
+                  <col width="80px">
+                  <col width="80px">
+                  <tr id="counter">
+                     <td id="days">&nbsp;</td>
+                     <td id="hours">&nbsp;</td>
+                     <td id="minutes">&nbsp;</td>
+                     <td id="seconds">&nbsp;</td>
+                  </tr>
+                  <tr>
+                     <td>days</td>
+                     <td>hours</td>
+                     <td>mins</td>
+                     <td>secs</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-12">
+            <h2>Payload Analysis</h2>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-4">
+            <div class="chart" id="pieChartPayloadByOrbit">
+               <h3>Payloads by Orbit</h3>
+               <div class="spinner-grow text-light" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-4">
+            <div class="chart" id="pieChartPayloadManufacturer">
+               <h3>Payloads by Manufacturer</h3>
+               <div class="spinner-grow text-light" role="status">
+                  <span class="sr-only">Loading...</span>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-4">
+            <div class="chart" id="rowChartPayloadType">
+               <h3>Payloads by Type</h3>
+               <div class="spinner-grow text-light" role="status">
+                  <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
@@ -130,11 +226,16 @@
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"></script>
+   <!-- Google Maps API -->
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap"
+      async defer></script>
    <!-- main.js -->
    <script src="assets/js/main.js"></script>
    <script>
       // TODO Move apiCall to main.js
       apiCall();
+      apiCallNextLaunch();
+      apiCallPayloads();
    </script>
 </body>
 

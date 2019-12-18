@@ -666,7 +666,6 @@ function apiCallNextLaunch() {
 // Populate Next Mission Card
 function populateNextMissionCard(data) {
   // If rocket is reused, rename rocket to 'Used Falcon 9'
-  //TODO catch error if reddit thread is null
   if (data.rocket.first_stage.cores[0].reused === true) {
     data.rocket.rocket_name = "Used Falcon 9";
   } else if (data.rocket.rocket_name === "Falcon 9") {
@@ -685,14 +684,13 @@ function populateNextMissionCard(data) {
       <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
       <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
       <li><strong>Details:</strong> ${data.details}</li>
-      <li><a href=${
-        data.links.reddit_campaign
-      } target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
-   </ul>
+  </ul>
 </p>
 </div>`
   );
-
+      
+  //Reddit removed <li><a href=${data.links.reddit_campaign} target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
+ 
   // Add To Calendar event details
   $("#addeventatc1 .title").text(`SpaceX Launch - ${data.mission_name}`);
   $("#addeventatc1 .start").text(data.launch_date_utc);
@@ -933,13 +931,13 @@ function showPayloadGraph(ndx) {
     .dimension(orbitDimension)
     .group(groupOrbit);
 
-  var rowChartPayloadNationality = dc
-    .rowChart("#pieChartPayloadNationalityUSvsROW")
-    .width(300)
-    .height(100)
-    .cap(1)
-    .dimension(nationalityDimension)
-    .group(groupNationality);
+//   var rowChartPayloadNationality = dc
+//     .rowChart("#pieChartPayloadNationalityUSvsROW")
+//     .width(300)
+//     .height(100)
+//     .cap(1)
+//     .dimension(nationalityDimension)
+//     .group(groupNationality);
 
   var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
@@ -951,14 +949,14 @@ function showPayloadGraph(ndx) {
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
-  var pieChartNationality = dc
-    .pieChart("#pieChartPayloadNationality")
-    .width(400)
-    .height(300)
-    .cap(7)
-    //  .useViewBoxResizing(true)
-    .dimension(nationalityDimension)
-    .group(groupNationality);
+//   var pieChartNationality = dc
+//     .pieChart("#pieChartPayloadNationality")
+//     .width(400)
+//     .height(300)
+//     .cap(7)
+//     //  .useViewBoxResizing(true)
+//     .dimension(nationalityDimension)
+//     .group(groupNationality);
 
   var rowChartPayloadType = dc
     .rowChart("#rowChartPayloadType")
