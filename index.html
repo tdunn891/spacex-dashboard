@@ -33,10 +33,10 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">LAUNCHES<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="payloads.html">PAYLOADS</a>
-            <a class="nav-item nav-link" href="landings.html">LANDINGS</a>
-            <a class="nav-item nav-link" href="missions.html">MISSIONS</a>
+            <a class="nav-item nav-link active" href="#">LAUNCH EXPLORER<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#next-launch">NEXT LAUNCH</a>
+            <a class="nav-item nav-link" href="#payload-analysis">PAYLOAD ANALYSIS</a>
+            <a class="nav-item nav-link" href="#starman">WHERE'S STARMAN?</a>
             <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary active">Reset</a>
          </div>
       </div>
@@ -118,7 +118,7 @@
 
       <div class="row">
          <div class="col-12">
-            <h2>Upcoming Launch</h2>
+            <h2 id="next-launch">Next Launch</h2>
          </div>
       </div>
       <div class="row">
@@ -182,7 +182,11 @@
       </div>
       <div class="row">
          <div class="col-12">
-            <h2>Payload Analysis</h2>
+            <h2 id="payload-analysis">Payload Analysis</h2>
+            <div class="dc-data-count-payloads">
+               <span class="filter-count"></span>
+               <span class="total-count"></span>
+            </div>
          </div>
       </div>
       <div class="row">
@@ -211,32 +215,86 @@
             </div>
          </div>
       </div>
-   </div>
+      <div class="row">
+         <div class="col-12">
+            <h2 id="starman">Where's Starman?</h2>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-6">
+            <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+               <div class="carousel-inner">
+                  <div class="carousel-item active" data-interval="3000">
+                     <img src="https://farm5.staticflickr.com/4615/40143096241_11128929df_b.jpg" class="d-block w-100"
+                        alt="Elon's Tesla Roadster">
+                  </div>
+                  <div class="carousel-item" data-interval="3000">
+                     <img src="https://farm5.staticflickr.com/4702/40110298232_91b32d0cc0_b.jpg" class="d-block w-100"
+                        alt="Elon's Tesla Roadster">
+                  </div>
+                  <div class="carousel-item" data-interval="3000">
+                     <img src="https://farm5.staticflickr.com/4676/40110297852_5e794b3258_b.jpg" class="d-block w-100"
+                        alt="Elon's Tesla Roadster">
+                  </div>
+                  <div class="carousel-item" data-interval="3000">
+                     <img src="https://farm5.staticflickr.com/4745/40110304192_6e3e9a7a1b_b.jpg" class="d-block w-100"
+                        alt="Elon's Tesla Roadster">
+                  </div>
+               </div>
+               <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+               </a>
+               <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+               </a>
+            </div>
+         </div>
+         <div class="col-lg-6">
+            <div class="card" id="roadster-card">
+               <div class="card-body">
+                  <h4 class="card-title">Elon Musk's Tesla Roadster</h4>
+                  <p class="card-text">
+                     <ul>
+                        <li><strong>Launch Date:</strong> 6 February 2018</li>
+                        <li><strong>Current Speed:</strong> <span id="speed"></span> km/h </li>
+                        <li><strong>Current Distance from Earth: </strong><span id="earth-distance"></span> km</li>
+                        <!-- <li><strong>Current Distance from Mars (km): </strong><span id="mars-distance"></span> km</li> -->
+                        <li><strong>Days in Orbit:</strong> <span id="days-in-space"></span> days</li>
+                        <li><strong>Details:</strong> <span id="roadster-details"></span></li>
+                     </ul>
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
 
-   <!-- SCRIPTS -->
-   <!-- d3 -->
-   <script src="https://d3js.org/d3.v5.min.js"></script>
-   <!-- crossfilter -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
-      integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
-   <!-- dc.js -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
-      integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
-   <!-- bootstrap -->
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"></script>
-   <!-- Google Maps API -->
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap"
-      async defer></script>
-   <!-- main.js -->
-   <script src="assets/js/main.js"></script>
-   <script>
-      // TODO Move apiCall to main.js
-      apiCall();
-      apiCallNextLaunch();
-      apiCallPayloads();
-   </script>
+      <!-- SCRIPTS -->
+      <!-- d3 -->
+      <script src="https://d3js.org/d3.v5.min.js"></script>
+      <!-- crossfilter -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
+         integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
+      <!-- dc.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
+         integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
+      <!-- bootstrap -->
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+         crossorigin="anonymous"></script>
+      <!-- Google Maps API -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap"
+         async defer></script>
+      <!-- main.js -->
+      <script src="assets/js/main.js"></script>
+      <script>
+         // TODO Move apiCalls to main.js
+         apiCall();
+         apiCallNextLaunch();
+         apiCallPayloads();
+         apiCallRoadster();
+      </script>
 </body>
 
 <footer>

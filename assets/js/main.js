@@ -115,8 +115,7 @@ function showLaunchesBySiteByRocket(ndx) {
       ].join("\n");
     })
     .x(
-      d3
-        .scaleOrdinal()
+      d3.scaleOrdinal()
       //   .domain([
       //     "Kwajalein Atoll Omelek Island",
       //     "Vandenberg Air Force Base Space Launch Complex 4E",
@@ -326,9 +325,24 @@ function showRowCount(ndx) {
     .groupAll(all)
     .html({
       some:
-        "<strong>%filter-count</strong> of <strong>%total-count</strong> selected" +
+        "<strong>%filter-count</strong> of <strong>%total-count</strong> launches selected" +
         " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
       all: "Showing all launches - click to filter."
+    });
+  //   https://dc-js.github.io/dc.js/docs/stock.html
+}
+// test
+function showRowCountPayloads(ndx) {
+  var all = ndx.groupAll();
+  var dataCountPayloads = dc
+    .dataCount(".dc-data-count-payloads")
+    .crossfilter(ndx)
+    .groupAll(all)
+    .html({
+      some:
+        "<strong>%filter-count</strong> of <strong>%total-count</strong> payloads selected" +
+        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
+      all: "Showing all payloads - click to filter."
     });
   //   https://dc-js.github.io/dc.js/docs/stock.html
 }
@@ -568,7 +582,7 @@ function showLaunchSuccessRate(ndx) {
     .dimension(launchDimension)
     .ordinalColors(["#2db92d", "#cd0000"])
     .useViewBoxResizing(true)
-   //  TODO Add rowChart axis label: Launches
+    //  TODO Add rowChart axis label: Launches
     //  .label(false)
     .label(function(d) {
       // if (rowChart.hasFilter() && !rowChart.hasFilter(d.key)) {
@@ -579,7 +593,7 @@ function showLaunchSuccessRate(ndx) {
       d.key === true ? (label = "Success") : (label = "Failure");
       return label;
     })
-   //   .renderTitle(true)
+    //   .renderTitle(true)
     .group(launchGroup);
 }
 
@@ -688,9 +702,9 @@ function populateNextMissionCard(data) {
 </p>
 </div>`
   );
-      
+
   //Reddit removed <li><a href=${data.links.reddit_campaign} target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
- 
+
   // Add To Calendar event details
   $("#addeventatc1 .title").text(`SpaceX Launch - ${data.mission_name}`);
   $("#addeventatc1 .start").text(data.launch_date_utc);
@@ -768,21 +782,19 @@ function addNextLaunchMarkerToMap(data) {
   });
 }
 
-//-------------ROADSTER (BONUS: probably not necessary)
+// Roadster API
 function apiCallRoadster() {
-  var fields = [
-    "speed_kph",
-    "speed_mph",
-    "earth_distance_km",
-    "earth_distance_mi"
-  ];
-  var filters = "?filter=" + fields.join(",");
   //   Call Roadster API
-  d3.json(`https://api.spacexdata.com/v3/roadster${filters}`).then(function(
-    data
-  ) {
-    console.log(data);
+  d3.json("https://api.spacexdata.com/v3/roadster").then(function(data) {
+    showRoadster(data);
   });
+}
+
+function showRoadster(data) {
+  $("#speed").text(data.speed_kph.toFixed(2));
+  $("#earth-distance").text(data.earth_distance_km.toFixed(2));
+  $("#days-in-space").text(data.period_days.toFixed(0));
+  $("#roadster-details").text(data.details);
 }
 
 //probbaly wont be used--------landings.html---------------- doesn't seem to respect filters
@@ -876,7 +888,7 @@ function drawPayloadGraphs(data) {
   var ndx = crossfilter(data);
   //   Show graphs
   showPayloadGraph(ndx);
-
+  showRowCountPayloads(ndx);
   // Hide loading spinners
   $(".spinner-grow").hide();
 
@@ -931,13 +943,13 @@ function showPayloadGraph(ndx) {
     .dimension(orbitDimension)
     .group(groupOrbit);
 
-//   var rowChartPayloadNationality = dc
-//     .rowChart("#pieChartPayloadNationalityUSvsROW")
-//     .width(300)
-//     .height(100)
-//     .cap(1)
-//     .dimension(nationalityDimension)
-//     .group(groupNationality);
+  //   var rowChartPayloadNationality = dc
+  //     .rowChart("#pieChartPayloadNationalityUSvsROW")
+  //     .width(300)
+  //     .height(100)
+  //     .cap(1)
+  //     .dimension(nationalityDimension)
+  //     .group(groupNationality);
 
   var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
@@ -949,14 +961,14 @@ function showPayloadGraph(ndx) {
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
-//   var pieChartNationality = dc
-//     .pieChart("#pieChartPayloadNationality")
-//     .width(400)
-//     .height(300)
-//     .cap(7)
-//     //  .useViewBoxResizing(true)
-//     .dimension(nationalityDimension)
-//     .group(groupNationality);
+  //   var pieChartNationality = dc
+  //     .pieChart("#pieChartPayloadNationality")
+  //     .width(400)
+  //     .height(300)
+  //     .cap(7)
+  //     //  .useViewBoxResizing(true)
+  //     .dimension(nationalityDimension)
+  //     .group(groupNationality);
 
   var rowChartPayloadType = dc
     .rowChart("#rowChartPayloadType")

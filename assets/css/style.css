@@ -1,5 +1,6 @@
 html {
   height: 100%;
+  scroll-behavior: smooth;
 }
 body {
   /* background-color: darkgray; */
@@ -134,7 +135,8 @@ body {
   color: whitesmoke;
 }
 
-.dc-data-count {
+.dc-data-count, .dc-data-count-payloads {
+   float: left;
   margin-top: 1px;
   color: whitesmoke;
 }
@@ -208,6 +210,11 @@ ul {
    text-align: justify;
 }
 
+.card-body {
+  font-family: "Share Tech", sans-serif;
+  font-size: 18px;
+}
+
 /* Modal content */
 .modal-content {
    /* TODO Add spacey background to modal */
@@ -240,6 +247,12 @@ ul {
 #counter td {
   font-size: 2.5rem;
 }
+
+/* Roadster carousel images */
+/* .d-block { */
+   /* max-height: 50px !important; */
+   /* width: auto !important; */
+/* } */
 
 /* Fade in transitions for coundown */
 @keyframes fadein {
@@ -286,8 +299,11 @@ h1 {
 
 h2 {
   font-family: "Share Tech", sans-serif;
-  color: whitesmoke;
+  /* color: whitesmoke; */
   text-align: center;
+  font-size: 26px;
+  text-align: justify;
+  background-color: lightblue;
   margin: 6px auto;
   padding: 6px;
   display: block;
