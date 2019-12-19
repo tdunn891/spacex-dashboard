@@ -25,7 +25,7 @@ function apiCall() {
   );
 }
 
-// Render All
+// Draw launch graphs
 function drawGraphs(data) {
   // If first stage core is reused, change rocket name to 'Used Falcon 9'
   for (var i = 0; i < getObjectLength(data); i++) {
