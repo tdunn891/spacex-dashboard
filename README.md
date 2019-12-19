@@ -166,7 +166,7 @@ How the needs are met:
 
 Potential Feature 1 - A section called Landing Explorer which uses the Landings API endpoint (https://api.spacexdata.com/v3/landpads). This would be a stacked barchart showing the success/failure of landing attempts for each landing pad.
 
-Potential Feature 2 - 
+Potential Feature 2 - A link in data table to show several pictures from each launch. The source data for this is in the launches API.
 
 Potential Feature 3 - 
 
@@ -202,7 +202,7 @@ Chrome Developer Tools were used extensively during development. In particular t
 
 <!-- Manual testing involved clicking through all the links from different locations on the page, on all device sizes to ensure responsiveness. External links were also tested to ensure they were opened in a new tab (ie target="_blank"). -->
 
-<!-- During my Mid-Project review session, my mentor advised that I use 100% width for the Enquiry form inputs on mobile devices. It was also advised to replace curved border style for the section headings with straight corners. My mentor advised this would help to avoid the user thinking they were clickable buttons. -->
+<!-- During my Mid-Project review session, my mentor advised that... -->
 
 ## Deployment
 
@@ -244,3 +244,5 @@ Images of the mission patches and the Tesla Roadster were sourced from the API.
 Favicon rocket icon source: http://www.iconarchive.com/show/captiva-icons-by-bokehlicia/rocket-icon.html
 
 ### Acknowledgements
+
+Thanks to my mentor, Brian M, for the helpful feedback.
