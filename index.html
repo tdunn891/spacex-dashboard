@@ -6,30 +6,26 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-   <!-- jquery -->
-   <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> -->
-   <!-- popper.js -->
-   <!-- <script src="https://unpkg.com/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
    <!-- bootstrap -->
    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
    <!-- dc css -->
+   <!-- TODO look for dc.min.css and test if required at all -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.css"
       integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
    <!-- google fonts -->
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
    <!-- favicon -->
    <link rel='icon' href='/assets/img/favicon-32x32.png' type='image/x-icon'>
-   <!-- source: http://www.iconarchive.com/show/captiva-icons-by-bokehlicia/rocket-icon.html -->
    <!-- style.css -->
    <link rel="stylesheet" href="assets/css/style.css">
-   <title>SpaceX Dashboard</title>
+   <title>SpaceX Interactive Dashboard</title>
 </head>
 
 <body>
    <nav class="navbar navbar-expand-lg navbar-dark">
-      <a class="navbar-brand" href="#">SpaceX Dashboard</a>
+      <a class="navbar-brand" href="#">SpaceX Interactive Dashboard</a>
+      <!-- <p style="vertical-align: middle; color: whitesmoke;">Data Source: SpaceX API</p> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
@@ -44,10 +40,13 @@
          </div>
       </div>
    </nav>
+   <!-- TODO ensure charts are responsive on ipad (currently hang over) -->
+   <!-- TODO provide links to falcon9 and falconheavy on spacex website -->
    <div class="container-fluid">
       <div class="row">
          <div class="col-12">
-            <h2>Launch Explorer</h2>
+            <h2><img src="/assets/img/falcon-heavy-in-flight-icon.svg" class="filter-navy" style="width: 48px;" />
+               Launch Explorer</h2>
             <div class="dc-data-count">
                <span class="filter-count"></span>
                <span class="total-count"></span>
@@ -57,27 +56,34 @@
       <div class="row">
          <!-- TODO ensure chart colours are not green or red (success/fail) -->
 
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" data-placement="top" title="Shows number of times SpaceX has launched each rocket." class="chart" id="pieChartLaunchesByRocket">
+         <div class="col-md-6 col-lg-4">
+            <div data-toggle="tooltip" data-placement="top"
+               title="Shows number of times SpaceX has launched each rocket." class="chart"
+               id="pieChartLaunchesByRocket">
                <h3>Launches By Rocket</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
-            <div data-toggle="tooltip" title="A given launch is deemed a success if it doesn't blow up during launch!" class="chart" id="rowChartLaunchSuccess">
+            <div data-toggle="tooltip" title="A given launch is deemed a success if it doesn't blow up during launch!"
+               class="chart" id="rowChartLaunchSuccess">
                <h3>Launch Success</h3>
             </div>
          </div>
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" title="Shows the upward trend of SpaceX launches year on year, grouped by rocket." class="chart" id="chartLaunchesPerYearByVehicle">
+         <div class="col-md-6 col-lg-4">
+            <div data-toggle="tooltip"
+               title="Shows the upward trend of SpaceX launches year on year, grouped by rocket." class="chart"
+               id="chartLaunchesPerYearByVehicle">
                <h3>Launches By Year</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" title="Shows the distribution of launches among SpaceX's four launch sites, grouped by rocket. Cape Canaveral is SpaceX's most used launch pad." class="chart" id="chartLaunchesBySiteAndRocket">
+         <div class="col-md-12 col-lg-4">
+            <div data-toggle="tooltip"
+               title="Shows the distribution of launches among SpaceX's four launch sites, grouped by rocket. Cape Canaveral is SpaceX's most used launch pad."
+               class="chart" id="chartLaunchesBySiteAndRocket">
                <h3>Launches By Site</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
@@ -86,7 +92,7 @@
          </div>
       </div>
       <div class="row" style="display: none;">
-         <div class="col-lg-4">
+         <div class="col-md-12 col-lg-4">
             <div style="display: none;" class="chart">
                <!-- <h3>Percentage Launch Success</h3> -->
                <div id="numberDisplayLaunchSuccessRate" style="font-size: 20px; text-align: center;"></div>
@@ -96,22 +102,23 @@
          </div>
          <div class="col-lg-4">
             <div class="chart" id="rowChartLaunchSuccess">
-               <!-- <h3>Launch Success</h3> -->
             </div>
          </div>
       </div>
       <div class="row">
          <div class="col-12">
             <!-- TODO Make datatable more responsive -->
-            <!-- <h3 class="chart">Past Launches</h3> -->
             <div id="paging">
                Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
                   id="totalsize"></span>
                <input id="prev" class="btn btn-info" type="Button" value="Previous" />
                <input id="next" class="btn btn-info" type="button" value="Next" />
             </div>
-            <table id="dc-data-table" class="table">
-            </table>
+            <!-- TODO ensure table doesn't affect mobile responsiveness (hangs too far right) -->
+            <div class="table-responsive">
+               <table id="dc-data-table" class="table table-dark table-hover table-sm table-striped">
+               </table>
+            </div>
             <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                aria-hidden="true">
@@ -125,11 +132,12 @@
 
       <div class="row">
          <div class="col-12">
-            <h2 id="next-launch">Next Launch</h2>
+            <h2 id="next-launch"><img src="/assets/img/falcon-heavy-icon.svg" class="filter-navy" style="width: 48px" />
+               Next Launch</h2>
          </div>
       </div>
       <div class="row">
-         <div class="col-md-6">
+         <div class="col-md-12 col-lg-6">
             <div class="card" id="nextMissionCard">
                <div class="card-body">
                   <h4 class="card-title"></h4>
@@ -144,7 +152,7 @@
                   </p>
                </div>
             </div>
-            <div data-toggle="tooltip" title="Counting down to the next launch..."id="nextLaunchCountdown">
+            <div data-toggle="tooltip" title="Counting down to the next launch..." id="nextLaunchCountdown">
                <table>
                   <col width="80px">
                   <col width="80px">
@@ -164,10 +172,8 @@
                   </tr>
                </table>
             </div>
-            <!-- <div id="nextLaunch"> -->
             <!-- https://www.addevent.com/add-to-calendar-button -->
             <div title="Add to Calendar" class="addeventatc" id=addToCalendar>
-               <!-- TODO: Fix calendar invite -->
                Add Launch to Calendar
                <span class="title"></span>
                <span class="timezone">Europe/London</span>
@@ -175,10 +181,9 @@
                <span class="location"></span>
                <span class="description"></span>
             </div>
-            <!-- </div> -->
          </div>
-         <div class="col-md-6">
-            <div data-toggle="tooltip" title="Next launch scheduled from this launchpad."id="map"></div>
+         <div class="col-md-12 col-lg-6">
+            <div data-toggle="tooltip" title="Next launch scheduled from this launchpad." id="map"></div>
             <script>
                //TODO: move map; to main.js
                // initialise map variable
@@ -187,10 +192,11 @@
          </div>
       </div>
       <!-- Countdown to next launch -->
-
       <div class="row">
          <div class="col-12">
-            <h2 id="payload-analysis">Payload Analysis</h2>
+            <!-- Satellite icon source: https://www.iconfinder.com/icons/1587506/internet_line_satellite_icon -->
+            <h2 id="payload-analysis"><img src="/assets/img/satellite-icon.svg" class="filter-navy" style="width: 48px;"
+                  alt="satellite icon" /> Payload Analysis </h2>
             <div class="dc-data-count-payloads">
                <span class="filter-count"></span>
                <span class="total-count"></span>
@@ -198,24 +204,30 @@
          </div>
       </div>
       <div class="row">
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" title="SpaceX deploys payloads (satellites) into different types of orbit. This chart shows number of payloads deployed to each orbit. The most common being Geostationary Transfer Orbit (GTO), followed by Low Earth Orbit (LEO)." class="chart" id="pieChartPayloadByOrbit">
+         <div class="col-md-6 col-lg-4">
+            <div data-toggle="tooltip"
+               title="SpaceX deploys payloads (satellites) into different types of orbit. This chart shows number of payloads deployed to each orbit. The most common being Geostationary Transfer Orbit (GTO), followed by Low Earth Orbit (LEO)."
+               class="chart" id="pieChartPayloadByOrbit">
                <h3>Payloads by Orbit</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" title="Manufacturers build payloads (satellites) to be deployed into orbit by SpaceX. This chart shows the number payloads built by each manufacturer." class="chart" id="pieChartPayloadManufacturer">
+         <div class="col-md-6 col-lg-4">
+            <div data-toggle="tooltip"
+               title="Manufacturers build payloads (satellites) to be deployed into orbit by SpaceX. This chart shows the number payloads built by each manufacturer."
+               class="chart" id="pieChartPayloadManufacturer">
                <h3>Payloads by Manufacturer</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
-         <div class="col-lg-4">
-            <div data-toggle="tooltip" title="Shows the number of payloads deployed of each type. The most common payload is 'Satellite' - all other types are SpaceX vehicles." class="chart" id="rowChartPayloadType">
+         <div class="col-md-6 offset-md-3 offset-lg-0 col-lg-4">
+            <div data-toggle="tooltip"
+               title="Shows the number of payloads deployed of each type. The most common payload is 'Satellite' - all other types are SpaceX vehicles."
+               class="chart" id="rowChartPayloadType">
                <h3>Payloads by Type</h3>
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
@@ -225,11 +237,13 @@
       </div>
       <div class="row">
          <div class="col-12">
-            <h2 id="starman">Where's Starman?</h2>
+            <h2 id="starman"><img src="/assets/img/starman-icon.svg" class="filter-navy" style="width: 48px" /> Where's
+               Starman?</h2>
          </div>
       </div>
       <div class="row">
          <div class="col-lg-6">
+            <!-- TODO change ID from example interval -->
             <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
                <div class="carousel-inner">
                   <div class="carousel-item active" data-interval="3000">
@@ -287,11 +301,6 @@
    <!-- dc.js -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
       integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
-   <!-- bootstrap
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"></script> -->
-   <!-- testttt -->
    <!-- jquery -->
    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -300,7 +309,7 @@
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"></script>
-   <!-- bootstrap new -->
+   <!-- bootstrap -->
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"></script>
@@ -309,6 +318,8 @@
       async defer></script>
    <!-- calendar js -->
    <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
+   <!-- YouTube -->
+   <script src="https://apis.google.com/js/platform.js"></script>
    <!-- main.js -->
    <script src="assets/js/main.js"></script>
    <script>
@@ -325,26 +336,19 @@
 </body>
 
 <footer>
-   <!-- YouTube -->
-   <script src="https://apis.google.com/js/platform.js"></script>
    <!-- Footer list -->
    <ul id="footer-list">
       <!-- SpaceX API -->
       <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
       <!-- SpaceX Official Website -->
-      <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" title="SpaceX Official"><img src="assets/img/spacex_logo_white.png" /></a></li>
+      <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" title="SpaceX Official"><img
+               src="assets/img/spacex_logo_white.png" /></a></li>
       <!-- Youtube Channel -->
-      <!-- TODO use small youtube channel link -->
       <li>
          <div class="g-ytsubscribe" data-channel="spacexchannel" data-layout="full" data-theme="dark"
             data-count="default"></div>
       </li>
-      <!-- Twitter -->
-      <li><a href="https://twitter.com/SpaceX?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false"
-            target="_blank">Follow @SpaceX</a></li>
    </ul>
-   <!-- Twitter script -->
-   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
    <span>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank">GitHub</a></span>
    <!-- TODO fix footer -->
 </footer>
