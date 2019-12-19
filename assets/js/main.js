@@ -58,16 +58,16 @@ function drawGraphs(data) {
 function showLaunchesBySiteByRocket(ndx) {
   // Dimension
   var siteDimension = ndx.dimension(function(d) {
-    return d.launch_site.site_name_long;
+   //   return d.launch_site.site_name_long;
+    return d.launch_site.site_name;
   });
-  //   Group
+  // Group
   var rocketGroup = siteDimension
     .group()
     //  Custom reducer
     .reduce(reduceAdd, reduceRemove, reduceInitial);
 
   function reduceAdd(i, d) {
-    //i: initial, d: datapoint
     i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
     return i;
   }
@@ -81,8 +81,10 @@ function showLaunchesBySiteByRocket(ndx) {
   // Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesBySiteAndRocket")
-    .width(600)
-    .height(360)
+   //  .width(500)
+    .width(500)
+   //  .height(300)
+    .height(470)
     .dimension(siteDimension)
     .group(rocketGroup, "Falcon 1", function(d) {
       return d.value["Falcon 1"];
@@ -96,17 +98,17 @@ function showLaunchesBySiteByRocket(ndx) {
     .stack(rocketGroup, "Falcon Heavy", function(d) {
       return d.value["Falcon Heavy"];
     })
-    .xAxisLabel("Launch Site", 100)
+    .xAxisLabel("Launch Site", 25)
     .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
     //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
-    .gap(20)
-    .elasticX(true)
+     .gap(60)
+    //  .elasticX(true)
+    //  .centerBar(true)
     .renderTitle(true)
     .title(function(d) {
-      //TODO: hide tooltip row if zero
       return [
         "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
@@ -117,10 +119,10 @@ function showLaunchesBySiteByRocket(ndx) {
     .x(
       d3.scaleOrdinal()
       //   .domain([
-      //     "Kwajalein Atoll Omelek Island",
-      //     "Vandenberg Air Force Base Space Launch Complex 4E",
-      //     "Kennedy Space Center Historic Launch Complex 39A",
-      //     "Cape Canaveral Air Force Station Space Launch Complex 40"
+      //     "Kwajalein Atoll",
+      //     "Vandenberg Air Force Base",
+      //     "Kennedy Space Center",
+      //     "Cape Canaveral"
       //   ])
     );
 }
@@ -361,24 +363,26 @@ function showPieChartByRocket(ndx) {
     .pieChart("#pieChartLaunchesByRocket")
     //   .externalLabels(10)
     //   .drawPaths(true)
-    .innerRadius(60)
+    .innerRadius(50)
     .externalRadiusPadding(30)
     .minAngleForLabel(0.1)
     .dimension(rocketDimension)
     .group(groupRocket)
     //TODO Fix colours
     .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
-    .height(360)
-    .width(600)
-    .cx(340)
+   //  .height(300)
+    .height(320)
+    .width(500)
+    .cx(310)
+    .cy(150)
     .legend(
       dc
         .legend()
-        .x(20)
-        .y(95)
+        .x(30)
+        .y(60)
         .autoItemWidth(true)
-        .itemHeight(30)
-        .gap(18)
+        .itemHeight(22)
+        .gap(14)
     )
     .useViewBoxResizing(true);
 }
@@ -408,8 +412,10 @@ function showPastLaunches(ndx) {
   // Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesPerYearByVehicle")
-    .width(600)
-    .height(360)
+    .width(500)
+   //  .width(500)
+    .height(470)
+   //  .height(300)
     .dimension(yearDimension)
     .group(rocketGroup, "Falcon 1", function(d) {
       return d.value["Falcon 1"];
@@ -476,8 +482,8 @@ function showPastLaunchesBySite(ndx) {
   var stackedBar = dc
     //   TODO   improve appearance of Launches by Site, use short names for sites?
     .barChart("#chartLaunchSites")
-    .width(600)
-    .height(360)
+    .width(500)
+    .height(300)
     .dimension(yearDimension)
     .group(yearGroup, "Kwajalein Atoll Omelek Island", function(d) {
       return d.value["Kwajalein Atoll Omelek Island"];
@@ -495,13 +501,13 @@ function showPastLaunchesBySite(ndx) {
     .yAxisLabel("Launches", 25) // Add internal axis margins/paddingj
     .xAxisLabel("Year", 30)
     .renderHorizontalGridLines(true)
-    .gap(6)
+    .gap(20)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .x(d3.scaleOrdinal())
     .centerBar(true)
-    .xAxis()
-    .tickFormat(d3.format("0000"));
+    .xAxis();
+  //  .tickFormat(d3.format("0000"));
 }
 
 // NOT USED ---------------------PAYLOADS By Year----------------------------
@@ -524,7 +530,7 @@ function showPayloads(ndx) {
   var barChart = dc
     .barChart("#chartPayloadPerYear")
     .width(500)
-    .height(260)
+    .height(300)
     .dimension(yearDimension)
     .group(yearGroup)
     .yAxisLabel("Payload Mass (kg)")
@@ -578,8 +584,8 @@ function showLaunchSuccessRate(ndx) {
   var rowChart = dc
     .rowChart("#rowChartLaunchSuccess")
     .width(500)
-    .height(125)
-    .gap(10)
+    .height(115)
+    .gap(8)
     .dimension(launchDimension)
     .ordinalColors(["#2db92d", "#cd0000"])
     .useViewBoxResizing(true)
@@ -936,17 +942,17 @@ function showPayloadGraph(ndx) {
 
   var rowChart = dc
     .rowChart("#pieChartPayloadByOrbit")
-    .width(600)
-    .height(360)
+    .width(500)
+    .height(300)
     .useViewBoxResizing(true)
     .cap(10)
     .gap(2)
     .dimension(orbitDimension)
     .group(groupOrbit);
-   //  .renderTitleLabel(true);
-   //  .title(function(d){
-      //  return d.orbit_params.regime;
-   //  });
+  //  .renderTitleLabel(true);
+  //  .title(function(d){
+  //  return d.orbit_params.regime;
+  //  });
 
   //   var rowChartPayloadNationality = dc
   //     .rowChart("#pieChartPayloadNationalityUSvsROW")
@@ -958,8 +964,8 @@ function showPayloadGraph(ndx) {
 
   var rowChartManufacturer = dc
     .rowChart("#pieChartPayloadManufacturer")
-    .width(600)
-    .height(360)
+    .width(500)
+    .height(300)
     .useViewBoxResizing(true)
     .cap(10)
     .gap(2)
@@ -977,8 +983,8 @@ function showPayloadGraph(ndx) {
 
   var rowChartPayloadType = dc
     .rowChart("#rowChartPayloadType")
-    .width(600)
-    .height(360)
+    .width(500)
+    .height(300)
     .gap(2)
     //  .labelOffsetX()
     .useViewBoxResizing(true)
