@@ -1,7 +1,8 @@
-//------------------------------------ API Request
-//TODO: catch apicall errors
+//API GET Request
 
+//TODO: catch apicall errors
 function apiCall() {
+  // array of required fields
   var fields = [
     "flight_number",
     "launch_year",
@@ -12,25 +13,27 @@ function apiCall() {
     "rocket",
     "launch_site/site_name_long"
   ];
+  //   comma-separate fields, ready to be passed into url
   var filters = "?filter=" + fields.join(",");
   filters = "";
 
+  // filters passed into url
   d3.json(`https://api.spacexdata.com/v3/launches/past${filters}`).then(
     function(data) {
       drawGraphs(data);
     }
   );
 }
-// Render All
 
+// Render All
 function drawGraphs(data) {
-  // If first stage core is reused, change rocket name.
+  // If first stage core is reused, change rocket name to 'Used Falcon 9'
   for (var i = 0; i < getObjectLength(data); i++) {
     if (data[i].rocket.first_stage.cores[0].reused === true) {
-      // change rocket name to to Used Falcon 9
+      // change rocket name to Used Falcon 9
       data[i].rocket.rocket_name = "Used Falcon 9";
+      // else if rocket name is Falcon 9, rename to New Falcon 9
     } else if (data[i].rocket.rocket_name === "Falcon 9") {
-      // change rocket name to New Falcon 9
       data[i].rocket.rocket_name = "New Falcon 9";
     }
   }
@@ -38,11 +41,10 @@ function drawGraphs(data) {
   // Crossfilter data
   var ndx = crossfilter(data);
 
-  // Pass crossfiltered data to charts
+  // Pass crossfiltered data to charts and tables
   showPastLaunches(ndx);
   showLaunchSuccessRate(ndx);
   showPieChartByRocket(ndx);
-  showLaunchSuccessPercentage(ndx);
   showLaunchesBySiteByRocket(ndx);
   showDataTable(ndx);
   showRowCount(ndx);
@@ -50,7 +52,7 @@ function drawGraphs(data) {
   // Hide loading spinners
   $(".spinner-grow").hide();
 
-  // Render charts
+  // Render all charts
   dc.renderAll();
 }
 
@@ -58,7 +60,7 @@ function drawGraphs(data) {
 function showLaunchesBySiteByRocket(ndx) {
   // Dimension
   var siteDimension = ndx.dimension(function(d) {
-   //   return d.launch_site.site_name_long;
+    //   return d.launch_site.site_name_long;
     return d.launch_site.site_name;
   });
   // Group
@@ -78,12 +80,11 @@ function showLaunchesBySiteByRocket(ndx) {
   function reduceInitial() {
     return {};
   }
+
   // Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesBySiteAndRocket")
-   //  .width(500)
     .width(500)
-   //  .height(300)
     .height(470)
     .dimension(siteDimension)
     .group(rocketGroup, "Falcon 1", function(d) {
@@ -99,14 +100,12 @@ function showLaunchesBySiteByRocket(ndx) {
       return d.value["Falcon Heavy"];
     })
     .xAxisLabel("Launch Site", 25)
-    .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
+    .yAxisLabel("Launches", 25)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
     //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
-     .gap(60)
-    //  .elasticX(true)
-    //  .centerBar(true)
+    .gap(60)
     .renderTitle(true)
     .title(function(d) {
       return [
@@ -150,23 +149,16 @@ function showDataTable(ndx) {
         label: "Mission Patch",
         // anchor has href attribute of void(0) to force hand cursor on mouseover
         format: function(d) {
-          return `<a href=javascript:void(0);><img src="${
-            d.links.mission_patch_small
-          }" class='mission-patch-small menu_links' alt="Mission Patch" title="Mission Patch" onclick="showModal('${
-            d.links.mission_patch
-          }')"></img></a>`;
+          return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" data-placement="right" title="Click to enlarge" onclick="showModal('${d.links.mission_patch}')"></img></a>`;
         }
       },
       {
         label: "Mission",
         format: function(d) {
+          //   TODO change from button to achor in mission data table
           //   If launch success, add button class btn-success, else add btn-danger
           var buttonType = d.launch_success ? "btn-success" : "btn-danger";
-          return `<a class="btn ${buttonType}" title="Click for Details" data-toggle="collapse" href="#collapse${
-            d.flight_number
-          }" role="button" aria-expanded="false" aria-controls="collapseExample">${
-            d.mission_name
-          }
+          return `<a class="btn ${buttonType}" title="Click for Details" data-toggle="collapse" href="#collapse${d.flight_number}" role="button" aria-expanded="false" aria-controls="collapseExample">${d.mission_name}
   </a>
   <div class="collapse" id="collapse${d.flight_number}">
           <div class="card card-body details-card">
@@ -178,16 +170,14 @@ function showDataTable(ndx) {
       {
         label: "Launch Date",
         format: function(d) {
-          // Only display first 10 characters of launch_date_local
+          // Only display first 10 characters of launch_date_local, to ignore the time
           return d.launch_date_local.substring(0, 10);
         }
       },
       {
         label: "Launch Site",
         format: function(d) {
-          return `<span title="${d.launch_site.site_name_long}">${
-            d.launch_site.site_name
-          }</span>`;
+          return `<span data-toggle="tooltip" data-placement="right" title="${d.launch_site.site_name_long}">${d.launch_site.site_name}</span>`;
         }
       },
 
@@ -198,9 +188,8 @@ function showDataTable(ndx) {
         }
       },
       {
-        label: "Launch Status",
+        label: "Launch Result",
         format: function(d) {
-          //   return d.launch_success;
           var launchOutcome = d.launch_success ? "SUCCESS" : "FAILURE";
           var launchOutcomeClass = launchOutcome.toLowerCase();
           var details = d.details;
@@ -213,15 +202,9 @@ function showDataTable(ndx) {
           // return unordered list of external links (YouTube, Wikipedia, News Article)
           // icon source: https://www.iconspedia.com/icon/news-icon-22850.html
           return `<ul class='launch-links'>
-                     <li><a href='${
-                       d.links.video_link
-                     }' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
-                     <li><a href='${
-                       d.links.wikipedia
-                     }' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
-                     <li><a href='${
-                       d.links.article_link
-                     }' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
+                     <li><a href='${d.links.video_link}' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
+                     <li><a href='${d.links.wikipedia}' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
+                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
                     </ul>`;
         }
       }
@@ -233,9 +216,9 @@ function showDataTable(ndx) {
     .on("preRedraw", update_offset)
     .on("pretransition", display);
 
-  // Define how many records to show per page
+  // Define how many records to show per page (5)
   var ofs = 0;
-  var pag = 10;
+  var pag = 5;
 
   //  Pagination based on example: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
   function update_offset() {
@@ -269,14 +252,14 @@ function showDataTable(ndx) {
     }
   }
 
-  //   Next pagination button
+  //  Go to Next page
   $("#next").on("click", function() {
     ofs += pag;
     update_offset();
     dataTable.redraw();
   });
 
-  //   Previous pagination button
+  //  Go to Previous
   $("#prev").on("click", function() {
     ofs -= pag;
     update_offset();
@@ -284,41 +267,8 @@ function showDataTable(ndx) {
   });
 }
 
-//TEST------------ show launch success percentage as single number
-//TODO figure out how to show percentage launch success as single number
-function showLaunchSuccessPercentage(ndx) {
-  var successDimension = ndx.dimension(dc.pluck("launch_success"));
-  var groupSuccess = successDimension.group();
-  var all = ndx.groupAll();
-
-  var launchSuccessPercentage = dc
-    .numberDisplay("#numberDisplayLaunchSuccessRate")
-    .width(100)
-    .height(100)
-    .group(groupSuccess)
-    .valueAccessor(function(d) {
-      return d.value;
-    })
-    .html({
-      one: "Launch Success: %number",
-      some: "Launch Successes: %number",
-      none: "No Success"
-    });
-
-  // Total records
-  var numRecords = ndx.groupAll();
-  var numDisplay = dc.numberDisplay("#numberDisplayLaunchSuccessTotal");
-  numDisplay
-    .group(numRecords)
-    .html({
-      one: "Launch Attempts: %number",
-      some: "Launch Attempts: %number",
-      none: "No Launch Attempts"
-    })
-    .valueAccessor(x => x);
-}
-
-// Row Count and how many records are currently filtered
+// Show how many launch records are currently included in crossfilter
+// Based on code from: https://dc-js.github.io/dc.js/docs/stock.html
 function showRowCount(ndx) {
   var all = ndx.groupAll();
   var dataCountTest = dc
@@ -331,9 +281,10 @@ function showRowCount(ndx) {
         " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
       all: "Showing all launches - click to filter."
     });
-  //   https://dc-js.github.io/dc.js/docs/stock.html
 }
-// test
+
+// Show how many payload records are currently included in crossfilter
+// Based on code from: https://dc-js.github.io/dc.js/docs/stock.html
 function showRowCountPayloads(ndx) {
   var all = ndx.groupAll();
   var dataCountPayloads = dc
@@ -346,10 +297,9 @@ function showRowCountPayloads(ndx) {
         " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
       all: "Showing all payloads - click to filter."
     });
-  //   https://dc-js.github.io/dc.js/docs/stock.html
 }
 
-// Launches by Rocket
+// Launches by Rocket Pie Chart
 function showPieChartByRocket(ndx) {
   // Dimension
   var rocketDimension = ndx.dimension(function(d) {
@@ -370,7 +320,6 @@ function showPieChartByRocket(ndx) {
     .group(groupRocket)
     //TODO Fix colours
     .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
-   //  .height(300)
     .height(320)
     .width(500)
     .cx(310)
@@ -386,11 +335,12 @@ function showPieChartByRocket(ndx) {
     )
     .useViewBoxResizing(true);
 }
-//----------------------------------- Show Launches Per Year By Rocket
+
+// Show Launches Per Year By Rocket
 
 function showPastLaunches(ndx) {
   // Dimension
-  var yearDimension = ndx.dimension(dc.pluck("launch_year")); //function(d) {
+  var yearDimension = ndx.dimension(dc.pluck("launch_year"));
   // Group
   var rocketGroup = yearDimension
     .group()
@@ -409,13 +359,11 @@ function showPastLaunches(ndx) {
     return {};
   }
 
-  // Bar Chart
+  // Stacked Bar Chart
   var barChart = dc
     .barChart("#chartLaunchesPerYearByVehicle")
     .width(500)
-   //  .width(500)
     .height(470)
-   //  .height(300)
     .dimension(yearDimension)
     .group(rocketGroup, "Falcon 1", function(d) {
       return d.value["Falcon 1"];
@@ -430,8 +378,7 @@ function showPastLaunches(ndx) {
       return d.value["Falcon Heavy"];
     })
     .xAxisLabel("Year", 25)
-    .yAxisLabel("Launches", 25) //TODO Add internal axis padding/margins
-    //  TODO increase fontsize of axis labels
+    .yAxisLabel("Launches", 25)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
@@ -439,7 +386,6 @@ function showPastLaunches(ndx) {
     //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
     .renderTitle(true)
     .title(function(d) {
-      //TODO: hide tooltip row if zero
       return [
         "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
@@ -453,134 +399,11 @@ function showPastLaunches(ndx) {
     .tickFormat(d3.format("0000"));
 }
 
-// Launches By Site
-
-function showPastLaunchesBySite(ndx) {
-  // Dimension
-  var yearDimension = ndx.dimension(dc.pluck("launch_year"));
-  //   Group
-  var yearGroup = yearDimension
-    .group()
-    //  Custom reducer
-    .reduce(reduceAdd, reduceRemove, reduceInitial);
-
-  function reduceAdd(i, d) {
-    i[d.launch_site.site_name_long] =
-      (i[d.launch_site.site_name_long] || 0) + 1;
-    return i;
-  }
-  function reduceRemove(i, d) {
-    i[d.launch_site.site_name_long] =
-      (i[d.launch_site.site_name_long] || 0) - 1;
-    return i;
-  }
-  function reduceInitial() {
-    return {};
-  }
-
-  // Stacked Bar Chart
-  var stackedBar = dc
-    //   TODO   improve appearance of Launches by Site, use short names for sites?
-    .barChart("#chartLaunchSites")
-    .width(500)
-    .height(300)
-    .dimension(yearDimension)
-    .group(yearGroup, "Kwajalein Atoll Omelek Island", function(d) {
-      return d.value["Kwajalein Atoll Omelek Island"];
-    })
-    .stack(yearGroup, "Cape Canaveral", function(d) {
-      return d
-        .value["Cape Canaveral Air Force Station Space Launch Complex 40"];
-    })
-    .stack(yearGroup, "Vandenberg Air Force Base", function(d) {
-      return d.value["Vandenberg Air Force Base Space Launch Complex 4E"];
-    })
-    .stack(yearGroup, "Kennedy Space Center", function(d) {
-      return d.value["Kennedy Space Center Historic Launch Complex 39A"];
-    })
-    .yAxisLabel("Launches", 25) // Add internal axis margins/paddingj
-    .xAxisLabel("Year", 30)
-    .renderHorizontalGridLines(true)
-    .gap(20)
-    .useViewBoxResizing(true)
-    .xUnits(dc.units.ordinal)
-    .x(d3.scaleOrdinal())
-    .centerBar(true)
-    .xAxis();
-  //  .tickFormat(d3.format("0000"));
-}
-
-// NOT USED ---------------------PAYLOADS By Year----------------------------
-
-function showPayloads(ndx) {
-  var yearDimension = ndx.dimension(function(d) {
-    return d.launch_year;
-  });
-  var yearGroup = yearDimension.group().reduceSum(function(d) {
-    //sum payload weights
-    var weight = 0;
-    for (var i = 0; i < d["rocket"]["second_stage"]["payloads"].length; i++) {
-      weight =
-        d["rocket"]["second_stage"]["payloads"][i]["payload_mass_kg"] + weight;
-    }
-    return weight;
-  });
-
-  // Bar Chart
-  var barChart = dc
-    .barChart("#chartPayloadPerYear")
-    .width(500)
-    .height(300)
-    .dimension(yearDimension)
-    .group(yearGroup)
-    .yAxisLabel("Payload Mass (kg)")
-    .xAxisLabel("Year")
-    .renderHorizontalGridLines(true)
-    .gap(10)
-    .xUnits(dc.units.ordinal)
-    .x(d3.scaleOrdinal())
-    .centerBar(true)
-    .brushOn(false)
-    .xAxis()
-    .tickFormat(d3.format("0000"));
-}
-
-// Sucess Percentage. could show this just as Text percentage
-//https://dc-js.github.io/dc.js/docs/stock.html
-
 function showLaunchSuccessRate(ndx) {
   var launchDimension = ndx.dimension(dc.pluck("launch_success"));
   var launchGroup = launchDimension.group();
-  var all = ndx.groupAll();
 
-  // pieChart not used, consider removing
-  var pieChart = dc
-    .pieChart("#pieChartLaunchSuccess")
-    .width(300)
-    .height(180)
-    .dimension(launchDimension)
-    .group(launchGroup)
-    .colors(["#b22222", "#369a43"])
-    .label(function(d) {
-      // not working properly
-      if (pieChart.hasFilter() && !pieChart.hasFilter(d.key)) {
-        return d.key;
-      }
-      var label;
-      // Success or Fail instead of true false
-      d.key === true ? (label = "Success!") : (label = "Oops..");
-      if (all.value()) {
-        label +=
-          " " +
-          d.value +
-          " out of ... or (" +
-          Math.floor((d.value / all.value()) * 100) +
-          "%)";
-      }
-      return label;
-    });
-
-  // Launch Success row chart
+  // Launch Result row chart
   var rowChart = dc
     .rowChart("#rowChartLaunchSuccess")
     .width(500)
@@ -589,25 +412,19 @@ function showLaunchSuccessRate(ndx) {
     .dimension(launchDimension)
     .ordinalColors(["#2db92d", "#cd0000"])
     .useViewBoxResizing(true)
-    //  TODO Add rowChart axis label: Launches
-    //  .label(false)
     .label(function(d) {
-      // if (rowChart.hasFilter() && !rowChart.hasFilter(d.key)) {
-      // return d.key;
-      //  }
       var label;
       // TODO Launch success barchart: dynamically show successes and failures
       d.key === true ? (label = "Success") : (label = "Failure");
       return label;
     })
-    //   .renderTitle(true)
     .group(launchGroup);
 }
 
 // Modal to be shown on click of mission patch in data table
 
 function showModal(missionPatchLarge) {
-  //   jQuery to add large mission patch to modal content
+  //   jQuery to add large mission patch link to modal content
   $("#modal-content").html(
     `<img src="${missionPatchLarge}" class="mission-patch-large" alt="Mission Patch Large"/>`
   );
@@ -615,7 +432,7 @@ function showModal(missionPatchLarge) {
   $("#myModal").modal("show");
 }
 
-//----------------------- Print Filter -----------------------
+// Print Filter
 // Source: https://gist.github.com/xhinking/9341806
 
 function print_filter(filter) {
@@ -648,13 +465,11 @@ function print_filter(filter) {
 }
 
 // Get Object Length helper function
-
 function getObjectLength(data) {
   return Object.keys(data).length;
 }
 
-// Next Mission API Call
-
+// Upcoming Launh API GET Request
 function apiCallNextLaunch() {
   // TODO API call next launch: use only fields required
   var fields = [
@@ -672,7 +487,7 @@ function apiCallNextLaunch() {
     "details"
   ];
   var filters = "?filter=" + fields.join(",");
-  // API Call
+  // append filters to url to minimise response size
   d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
     function(data) {
       // get details (lat/long) of launch pad
@@ -684,17 +499,18 @@ function apiCallNextLaunch() {
     }
   );
 }
+
 // Populate Next Mission Card
 function populateNextMissionCard(data) {
-  // If rocket is reused, rename rocket to 'Used Falcon 9'
+  // If rocket is reused, rename rocket to "Used Falcon 9"
   if (data.rocket.first_stage.cores[0].reused === true) {
     data.rocket.rocket_name = "Used Falcon 9";
-  } else if (data.rocket.rocket_name === "Falcon 9") {
     //   else if, rename rocket to "New Falcon 9"
+  } else if (data.rocket.rocket_name === "Falcon 9") {
     data.rocket.rocket_name = "New Falcon 9";
   }
 
-  // jQuery to Populate card with next launch details
+  // jQuery to populate card with next launch details
   $("#nextMissionCard").html(
     `<div class="card-body">
 <h4 class="card-title">${data.mission_name}</h4>
@@ -710,8 +526,6 @@ function populateNextMissionCard(data) {
 </div>`
   );
 
-  //Reddit removed <li><a href=${data.links.reddit_campaign} target="_blank"><img src="assets/img/reddit-icon.png" /></a></li>
-
   // Add To Calendar event details
   $("#addeventatc1 .title").text(`SpaceX Launch - ${data.mission_name}`);
   $("#addeventatc1 .start").text(data.launch_date_utc);
@@ -722,11 +536,11 @@ function populateNextMissionCard(data) {
 }
 
 // Populate CountDown until next Launch
-
 function populateCountDown(launchDateUnix) {
-  var countDownDate = launchDateUnix * 1000; // millisecond since unix epoch
+  // multiple by 1000 to get milliseconds since Unix Epoch
+  var countDownDate = launchDateUnix * 1000;
 
-  // Below Countdown based on source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
+  // Below countdown function based on source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
   // Update the count down every 1 second
   var x = setInterval(function() {
     // Get today's date and time
@@ -778,7 +592,7 @@ function addNextLaunchMarkerToMap(data) {
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLngMarker,
     mapTypeId: "hybrid",
-    zoom: 12
+    zoom: 11
   });
 
   // create marker of launch site
@@ -789,7 +603,7 @@ function addNextLaunchMarkerToMap(data) {
   });
 }
 
-// Roadster API
+// Roadster API Get Request
 function apiCallRoadster() {
   //   Call Roadster API
   d3.json("https://api.spacexdata.com/v3/roadster").then(function(data) {
@@ -797,89 +611,12 @@ function apiCallRoadster() {
   });
 }
 
+// Displays Roadster data in Roadster card
 function showRoadster(data) {
   $("#speed").text(data.speed_kph.toFixed(2));
   $("#earth-distance").text(data.earth_distance_km.toFixed(2));
   $("#days-in-space").text(data.period_days.toFixed(0));
   $("#roadster-details").text(data.details);
-}
-
-//probbaly wont be used--------landings.html---------------- doesn't seem to respect filters
-// function apiCallLandingPads() {
-//   d3.json(`https://api.spacexdata.com/v3/landpads`).then(function(data) {
-//     console.log(data[0]);
-//     drawLandingGraph(data);
-//     addLandingMarkers(data);
-//   });
-// }
-
-// function addLandingMarkers(data) {
-//   var totalLandingPads = getObjectLength(data);
-//   console.log("object length: " + getObjectLength(data));
-
-//   for (var i = 0; i < totalLandingPads; i++) {
-//     //for each landing pad, add a marker
-//     //get relevant data points
-//     var row = data[i];
-//     var latLngMarker = {
-//       lat: row.location.latitude,
-//       lng: row.location.longitude
-//     };
-//     var fullName = row.full_name;
-
-//     //create marker
-//     var marker = new google.maps.Marker({
-//       position: latLngMarker,
-//       map: map,
-//       title: fullName
-//     });
-//   }
-// }
-
-// draw landing graph
-function drawLandingGraph(data) {
-  var ndx = crossfilter(data);
-
-  showLandingGraph(ndx);
-  dc.renderAll();
-}
-
-// NOT USED Landings by site
-function showLandingGraph(ndx) {
-  var landingPadDimension = ndx.dimension(dc.pluck("full_name"));
-  // var groupOutcome = landingPadDimension.group().reduce(reduceAdd, reduceRemove, reduceInitial);
-  var groupLandSuccess = landingPadDimension.group().reduceSum(function(d) {
-    return +d.successful_landings;
-  });
-  var groupLandFail = landingPadDimension.group().reduceSum(function(d) {
-    return d.attempted_landings - d.successful_landings;
-  });
-
-  //   print_filter(groupLandSuccess);
-  //   print_filter(groupLandFail);
-  /*var totalSuccessArray = groupLandSuccess.all();
-  var totalFailArray = groupLandFail.all();
-  var totalSuccess = 0;
-  var totalFail = 0;
-  for (var i = 0; i < totalSuccessArray.length; i++) {
-    totalSuccess += totalSuccessArray[i].value;
-    totalFail += totalFailArray[i].value 
-  };
-  var totalAttempts = totalSuccess + totalFail;
-  var landSuccessRate = parseFloat(totalSuccess / (totalSuccess + totalFail)*100).toFixed(2)+"%";
-*/
-  var barChart = dc
-    .barChart("#landings-chart")
-    .width(400)
-    .height(200)
-    .x(d3.scaleOrdinal())
-    .xUnits(dc.units.ordinal)
-    .elasticX(true)
-    .ordinalColors(["#2db92d", "#cd0000"])
-    .useViewBoxResizing(true)
-    .dimension(landingPadDimension)
-    .group(groupLandSuccess, "Success")
-    .stack(groupLandFail, "Fail");
 }
 
 // API Call Payloads
@@ -889,59 +626,39 @@ function apiCallPayloads() {
   });
 }
 
+// Draw payload graphs
 function drawPayloadGraphs(data) {
   // Crossfilter payload data
   var ndx = crossfilter(data);
   //   Show graphs
-  showPayloadGraph(ndx);
+  showPayloadGraphs(ndx);
+  // Show count of currently filtered payload records
   showRowCountPayloads(ndx);
-
   // Hide loading spinners
   $(".spinner-grow").hide();
-
   //   Render graphs
   dc.renderAll();
 }
 
-// Multiple Payload Graphs
-function showPayloadGraph(ndx) {
+// Show 3 Payload Graphs - Payload by Orbit, Payloads by Manufacturer, Payloads by Type
+function showPayloadGraphs(ndx) {
+  // Dimensions
   var orbitDimension = ndx.dimension(dc.pluck("orbit"));
   // if null, return "N/A"
-  var nationalityDimension = ndx.dimension(function(d) {
-    return d.nationality || "N/A";
-  });
   var manufacturerDimension = ndx.dimension(function(d) {
     return d.manufacturer || "N/A";
   });
   var payloadTypeDimension = ndx.dimension(function(d) {
     return d.payload_type || "N/A";
   });
-  var burstOrbitManuDimension = ndx.dimension(function(d) {
-    return [d.orbit || "N/A", d.manufacturer || "N/A"];
-  });
-  var burstNationalityManuDimension = ndx.dimension(function(d) {
-    return [d.nationality || "N/A", d.manufacturer || "N/A"];
-  });
 
+  // Groups
   var groupOrbit = orbitDimension.group().reduceCount();
-  var groupNationality = nationalityDimension.group().reduceCount();
   var groupManufacturer = manufacturerDimension.group().reduceCount();
   var groupPayloadType = payloadTypeDimension.group().reduceCount();
 
-  var groupBurst = burstOrbitManuDimension.group().reduceCount(function(d) {
-    return d.manufacturer;
-  });
-
-  var groupBurst2 = burstNationalityManuDimension
-    .group()
-    .reduceCount(function(d) {
-      return d.nationality;
-    });
-
-  var all = ndx.groupAll();
-
-  var rowChart = dc
-    .rowChart("#pieChartPayloadByOrbit")
+  var rowChartPayloadByOrbit = dc
+    .rowChart("#barChartPayloadByOrbit")
     .width(500)
     .height(300)
     .useViewBoxResizing(true)
@@ -949,21 +666,9 @@ function showPayloadGraph(ndx) {
     .gap(2)
     .dimension(orbitDimension)
     .group(groupOrbit);
-  //  .renderTitleLabel(true);
-  //  .title(function(d){
-  //  return d.orbit_params.regime;
-  //  });
 
-  //   var rowChartPayloadNationality = dc
-  //     .rowChart("#pieChartPayloadNationalityUSvsROW")
-  //     .width(300)
-  //     .height(100)
-  //     .cap(1)
-  //     .dimension(nationalityDimension)
-  //     .group(groupNationality);
-
-  var rowChartManufacturer = dc
-    .rowChart("#pieChartPayloadManufacturer")
+  var rowChartPayloadByManufacturer = dc
+    .rowChart("#barChartPayloadManufacturer")
     .width(500)
     .height(300)
     .useViewBoxResizing(true)
@@ -972,21 +677,11 @@ function showPayloadGraph(ndx) {
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
-  //   var pieChartNationality = dc
-  //     .pieChart("#pieChartPayloadNationality")
-  //     .width(400)
-  //     .height(300)
-  //     .cap(7)
-  //     //  .useViewBoxResizing(true)
-  //     .dimension(nationalityDimension)
-  //     .group(groupNationality);
-
-  var rowChartPayloadType = dc
+  var rowChartPayloadByType = dc
     .rowChart("#rowChartPayloadType")
     .width(500)
     .height(300)
     .gap(2)
-    //  .labelOffsetX()
     .useViewBoxResizing(true)
     .dimension(payloadTypeDimension)
     .group(groupPayloadType);
