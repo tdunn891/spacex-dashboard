@@ -3,21 +3,7 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  /* background-color: darkgray; */
-  /* https://cssgradient.io/ */
-  /* position: fixed; */
-  /* background: rgb(2, 0, 36); */
-  background: rgb(
-    24,
-    33,
-    65
-  ); /* yankees blue
-  /* background: linear-gradient( */
-  /* 180deg, */
-  /* rgba(2, 0, 36, 1) 0%, */
-  /* rgba(9, 9, 121, 1) 35%, */
-  /* rgba(0, 129, 255, 1) 100% */
-  /* ); */
+  background: rgb(24, 33, 65);
   background-attachment: fixed;
 }
 
@@ -25,21 +11,9 @@ body {
   padding: 0 2px;
 }
 
-#chartPayloadPerYear,
-#pieChartLaunchSuccess,
-#chartLaunchSites {
-  display: none;
-}
-
-/* #sunburstChartOrbitManu { */
-  /* text-align: center; */
-/* } */
-
 .chart {
   /* TODO Add box shadow to chart cards */
-  /* background-color: rgba(46, 49, 49, 0.55); */
   background-color: rgba(48, 62, 66, 0.55); /* outerspace */
-  /* box-shadow: violet; */
   margin-top: 3px;
   text-align: center;
 }
@@ -53,7 +27,6 @@ body {
 /* chart ticks */
 .tick {
   color: whitesmoke;
-  /* font-family: "Share Tech", sans-serif; */
 }
 
 /* Axis Labels */
@@ -91,14 +64,11 @@ body {
 /* Launch Success Number Displays */
 #numberDisplayLaunchSuccessRate,
 #numberDisplayLaunchSuccessTotal {
-  /* font-size: 10px; */
   color: whitesmoke;
 }
 
 #dc-data-table {
-  /* background-color: rgba(75, 102, 107, 0.55); */
   text-align: center;
-  /* font-size: 14px; */
 }
 
 .dc-table-column {
@@ -108,11 +78,6 @@ body {
 /* Data Table content */
 .table td {
   vertical-align: middle;
-}
-
-/* Hides unnecessary table row */
-.dc-table-label {
-  /* display: none; */
 }
 
 /* Pagination buttons */
@@ -130,18 +95,12 @@ body {
 
 /* Data table headers */
 .dc-table-head {
-  /* color: whitesmoke; */
   font-family: "Share Tech", sans-serif;
-  /* font-size: 24px; */
-  /* text-align: center; */
 }
 
 /* table body font */
 .dc-table-row {
-   /* font-family: Arial, Helvetica, sans-serif; */
   font-family: "Share Tech", sans-serif;
-  /* font-size: 18px; */
-  /* color: whitesmoke; */
 }
 
 .dc-data-count,
@@ -158,8 +117,6 @@ body {
 }
 /* Launches by Site text */
 #chartLaunchesBySiteAndRocket .x.axis text {
-  /* text-anchor: end !important; */
-  /* transform: rotate(-30deg); */
   font-size: 10px;
 }
 
@@ -168,17 +125,14 @@ body {
   fill: whitesmoke;
 }
 
-/* unordered lists data table links  */
+/* unordered lists  */
 ul {
   list-style-type: none;
-  /* vertical-align: middle; */
-  /* float: left; */
-  /* padding-left: 0; */
 }
 
 .launch-links li {
-   float: left;
-   margin: auto 6px;
+  float: left;
+  margin: auto 6px;
 }
 /* Data table link icons */
 .link-icon-small {
@@ -194,11 +148,6 @@ ul {
 .mission-patch-large {
   width: 60%;
   height: auto;
-}
-
-/* Next Launch Card Title */
-.card-title {
-  /* text-align: center; */
 }
 
 /* Launch success text */
@@ -219,13 +168,13 @@ ul {
   text-align: center;
 }
 
+/* launch details */
 .details-card {
   background-color: whitesmoke;
   color: black;
   text-align: justify;
 }
 
-/* TODO card-body text size responsiveness */
 .card-body {
   font-family: "Share Tech", sans-serif;
   padding: 0.6rem;
@@ -234,20 +183,19 @@ ul {
 
 /* Modal content */
 .modal-content {
-  /* TODO Add spacey background to modal */
   align-items: center;
   background-color: darkslategrey;
 }
+
+/* padding around large mission patch in modal */
 .modal-content img {
-  /* padding: 20px auto; */
   margin: 25px auto;
 }
 
 /* Next launch location map */
 #map {
   width: 100%;
-  height: 40vh;
-  /* height: 100%; */
+  height: 50vh;
 }
 
 /* Next launch coundown */
@@ -311,7 +259,6 @@ h1 {
 
 h2 {
   font-family: "Share Tech", sans-serif;
-  /* color: whitesmoke; */
   text-align: center;
   font-size: 26px;
   text-align: justify;
@@ -343,10 +290,12 @@ h3 {
   background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
+/* heading svg colour */
 .filter-navy {
   filter: invert(11%) sepia(76%) saturate(5306%) hue-rotate(211deg)
     brightness(92%) contrast(113%);
 }
+
 /* Footer */
 footer {
   width: 100%;
@@ -372,6 +321,6 @@ footer {
 }
 
 * {
-  outline: 1px solid grey;
-  outline-offset: -1px;
+  /* outline: 1px solid grey; */
+  /* outline-offset: -1px; */
 }
