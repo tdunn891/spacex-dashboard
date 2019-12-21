@@ -10,16 +10,23 @@ body {
   background-attachment: fixed;
 }
 
+p {
+   color: whitesmoke;
+   font-family: "Share Tech", sans-serif;
+}
+
+/* Navbar Text */
 .navbar-text {
   color: whitesmoke;
   font-size: 14px;
 }
 
-/* column padding */
+/* Column Padding */
 .col-lg-4 {
   padding: 4px 5px;
 }
 
+/* Charts */
 .chart {
   background-color: #474b4f;
   margin: 3px 1px;
@@ -93,6 +100,7 @@ footer {
 /* Primary Buttons */
 .btn-primary {
   font-family: "Share Tech", sans-serif;
+  text-transform: uppercase;
 }
 
 /* Pagination buttons */
@@ -109,11 +117,12 @@ footer {
   font-family: "Share Tech", sans-serif;
   text-align: right;
   color: whitesmoke;
-  margin: 16px auto 10px auto;
+  /* margin: 0 auto 0 auto; */
 }
 
 .dc-data-count,
 .dc-data-count-payloads {
+   font-family: "Share Tech", sans-serif;
   float: left;
   margin-top: 1px;
   color: whitesmoke;
@@ -139,9 +148,23 @@ ul {
   list-style-type: none;
 }
 
+.filter-button {
+   margin-top: 14px;
+   /* margin-bottom: 12px; */
+   margin-right: 8px !important;
+   float: right;
+}
+
+/* Launch Links */
+
+.launch-links {
+   margin: 0 !important;
+   padding: 0; 
+   text-align: center;
+}
+
 .launch-links li {
-  float: left;
-  margin: auto 6px;
+  display: inline;
 }
 
 #news-article-icon {
@@ -155,7 +178,7 @@ ul {
 
 /* Data table mission patch images */
 .mission-patch-small {
-  width: 5vw;
+  width: 55px;
 }
 
 /* Modal large mission patch images */
@@ -167,7 +190,7 @@ ul {
 /* Launch success text */
 .success {
   border: 1px solid whitesmoke;
-  padding: 2px 10px;
+  padding: 2px 4px;
   text-align: center;
   color: whitesmoke;
   background-color: green;
@@ -176,7 +199,7 @@ ul {
 /* Launch failure text */
 .failure {
   border: 1px solid whitesmoke;
-  padding: 2px 10px;
+  padding: 2px 4px;
   color: whitesmoke;
   background-color: darkred;
   text-align: center;
@@ -234,6 +257,8 @@ ul {
 h2 {
   font-family: "Share Tech", sans-serif;
   font-size: 26px;
+  /* margin-top: 30px; */
+  /* padding-bottom: 0; */
   text-transform: uppercase;
   color: whitesmoke;
   display: inline-block;
@@ -328,6 +353,9 @@ footer {
   .navbar-text {
     display: none;
   }
+  .mission-patch-small {
+     width: 22px;
+  }
 }
 
 /* Offset anchors so navbar doesn't overlap headings */
@@ -339,6 +367,6 @@ a:target {
 }
 
 * {
-  /* outline: 1px solid grey; */
-  /* outline-offset: -1px; */
+  outline: 1px solid grey;
+  outline-offset: -1px;
 }
