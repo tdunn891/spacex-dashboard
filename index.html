@@ -10,41 +10,50 @@
    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
    <!-- dc css -->
-   <!-- TODO look for dc.min.css and test if required at all -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.5/dc.css"
-      integrity="sha256-AqNj0S7N1lVLHuYiA9ydJqGXI/9NMQOCGf40m1iyQI0=" crossorigin="anonymous" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.css"
+      integrity="sha256-JxxmFZJjSBxxAjCludgb7ZMDLq9++jCr5pSVyoQLo2s=" crossorigin="anonymous" />
    <!-- google fonts -->
    <link href="https://fonts.googleapis.com/css?family=Share+Tech&display=swap" rel="stylesheet">
    <!-- favicon -->
    <link rel='icon' href='/assets/img/favicon-32x32.png' type='image/x-icon'>
    <!-- style.css -->
    <link rel="stylesheet" href="assets/css/style.css">
-   <title>SpaceX Interactive Dashboard</title>
+   <title>SpaceX Data Dashboard</title>
 </head>
 
 <body>
-   <nav class="navbar navbar-expand-lg navbar-dark">
-      <a class="navbar-brand" href="#">SpaceX Interactive Dashboard</a>
+   <!-- Nav Bar -->
+   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <a class="navbar-brand" href="#">SpaceX Data Dashboard</a>
+      <span class="navbar-text">Data Source: SpaceX Official API</span>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+         <!-- Nav links -->
          <div class="navbar-nav">
             <a class="nav-item nav-link active" href="#">LAUNCH EXPLORER<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#next-launch">NEXT LAUNCH</a>
-            <a class="nav-item nav-link" href="#payload-analysis">PAYLOAD ANALYSIS</a>
-            <a class="nav-item nav-link" href="#starman">WHERE'S STARMAN?</a>
-            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary active">Reset</a>
+            <a class="nav-item nav-link" href="#next-launch-anchor">NEXT LAUNCH</a>
+            <a class="nav-item nav-link" href="#payload-analysis-anchor">PAYLOAD ANALYSIS</a>
+            <a class="nav-item nav-link" href="#starman-anchor">ROADSTER</a>
          </div>
       </div>
    </nav>
-   <!-- TODO provide links to falcon9 and falconheavy on spacex website -->
    <div class="container-fluid">
+      <!-- Launch Explorer -->
       <div class="row">
+         <div class="heading-row">
+            <img src="/assets/img/falcon-heavy-in-flight-icon.svg" class="heading-icon"
+               alt="Falcon Heavy Flight Icon" />
+            <h2>Launch Explorer</h2>
+            <img src="/assets/img/info-icon.png" alt="Launch Dashboard Info" data-toggle="tooltip" title="This dashboard shows the full history of SpaceX's launch program. The colors represent each rocket.
+            Clicking a segment any chart will also filter the other charts. 'Reset' resets all filters." width="14px" />
+            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary" style="float: right;">Clear
+               Filters</a>
+         </div>
          <div class="col-12">
-            <h2><img src="/assets/img/falcon-heavy-in-flight-icon.svg" class="filter-navy" style="width: 48px;" />
-               Launch Explorer</h2>
+            <!-- Data Count: Shows how many launch records are currently filtered  -->
             <div class="dc-data-count">
                <span class="filter-count"></span>
                <span class="total-count"></span>
@@ -52,39 +61,45 @@
          </div>
       </div>
       <div class="row">
-         <!-- TODO ensure chart colours are not green or red (success/fail) -->
          <div class="col-md-6 col-lg-4">
+            <!-- Launches by Rocket Pie Chart -->
             <div data-toggle="tooltip" data-placement="top"
                title="Shows number of times SpaceX has launched each rocket." class="chart"
                id="pieChartLaunchesByRocket">
-               <h3>Launches by Rocket</h3>
+               <h3> Launches by Rocket</h3>
+
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
-            <div data-toggle="tooltip" title="A given launch is deemed a success if it doesn't blow up during launch!"
-               class="chart" id="rowChartLaunchSuccess">
+            <!-- Launch Result Row Chart -->
+            <div data-toggle="tooltip" title="Launch Result" class="chart" id="rowChartLaunchSuccess">
                <h3>Launch Result</h3>
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
          <div class="col-md-6 col-lg-4">
+            <!-- Launches by Year Stacked Bar Chart -->
             <div data-toggle="tooltip"
                title="Shows the upward trend of SpaceX launches year on year, grouped by rocket." class="chart"
                id="chartLaunchesPerYearByVehicle">
                <h3>Launches by Year</h3>
+               <!-- Bootsrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
          <div class="col-md-12 col-lg-4">
-            <div data-toggle="tooltip"
-               title="Shows the distribution of launches among SpaceX's four launch sites, grouped by rocket. Cape Canaveral is SpaceX's most used launch pad."
-               class="chart" id="chartLaunchesBySiteAndRocket">
+            <!-- Launches by Site stacked bar chart -->
+            <div data-toggle="tooltip" title="Shows the distribution of launches among SpaceX's four launch sites, grouped by rocket.
+                Cape Canaveral is SpaceX's most used launch pad." class="chart" id="chartLaunchesBySiteAndRocket">
                <h3>Launches by Site</h3>
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
@@ -93,54 +108,61 @@
       </div>
       <div class="row">
          <div class="col-12">
+            <!-- Data Table Pagination -->
             <div id="paging">
                Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span
                   id="totalsize"></span>
-               <input id="prev" class="btn btn-info" type="Button" value="Previous" />
-               <input id="next" class="btn btn-info" type="button" value="Next" />
+               <a id="prev" class="btn btn-primary" type="button">Previous</a>
+               <a id="next" class="btn btn-primary" type="button">Next</a>
             </div>
+            <!-- Bootstrap Responsive Data Table, showing crossfiltered launch records -->
             <div class="table-responsive">
                <table id="dc-data-table" class="table table-dark table-hover table-sm table-striped">
                </table>
             </div>
-            <!-- Modal -->
+            <!-- Modal with image of large mission patch, which is activated on click of small mission patch -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                aria-hidden="true">
-               <div class="modal-dialog modal-lg">
+               <div class="modal-dialog modal-xl">
                   <div class="modal-content" id=modal-content>
+                     <img src="" id="launch-image" class="large-modal-image" alt="Mission Patch Large" />
+                     <!-- /><p>Mission Detail: <span id="launch-detail"></span></p> -->
                   </div>
                </div>
             </div>
          </div>
       </div>
+
+      <!-- Offset Anchor to Ensure Nav Bar doesn't cover content -->
+      <a class="anchor-offset" id="next-launch-anchor"></a>
+
+      <!-- Next Launch -->
       <div class="row">
-         <div class="col-12">
-            <h2 id="next-launch"><img src="/assets/img/falcon-heavy-icon.svg" class="filter-navy" style="width: 48px" />
+         <div class="heading-row">
+            <img src="/assets/img/falcon-heavy-icon.svg" class="heading-icon" alt="Falconn Heavy at Launchpad Icon" />
+            <h2 id="next-launch">
                Next Launch</h2>
          </div>
-      </div>
-      <div class="row">
          <div class="col-md-12 col-lg-6">
             <div class="card" id="nextMissionCard">
                <div class="card-body">
                   <h4 class="card-title"></h4>
-                  <p class="card-text">
-                     <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                     </ul>
-                  </p>
+                  <ul>
+                     <li></li>
+                     <li></li>
+                     <li></li>
+                     <li></li>
+                     <li></li>
+                  </ul>
                </div>
             </div>
+            <!-- Next Launch Countdown -->
             <div data-toggle="tooltip" title="Counting down to the next launch..." id="nextLaunchCountdown">
-               <table>
-                  <col width="80px">
-                  <col width="80px">
-                  <col width="80px">
-                  <col width="80px">
+               <table id="countdown-table">
+                  <col>
+                  <col>
+                  <col>
+                  <col>
                   <tr id="counter">
                      <td id="days">&nbsp;</td>
                      <td id="hours">&nbsp;</td>
@@ -155,31 +177,41 @@
                   </tr>
                </table>
             </div>
-            <!-- https://www.addevent.com/add-to-calendar-button -->
+            <!-- Add Launch to Calendar button -->
             <div title="Add to Calendar" class="addeventatc" id=addToCalendar>
                Add Launch to Calendar
                <span class="title"></span>
+               <!-- Timezone hardcoded to Europe/London because the launch time is in UTC -->
                <span class="timezone">Europe/London</span>
                <span class="start"></span>
                <span class="location"></span>
                <span class="description"></span>
             </div>
          </div>
+         <!-- Google Map of next launch pad location -->
          <div class="col-md-12 col-lg-6">
             <div data-toggle="tooltip" title="Next launch scheduled from this launchpad." id="map"></div>
             <script>
-               //TODO: move map; to main.js
                // initialise map variable
                var map;
             </script>
          </div>
       </div>
-      <!-- Countdown to next launch -->
+
+      <!-- Offset Anchor to Ensure Nav Bar doesn't cover content -->
+      <a class="anchor-offset" id="payload-analysis-anchor"></a>
+
+      <!-- Payload Analysis -->
       <div class="row">
+         <!-- Satellite icon source: https://www.iconfinder.com/icons/1587506/internet_line_satellite_icon -->
+         <div class="heading-row">
+            <img src="/assets/img/satellite-icon.svg" class="heading-icon" alt="satellite icon" />
+            <h2 id="payload-analysis">Payload Analysis</h2>
+            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary" style="float: right;">Clear
+               Filters</a>
+         </div>
          <div class="col-12">
-            <!-- Satellite icon source: https://www.iconfinder.com/icons/1587506/internet_line_satellite_icon -->
-            <h2 id="payload-analysis"><img src="/assets/img/satellite-icon.svg" class="filter-navy" style="width: 48px;"
-                  alt="satellite icon" /> Payload Analysis </h2>
+            <!-- Data count showing how many payload records are currently filtered -->
             <div class="dc-data-count-payloads">
                <span class="filter-count"></span>
                <span class="total-count"></span>
@@ -188,46 +220,53 @@
       </div>
       <div class="row">
          <div class="col-md-6 col-lg-4">
+            <!-- Payloads by Orbit Row Chart -->
             <div data-toggle="tooltip"
                title="SpaceX deploys payloads (satellites) into different types of orbit. This chart shows number of payloads deployed to each orbit. The most common being Geostationary Transfer Orbit (GTO), followed by Low Earth Orbit (LEO)."
                class="chart" id="barChartPayloadByOrbit">
                <h3>Payloads by Orbit</h3>
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
          <div class="col-md-6 col-lg-4">
+            <!-- Payloads by Manufacturer Row Chart -->
             <div data-toggle="tooltip"
                title="Manufacturers build payloads (satellites) to be deployed into orbit by SpaceX. This chart shows the number payloads built by each manufacturer."
                class="chart" id="barChartPayloadManufacturer">
                <h3>Payloads by Manufacturer</h3>
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
          <div class="col-md-6 offset-md-3 offset-lg-0 col-lg-4">
+            <!-- Payloads by Type Row Chart -->
             <div data-toggle="tooltip"
                title="Shows the number of payloads deployed of each type. The most common payload is 'Satellite' - all other types are SpaceX vehicles."
                class="chart" id="rowChartPayloadType">
                <h3>Payloads by Type</h3>
+               <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
                   <span class="sr-only">Loading...</span>
                </div>
             </div>
          </div>
       </div>
+
+      <!-- Offset Anchor to Ensure Nav Bar doesn't cover content -->
+      <a class="anchor-offset" id="starman-anchor"></a>
+      
+      <!-- Dude, Where's My Car? (Tesla Roadster) -->
       <div class="row">
-         <div class="col-12">
-            <h2 id="starman"><img src="/assets/img/starman-icon.svg" class="filter-navy" style="width: 48px" /> Where's
-               Starman?</h2>
+         <div class="heading-row">
+            <img src="/assets/img/starman-icon.svg" class="heading-icon" alt="Starman Icon" />
+            <h2 id="starman">Dude, Where's My Car?</h2>
          </div>
-      </div>
-      <div class="row">
          <div class="col-lg-6">
-            <!-- TODO change ID from example interval -->
-            <!-- <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel"> -->
             <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
                <div class="carousel-inner">
                   <div class="carousel-item active" data-interval="3000">
@@ -258,18 +297,20 @@
             </div>
          </div>
          <div class="col-lg-6">
+            <!-- Roadster Data -->
             <div class="card" id="roadster-card">
                <div class="card-body">
                   <h4 class="card-title">Elon Musk's Tesla Roadster</h4>
-                  <p class="card-text">
-                     <ul>
-                        <li><strong>Launch Date:</strong> 6 February 2018</li>
-                        <li><strong>Current Speed:</strong> <span id="speed"></span> km/h </li>
-                        <li><strong>Current Distance from Earth: </strong><span id="earth-distance"></span> km</li>
-                        <li><strong>Days in Orbit:</strong> <span id="days-in-space"></span> days</li>
-                        <li><strong>Details:</strong> <span id="roadster-details"></span></li>
-                     </ul>
-                  </p>
+                  <ul>
+                     <li><strong>Current Speed:</strong> <span id="speed"></span> km/h </li>
+                     <li><strong>Current Distance from Earth: </strong><span id="earth-distance"></span> km</li>
+                     <li><strong>Days in Orbit:</strong> <span id="days-in-space"></span> days</li>
+                     <li>&nbsp;</li>
+                     <li>Elon Musk's Tesla Roadster served as
+                        the dummy payload for the February 2018 Falcon Heavy test flight and is now an artificial
+                        satellite of the Sun. Starman, a mannequin dressed in a spacesuit, occupies the driver's seat."
+                     </li>
+                  </ul>
                </div>
             </div>
          </div>
@@ -307,7 +348,7 @@
    <!-- main.js -->
    <script src="assets/js/main.js"></script>
    <script>
-      // TODO Move apiCalls to main.js
+      // Call APIs
       apiCall();
       apiCallNextLaunch();
       apiCallPayloads();
@@ -320,21 +361,22 @@
 </body>
 
 <footer>
-   <!-- Footer list -->
-   <ul id="footer-list">
-      <!-- SpaceX API -->
-      <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
-      <!-- SpaceX Official Website -->
-      <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" title="SpaceX Official"><img
-               src="assets/img/spacex_logo_white.png" /></a></li>
-      <!-- Youtube Channel  -->
-      <!-- <li> -->
-      <!-- <div class="g-ytsubscribe" data-channel="spacexchannel" data-layout="full" data-theme="dark" -->
-      <!-- data-count="default"></div> -->
-      <!-- </!-->
-   </ul>
-   <span>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank">GitHub</a></span>
-   <!-- TODO fix footer -->
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-12">
+            <!-- Footer list -->
+            <ul id="footer-list">
+               <!-- SpaceX API -->
+               <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
+               <!-- SpaceX Official Website -->
+               <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" title="SpaceX Official"><img
+                        src="assets/img/spacex_logo_white.png" alt="SpaceX Logo" style="padding-bottom: 8px" /></a></li>
+            </ul>
+            <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank"><img
+                     src="/assets/img/GitHub-32.png" alt="GitHub Logo" height="18px" /></a></p>
+         </div>
+      </div>
+   </div>
 </footer>
 
 </html>

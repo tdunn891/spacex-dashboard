@@ -2,31 +2,41 @@ html {
   height: 100%;
   scroll-behavior: smooth;
 }
+
 body {
-  background: rgb(24, 33, 65);
+  /* background: rgb(24, 33, 65); */
+  /* background-color: #2c3531; */
+  background-color: #222629;
   background-attachment: fixed;
 }
 
+.navbar-text {
+  color: whitesmoke;
+  font-size: 14px;
+}
+
+/* column padding */
 .col-lg-4 {
-  padding: 0 2px;
+  padding: 4px 5px;
 }
 
 .chart {
-  /* TODO Add box shadow to chart cards */
-  background-color: rgba(48, 62, 66, 0.55); /* outerspace */
-  margin-top: 3px;
+  background-color: #474b4f;
+  margin: 3px 1px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
 
-/* Axis tick lines */
+/* Axis tick lines, chart ticks */
 .axis path,
-.tick line {
+.tick line,
+.tick {
   stroke: whitesmoke !important;
 }
 
-/* chart ticks */
-.tick {
-  color: whitesmoke;
+/* Launch Success chart text */
+.dc-chart g.row text {
+  fill: whitesmoke;
 }
 
 /* Axis Labels */
@@ -34,9 +44,14 @@ body {
 .x-axis-label {
   fill: whitesmoke !important;
   font-family: "Share Tech", sans-serif;
+  font-size: 18px;
 }
 
-#nextMissionCard {
+/* Font */
+#nextMissionCard,
+.nav-item, .navbar-text,
+table, 
+footer {
   font-family: "Share Tech", sans-serif;
 }
 
@@ -45,11 +60,12 @@ body {
   z-index: 0;
   text-align: center;
   display: block;
+  width: 220px;
   margin: 10px auto;
   font-family: "Share Tech", sans-serif;
   color: whitesmoke !important;
-  background-color: darkblue;
-  color: blue;
+  background-color:darkcyan;
+  /* color: blue; */
 }
 
 #addeventatc1 .addeventatc_icon {
@@ -59,12 +75,6 @@ body {
 .card-title {
   padding: 4px;
   margin: 4px;
-}
-
-/* Launch Success Number Displays */
-#numberDisplayLaunchSuccessRate,
-#numberDisplayLaunchSuccessTotal {
-  color: whitesmoke;
 }
 
 #dc-data-table {
@@ -80,27 +90,26 @@ body {
   vertical-align: middle;
 }
 
+/* Primary Buttons */
+.btn-primary {
+  font-family: "Share Tech", sans-serif;
+}
+
 /* Pagination buttons */
 #prev,
 #next {
+  font-family: "Share Tech", sans-serif;
+  margin-bottom: 2px;
+  padding: 0px 3px;
   color: whitesmoke;
-  font-weight: bold;
 }
 
 /* Pagination button container */
 #paging {
+  font-family: "Share Tech", sans-serif;
   text-align: right;
   color: whitesmoke;
-}
-
-/* Data table headers */
-.dc-table-head {
-  font-family: "Share Tech", sans-serif;
-}
-
-/* table body font */
-.dc-table-row {
-  font-family: "Share Tech", sans-serif;
+  margin: 16px auto 10px auto;
 }
 
 .dc-data-count,
@@ -120,9 +129,9 @@ body {
   font-size: 10px;
 }
 
-/* Launch Success chart text */
-.dc-chart g.row text {
-  fill: whitesmoke;
+/* countdown table */
+#countdown-table col {
+  width: 80px;
 }
 
 /* unordered lists  */
@@ -133,6 +142,11 @@ ul {
 .launch-links li {
   float: left;
   margin: auto 6px;
+}
+
+#news-article-icon {
+  filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg) brightness(85%)
+    contrast(95%);
 }
 /* Data table link icons */
 .link-icon-small {
@@ -145,9 +159,9 @@ ul {
 }
 
 /* Modal large mission patch images */
-.mission-patch-large {
-  width: 60%;
-  height: auto;
+.large-modal-image {
+  max-height: 400px;
+  width: auto;
 }
 
 /* Launch success text */
@@ -179,23 +193,24 @@ ul {
   font-family: "Share Tech", sans-serif;
   padding: 0.6rem;
   font-size: 16px;
+  color: whitesmoke;
+  background: rgb(24, 33, 65);
+}
+
+#roadster-card,
+#nextMissionCard {
+  margin: 10px auto;
 }
 
 /* Modal content */
 .modal-content {
   align-items: center;
-  background-color: darkslategrey;
+  background-color: black;
 }
 
 /* padding around large mission patch in modal */
 .modal-content img {
-  margin: 25px auto;
-}
-
-/* Next launch location map */
-#map {
-  width: 100%;
-  height: 50vh;
+  margin: 20px auto;
 }
 
 /* Next launch coundown */
@@ -204,68 +219,24 @@ ul {
   text-align: center;
   color: whitesmoke;
   font-size: 22px;
-  animation: fadein 4s;
-  -moz-animation: fadein 4s; /* Firefox */
-  -webkit-animation: fadein 4s; /* Safari and Chrome */
-  -o-animation: fadein 4s; /* Opera */
 }
 
 #counter td {
   font-size: 2.5rem;
 }
 
-/* Fade in transitions for coundown */
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fadein {
-  /* Firefox */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fadein {
-  /* Safari and Chrome */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-o-keyframes fadein {
-  /* Opera */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-h1 {
-  text-align: center;
-  font-family: "Share Tech", sans-serif;
-  color: whitesmoke;
+.heading-row {
+  background-color: rgba(0, 0, 128, 0.6);
+  width: 100%;
+  margin: 18px auto;
 }
 
 h2 {
   font-family: "Share Tech", sans-serif;
-  text-align: center;
   font-size: 26px;
-  text-align: justify;
-  background-color: lightblue;
-  margin: 6px auto;
-  padding: 6px;
-  display: block;
+  text-transform: uppercase;
+  color: whitesmoke;
+  display: inline-block;
 }
 
 /* Chart titles */
@@ -285,17 +256,24 @@ h3 {
   font-family: "Share Tech", sans-serif !important;
   font-size: 28px;
 }
+
 /* Navbar  */
 .navbar {
   background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
-/* heading svg colour */
-.filter-navy {
-  filter: invert(11%) sepia(76%) saturate(5306%) hue-rotate(211deg)
-    brightness(92%) contrast(113%);
+/* heading icons */
+.heading-icon {
+  filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg)
+    brightness(118%) contrast(100%);
+  margin-right: 12px;
+  width: 44px;
+  margin: 12px;
 }
 
+#carouselExampleInterval {
+  margin: 10px auto;
+}
 /* Footer */
 footer {
   width: 100%;
@@ -318,6 +296,46 @@ footer {
   padding: 0 16px;
   vertical-align: middle;
   display: inline-block;
+}
+
+#map {
+  width: 100%;
+  height: 50vh;
+}
+
+/* Meida Queries */
+
+/* Mobile */
+@media (min-width: 320px) {
+}
+
+/* Medium Tablet */
+@media (min-width: 768px) {
+  #map {
+    height: 40vh;
+  }
+}
+/* Large Tablet, Small Laptops and above */
+@media (min-width: 992px) {
+  #map {
+    height: 100%;
+  }
+}
+
+/* Medium Tablet */
+@media (max-width: 768px) {
+  /* Hide navbar-text on tablets and smaller */
+  .navbar-text {
+    display: none;
+  }
+}
+
+/* Offset anchors so navbar doesn't overlap headings */
+a:target {
+  display: block;
+  position: relative;
+  top: -52px;
+  visibility: hidden;
 }
 
 * {
