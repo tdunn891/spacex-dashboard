@@ -104,7 +104,8 @@ function showLaunchesBySiteByRocket(ndx) {
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    //   .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"]) //963484
     .gap(60)
     .renderTitle(true)
     .title(function(d) {
@@ -149,22 +150,19 @@ function showDataTable(ndx) {
         label: "Mission Patch",
         // anchor has href attribute of void(0) to force hand cursor on mouseover
         format: function(d) {
-          return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" data-placement="right" title="Click to enlarge" onclick="showModal('${d.links.mission_patch}')"></img></a>`;
+          return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" 
+          class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" data-placement="right"
+           title="Click to enlarge" onclick="showModal('${d.links.mission_patch}')" /></a>`;
         }
       },
       {
         label: "Mission",
+        //   Function allows mission detail dropdown on click of mission name
         format: function(d) {
-          //   TODO change from button to achor in mission data table
-          //   If launch success, add button class btn-success, else add btn-danger
-          var buttonType = d.launch_success ? "btn-success" : "btn-danger";
-          return `<a class="btn ${buttonType}" title="Click for Details" data-toggle="collapse" href="#collapse${d.flight_number}" role="button" aria-expanded="false" aria-controls="collapseExample">${d.mission_name}
-  </a>
-  <div class="collapse" id="collapse${d.flight_number}">
-          <div class="card card-body details-card">
-          ${d.details}
-          </div>
-        </div>`;
+          return `<a class="mission-links" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
+           aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.mission_name}<span>
+           </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
+          ${d.details}</div></div>`;
         }
       },
       {
@@ -177,14 +175,30 @@ function showDataTable(ndx) {
       {
         label: "Launch Site",
         format: function(d) {
-          return `<span data-toggle="tooltip" data-placement="right" title="${d.launch_site.site_name_long}">${d.launch_site.site_name}</span>`;
+          return `<span data-toggle="tooltip" data-placement="left" title="${d.launch_site.site_name_long}">
+          ${d.launch_site.site_name}</span>`;
         }
       },
 
       {
         label: "Rocket",
         format: function(d) {
-          return d.rocket.rocket_name;
+         
+         // if the flickr image array is not empty, insert link which triggers showModal()
+         if (d.links.flickr_images.length > 0) {
+
+            var details = d.details;
+            // get first image in array
+            var flickrImage1 = d.links.flickr_images[0]
+
+            return `<a href=javascript:void(0);
+            data-toggle="tooltip" data-placement="right"
+            title="Show Launch Image" onclick="showModal('${flickrImage1}')">
+            ${d.rocket.rocket_name}</a>`;
+         } else {
+            // else return without any link
+            return d.rocket.rocket_name;
+         }
         }
       },
       {
@@ -204,7 +218,7 @@ function showDataTable(ndx) {
           return `<ul class='launch-links'>
                      <li><a href='${d.links.video_link}' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
                      <li><a href='${d.links.wikipedia}' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
-                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
+                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" id="news-article-icon" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
                     </ul>`;
         }
       }
@@ -218,7 +232,7 @@ function showDataTable(ndx) {
 
   // Define how many records to show per page (5)
   var ofs = 0;
-  var pag = 5;
+  var pag = 8;
 
   //  Pagination based on example: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
   function update_offset() {
@@ -311,15 +325,14 @@ function showPieChartByRocket(ndx) {
   // Pie Chart
   var pieChart = dc
     .pieChart("#pieChartLaunchesByRocket")
-    //   .externalLabels(10)
-    //   .drawPaths(true)
     .innerRadius(50)
     .externalRadiusPadding(30)
     .minAngleForLabel(0.1)
     .dimension(rocketDimension)
     .group(groupRocket)
-    //TODO Fix colours
-    .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    .ordinalColors(["#AAC0AA", "#F6AE2D", "#30C5FF", "#963484"]) // 963484 pink
+
     .height(320)
     .width(500)
     .cx(310)
@@ -384,6 +397,7 @@ function showPastLaunches(ndx) {
     .renderHorizontalGridLines(true)
     .gap(6)
     //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
+    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"])
     .renderTitle(true)
     .title(function(d) {
       return [
@@ -399,6 +413,7 @@ function showPastLaunches(ndx) {
     .tickFormat(d3.format("0000"));
 }
 
+// Bar chart showing Launch Results
 function showLaunchSuccessRate(ndx) {
   var launchDimension = ndx.dimension(dc.pluck("launch_success"));
   var launchGroup = launchDimension.group();
@@ -414,7 +429,6 @@ function showLaunchSuccessRate(ndx) {
     .useViewBoxResizing(true)
     .label(function(d) {
       var label;
-      // TODO Launch success barchart: dynamically show successes and failures
       d.key === true ? (label = "Success") : (label = "Failure");
       return label;
     })
@@ -422,12 +436,9 @@ function showLaunchSuccessRate(ndx) {
 }
 
 // Modal to be shown on click of mission patch in data table
-
-function showModal(missionPatchLarge) {
-  //   jQuery to add large mission patch link to modal content
-  $("#modal-content").html(
-    `<img src="${missionPatchLarge}" class="mission-patch-large" alt="Mission Patch Large"/>`
-  );
+function showModal(modalImage) {
+// Set modal image attribute to modalImage
+  $("#launch-image").attr("src", `${modalImage}`);
   // Show modal
   $("#myModal").modal("show");
 }
@@ -471,7 +482,6 @@ function getObjectLength(data) {
 
 // Upcoming Launh API GET Request
 function apiCallNextLaunch() {
-  // TODO API call next launch: use only fields required
   var fields = [
     "flight_number",
     "launch_year",
@@ -520,7 +530,9 @@ function populateNextMissionCard(data) {
       <li><strong>Rocket:</strong> ${data.rocket.rocket_name}</li>
       <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
       <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
-      <li><strong>Details:</strong> ${data.details}</li>
+      <li><a data-toggle="collapse" href="#collapseDetails" role="button" aria-expanded="false" aria-controls="collapseExample">Show Details >></a>
+      <div class="collapse" id="collapseDetails">
+      <div class="card card-body details-card">${data.details}</div></div></li>
   </ul>
 </p>
 </div>`
@@ -616,7 +628,6 @@ function showRoadster(data) {
   $("#speed").text(data.speed_kph.toFixed(2));
   $("#earth-distance").text(data.earth_distance_km.toFixed(2));
   $("#days-in-space").text(data.period_days.toFixed(0));
-  $("#roadster-details").text(data.details);
 }
 
 // API Call Payloads
