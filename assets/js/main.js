@@ -1,6 +1,5 @@
-//API GET Request
+// API Launches GET Request
 
-//TODO: catch apicall errors
 function apiCall() {
   // array of required fields
   var fields = [
@@ -104,8 +103,7 @@ function showLaunchesBySiteByRocket(ndx) {
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    //   .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
-    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"]) //963484
+    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"])
     .gap(60)
     .renderTitle(true)
     .title(function(d) {
@@ -118,12 +116,6 @@ function showLaunchesBySiteByRocket(ndx) {
     })
     .x(
       d3.scaleOrdinal()
-      //   .domain([
-      //     "Kwajalein Atoll",
-      //     "Vandenberg Air Force Base",
-      //     "Kennedy Space Center",
-      //     "Cape Canaveral"
-      //   ])
     );
 }
 
@@ -292,8 +284,8 @@ function showRowCount(ndx) {
     .html({
       some:
         "<strong>%filter-count</strong> of <strong>%total-count</strong> launches selected" +
-        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
-      all: "Showing all launches - click to filter."
+        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset</a>",
+      all: "Showing all launches"
     });
 }
 
@@ -308,8 +300,8 @@ function showRowCountPayloads(ndx) {
     .html({
       some:
         "<strong>%filter-count</strong> of <strong>%total-count</strong> payloads selected" +
-        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset All</a>",
-      all: "Showing all payloads - click to filter."
+        " | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset</a>",
+      all: "Showing all payloads"
     });
 }
 
@@ -330,7 +322,6 @@ function showPieChartByRocket(ndx) {
     .minAngleForLabel(0.1)
     .dimension(rocketDimension)
     .group(groupRocket)
-    //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ff0000"]) //orange: #ff9900, #1f78b4"  green: #00cc00
     .ordinalColors(["#AAC0AA", "#F6AE2D", "#30C5FF", "#963484"]) // 963484 pink
 
     .height(320)
@@ -396,7 +387,6 @@ function showPastLaunches(ndx) {
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
     .gap(6)
-    //  .ordinalColors(["#ff9900", "#2db92d", "#1e90ff", "#ffff00"]) //orange: #ff9900, #1f78b4"  green: #00cc00
     .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"])
     .renderTitle(true)
     .title(function(d) {
