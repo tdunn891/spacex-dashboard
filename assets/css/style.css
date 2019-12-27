@@ -4,20 +4,12 @@ html {
 }
 
 body {
-  /* background: rgb(24, 33, 65); */
-  /* background-color: #2c3531; */
   background-color: #222629;
   background-attachment: fixed;
 }
 
-p {
-   color: whitesmoke;
-   font-family: "Share Tech", sans-serif;
-}
-
 /* Navbar Text */
 .navbar-text {
-  color: whitesmoke;
   font-size: 14px;
 }
 
@@ -36,9 +28,15 @@ p {
 
 /* Axis tick lines, chart ticks */
 .axis path,
-.tick line,
-.tick {
+.tick line {
   stroke: whitesmoke !important;
+}
+
+/* y-axis tick text */
+.tick text {
+  fill: whitesmoke;
+  font-size: 13px !important;
+  font-family: "Share Tech", sans-serif !important;
 }
 
 /* Launch Success chart text */
@@ -50,16 +48,13 @@ p {
 .y-axis-label,
 .x-axis-label {
   fill: whitesmoke !important;
-  font-family: "Share Tech", sans-serif;
-  font-size: 18px;
+  font-size: 22px;
 }
 
-/* Font */
-#nextMissionCard,
-.nav-item, .navbar-text,
-table, 
-footer {
+/* Default Font and Colour */
+body, footer {
   font-family: "Share Tech", sans-serif;
+  color: whitesmoke;
 }
 
 /* Add Launch to Calendar Button */
@@ -67,23 +62,20 @@ footer {
   z-index: 0;
   text-align: center;
   display: block;
-  width: 220px;
-  margin: 10px auto;
+  width: 180px;
+  margin: 16px auto 4px auto;
   font-family: "Share Tech", sans-serif;
   color: whitesmoke !important;
-  background-color:darkcyan;
-  /* color: blue; */
+  font-size: 14px;
+  background-color: rgb(30, 144, 255);
 }
 
+/* Add Launch to Calendar button */
 #addeventatc1 .addeventatc_icon {
   background-color: whitesmoke !important;
 }
 
-.card-title {
-  padding: 4px;
-  margin: 4px;
-}
-
+/* Data Table */
 #dc-data-table {
   text-align: center;
 }
@@ -99,38 +91,30 @@ footer {
 
 /* Primary Buttons */
 .btn-primary {
-  font-family: "Share Tech", sans-serif;
   text-transform: uppercase;
 }
 
 /* Pagination buttons */
 #prev,
 #next {
-  font-family: "Share Tech", sans-serif;
   margin-bottom: 2px;
   padding: 0px 3px;
-  color: whitesmoke;
 }
 
 /* Pagination button container */
 #paging {
-  font-family: "Share Tech", sans-serif;
   text-align: right;
-  color: whitesmoke;
-  /* margin: 0 auto 0 auto; */
 }
 
 .dc-data-count,
 .dc-data-count-payloads {
-   font-family: "Share Tech", sans-serif;
   float: left;
-  margin-top: 1px;
-  color: whitesmoke;
+  margin-top: 15px;
+  margin-right: 15px;
 }
 
 .dc-legend-item text {
   font-size: 15px;
-  font-family: "Share Tech", sans-serif;
   fill: whitesmoke !important;
 }
 /* Launches by Site text */
@@ -149,36 +133,30 @@ ul {
 }
 
 .filter-button {
-   margin-top: 14px;
-   /* margin-bottom: 12px; */
-   margin-right: 8px !important;
-   float: right;
+  margin-top: 14px;
+  margin-right: 8px !important;
+  float: right;
 }
 
 /* Launch Links */
-
 .launch-links {
-   margin: 0 !important;
-   padding: 0; 
-   text-align: center;
+  margin: 0 !important;
+  padding: 0;
+  text-align: center;
 }
 
 .launch-links li {
   display: inline;
 }
 
-#news-article-icon {
-  filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg) brightness(85%)
-    contrast(95%);
-}
 /* Data table link icons */
 .link-icon-small {
-  height: 26px;
+  height: 20px;
 }
 
 /* Data table mission patch images */
 .mission-patch-small {
-  width: 55px;
+  width: 50px;
 }
 
 /* Modal large mission patch images */
@@ -192,7 +170,6 @@ ul {
   border: 1px solid whitesmoke;
   padding: 2px 4px;
   text-align: center;
-  color: whitesmoke;
   background-color: green;
 }
 
@@ -200,30 +177,24 @@ ul {
 .failure {
   border: 1px solid whitesmoke;
   padding: 2px 4px;
-  color: whitesmoke;
   background-color: darkred;
   text-align: center;
 }
 
 /* launch details */
 .details-card {
-  background-color: whitesmoke;
   color: black;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   text-align: justify;
 }
 
 .card-body {
-  font-family: "Share Tech", sans-serif;
-  padding: 0.6rem;
+  padding: 0 22px;
   font-size: 16px;
   color: whitesmoke;
-  background: rgb(24, 33, 65);
+  background-color: #474b4f;
 }
 
-#roadster-card,
-#nextMissionCard {
-  margin: 10px auto;
-}
 
 /* Modal content */
 .modal-content {
@@ -240,27 +211,35 @@ ul {
 #nextLaunchCountdown table {
   margin: 2px auto;
   text-align: center;
-  color: whitesmoke;
   font-size: 22px;
 }
 
+/* Countdown table */
 #counter td {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .heading-row {
-  background-color: rgba(0, 0, 128, 0.6);
   width: 100%;
-  margin: 18px auto;
+  margin: 4px auto;
 }
 
-h2 {
-  font-family: "Share Tech", sans-serif;
-  font-size: 26px;
-  /* margin-top: 30px; */
-  /* padding-bottom: 0; */
-  text-transform: uppercase;
+/* Data table links */
+.mission-links, .rocket-link, #show-details {
+   color: deepskyblue;
+}
+
+/* Horizontal Lines */
+hr {
   color: whitesmoke;
+  border-color: whitesmoke;
+  background-color: whitesmoke;
+}
+
+/* Section headings */
+h2 {
+  font-size: 26px;
+  text-transform: uppercase;
   display: inline-block;
 }
 
@@ -268,23 +247,20 @@ h2 {
 h3 {
   text-align: center;
   display: block;
-  font-size: 25px;
+  font-size: 22px;
   margin: 4px auto;
-  padding-top: 4px;
-  padding-bottom: 0px;
-  font-family: "Share Tech", sans-serif;
-  color: whitesmoke;
+  padding-top: 10px;
+  padding-bottom: 2px;
 }
 
 /* Navbar title */
 .navbar-brand {
-  font-family: "Share Tech", sans-serif !important;
   font-size: 28px;
 }
 
 /* Navbar  */
 .navbar {
-  background-color: rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
 }
 
 /* heading icons */
@@ -296,15 +272,16 @@ h3 {
   margin: 12px;
 }
 
+/* Roadster image carousel */
 #carouselExampleInterval {
   margin: 10px auto;
 }
+
 /* Footer */
 footer {
   width: 100%;
   bottom: 0;
   background-color: black;
-  color: whitesmoke;
   margin: auto;
   height: fit-content;
   text-align: center;
@@ -313,7 +290,7 @@ footer {
 /* Footer list */
 #footer-list {
   list-style-type: none;
-  padding: 20px 2px;
+  padding: 16px 2px 0 2px;
 }
 
 /* Footer list items */
@@ -323,15 +300,48 @@ footer {
   display: inline-block;
 }
 
+/* Google Map */
 #map {
   width: 100%;
-  height: 50vh;
+  height: 50vh !important;
 }
 
-/* Meida Queries */
+/* Pie Chart Labels */
+.pie-label {
+  font-size: 25px !important;
+  stroke: rgba(0, 0, 0, 0.6);
+  stroke-width: 1px;
+}
 
+/* Labels for row charts */
+.titlerow {
+   text-anchor: start;
+   font-size: 17px !important;
+ }
+ 
+ /* Launch Success Chart */
+ #rowChartLaunchSuccess {
+    margin-top: 10px;
+ }
+ 
+ .x text {
+   fill: whitesmoke;
+ }
+
+ /* Offset anchors so navbar doesn't overlap headings */
+a:target {
+   display: block;
+   position: relative;
+   top: -60px;
+   visibility: hidden;
+ }
+
+/* Meida Queries */
 /* Mobile */
 @media (min-width: 320px) {
+  .mission-patch-small {
+    width: 30px;
+  }
 }
 
 /* Medium Tablet */
@@ -339,7 +349,11 @@ footer {
   #map {
     height: 40vh;
   }
+  .mission-patch-small {
+    width: 50px;
+  }
 }
+
 /* Large Tablet, Small Laptops and above */
 @media (min-width: 992px) {
   #map {
@@ -347,26 +361,26 @@ footer {
   }
 }
 
-/* Medium Tablet */
+/* Medium Tablet (max-width) */
 @media (max-width: 768px) {
   /* Hide navbar-text on tablets and smaller */
   .navbar-text {
     display: none;
   }
-  .mission-patch-small {
-     width: 22px;
+  /* Decrease table header font size */
+  .dc-table-head {
+    font-size: 12px;
+  }
+  /* Decrease table body font size */
+  tbody {
+    font-size: 12px;
   }
 }
 
-/* Offset anchors so navbar doesn't overlap headings */
-a:target {
-  display: block;
-  position: relative;
-  top: -52px;
-  visibility: hidden;
-}
+
+
 
 * {
-  outline: 1px solid grey;
-  outline-offset: -1px;
+  /* outline: 1px solid grey; */
+  /* outline-offset: -1px; */
 }
