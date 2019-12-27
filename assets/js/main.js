@@ -20,6 +20,15 @@ function apiCall() {
   d3.json(`https://api.spacexdata.com/v3/launches/past${filters}`).then(
     function(data) {
       drawGraphs(data);
+    },
+    //  alert if no response
+    function(error) {
+      alert(
+        "Failed to get response from the SpaceX API Launches Endpoint.\n\n" +
+          error +
+          "\n\nPlease retry later."
+      );
+      console.warn(error);
     }
   );
 }
@@ -59,8 +68,17 @@ function drawGraphs(data) {
 function showLaunchesBySiteByRocket(ndx) {
   // Dimension
   var siteDimension = ndx.dimension(function(d) {
-    //   return d.launch_site.site_name_long;
-    return d.launch_site.site_name;
+    //   Return shortened site names
+    switch (d.launch_site.site_name) {
+      case "CCAFS SLC 40":
+        return "Cape Canaveral";
+      case "KSC LC 39A":
+        return "Kennedy Space Center";
+      case "VAFB SLC 4E":
+        return "Vandenberg";
+      default:
+        return d.launch_site.site_name;
+    }
   });
   // Group
   var rocketGroup = siteDimension
@@ -103,20 +121,20 @@ function showLaunchesBySiteByRocket(ndx) {
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
     .renderHorizontalGridLines(true)
-    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"])
+    .ordinalColors(["#FAF3DD", "#0D324D", "#73EEDC", "#A4A8D1"])
     .gap(60)
     .renderTitle(true)
     .title(function(d) {
       return [
+        d.key,
         "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
         "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
         "Falcon 1: " + (d.value["Falcon 1"] || "0")
       ].join("\n");
     })
-    .x(
-      d3.scaleOrdinal()
-    );
+    .margins({ top: 30, left: 60, right: 20, bottom: 70 })
+    .x(d3.scaleOrdinal());
 }
 
 // Data Table
@@ -139,11 +157,11 @@ function showDataTable(ndx) {
         }
       },
       {
-        label: "Mission Patch",
+        label: "Patch",
         // anchor has href attribute of void(0) to force hand cursor on mouseover
         format: function(d) {
           return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" 
-          class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" data-placement="right"
+          class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" 
            title="Click to enlarge" onclick="showModal('${d.links.mission_patch}')" /></a>`;
         }
       },
@@ -167,30 +185,45 @@ function showDataTable(ndx) {
       {
         label: "Launch Site",
         format: function(d) {
-          return `<span data-toggle="tooltip" data-placement="left" title="${d.launch_site.site_name_long}">
-          ${d.launch_site.site_name}</span>`;
+          var site;
+          switch (d.launch_site.site_name) {
+            case "CCAFS SLC 40":
+              site = "Cape Canaveral";
+              break;
+            case "KSC LC 39A":
+              site = "Kennedy Space Center";
+              break;
+            case "VAFB SLC 4E":
+              site = "Vandenburg";
+              break;
+            default:
+              site = d.launch_site.site_name;
+              break;
+          }
+
+          return `<span data-toggle="tooltip" title="${d.launch_site.site_name_long}">
+          ${site}</span>`;
         }
       },
 
       {
         label: "Rocket",
         format: function(d) {
-         
-         // if the flickr image array is not empty, insert link which triggers showModal()
-         if (d.links.flickr_images.length > 0) {
-
+          // if the flickr image array is not empty, insert link which triggers showModal()
+          if (d.links.flickr_images.length > 0) {
             var details = d.details;
             // get first image in array
-            var flickrImage1 = d.links.flickr_images[0]
-
+            var flickrImage1 = d.links.flickr_images[0];
+            // 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
             return `<a href=javascript:void(0);
-            data-toggle="tooltip" data-placement="right"
+            data-toggle="tooltip" 
+            class="rocket-link"
             title="Show Launch Image" onclick="showModal('${flickrImage1}')">
             ${d.rocket.rocket_name}</a>`;
-         } else {
+          } else {
             // else return without any link
             return d.rocket.rocket_name;
-         }
+          }
         }
       },
       {
@@ -203,15 +236,13 @@ function showDataTable(ndx) {
         }
       },
       {
-        label: "Links",
+        label: "Video",
         format: function(d) {
-          // return unordered list of external links (YouTube, Wikipedia, News Article)
+          //   Youtube link
           // icon source: https://www.iconspedia.com/icon/news-icon-22850.html
-          return `<ul class='launch-links'>
-                     <li><a href='${d.links.video_link}' target="_blank"><img src="/assets/img/youtube_social_red.png" class="link-icon-small" alt="YouTube Link" title="Watch on YouTube"/></a></li>
-                     <li><a href='${d.links.wikipedia}' target="_blank"><img src="assets/img/wikipedia-32.png" class="link-icon-small" alt="Wikipedia" title="Wikipedia"/></a></li>
-                     <li><a href='${d.links.article_link}' target="_blank"><img src="assets/img/news-32.png" id="news-article-icon" class="link-icon-small" alt="News Article" title="News Article"/></a></li>
-                    </ul>`;
+          return `<a href='${d.links.video_link}' target="_blank">
+                  <img src="assets/img/youtube_social_red.png" class="link-icon-small" data-toggle="tooltip"
+                  alt="YouTube Link" title="Watch on YouTube"/></a>`;
         }
       }
     ])
@@ -317,25 +348,26 @@ function showPieChartByRocket(ndx) {
   // Pie Chart
   var pieChart = dc
     .pieChart("#pieChartLaunchesByRocket")
-    .innerRadius(50)
-    .externalRadiusPadding(30)
-    .minAngleForLabel(0.1)
+    .radius(120)
+    .minAngleForLabel(0.2)
     .dimension(rocketDimension)
     .group(groupRocket)
-    .ordinalColors(["#AAC0AA", "#F6AE2D", "#30C5FF", "#963484"]) // 963484 pink
-
-    .height(320)
+    .ordinalColors(["#0D324D", "#73EEDC", "#FAF3DD", "#A4A8D1"])
+    .height(295)
     .width(500)
-    .cx(310)
+    .label(function(d) {
+      return d.value;
+    })
+    .cx(330)
     .cy(150)
     .legend(
       dc
         .legend()
         .x(30)
-        .y(60)
+        .y(65)
         .autoItemWidth(true)
-        .itemHeight(22)
-        .gap(14)
+        .itemHeight(32)
+        .gap(12)
     )
     .useViewBoxResizing(true);
 }
@@ -385,12 +417,14 @@ function showPastLaunches(ndx) {
     .yAxisLabel("Launches", 25)
     .useViewBoxResizing(true)
     .xUnits(dc.units.ordinal)
+    .margins({ top: 30, left: 60, right: 30, bottom: 70 })
     .renderHorizontalGridLines(true)
     .gap(6)
-    .ordinalColors(["#30C5FF", "#AAC0AA", "#F6AE2D", "#963484"])
+    .ordinalColors(["#FAF3DD", "#0D324D", "#73EEDC", "#A4A8D1"])
     .renderTitle(true)
     .title(function(d) {
       return [
+        d.key,
         "New Falcon 9: " + (d.value["New Falcon 9"] || "0"),
         "Used Falcon 9: " + (d.value["Used Falcon 9"] || "0"),
         "Falcon Heavy: " + (d.value["Falcon Heavy"] || "0"),
@@ -398,7 +432,6 @@ function showPastLaunches(ndx) {
       ].join("\n");
     })
     .x(d3.scaleOrdinal())
-    .centerBar(true)
     .xAxis()
     .tickFormat(d3.format("0000"));
 }
@@ -412,22 +445,29 @@ function showLaunchSuccessRate(ndx) {
   var rowChart = dc
     .rowChart("#rowChartLaunchSuccess")
     .width(500)
-    .height(115)
-    .gap(8)
+    .height(110)
+    .gap(4)
     .dimension(launchDimension)
+    .renderTitleLabel(true)
     .ordinalColors(["#2db92d", "#cd0000"])
     .useViewBoxResizing(true)
-    .label(function(d) {
-      var label;
-      d.key === true ? (label = "Success") : (label = "Failure");
-      return label;
+    .label(function() {
+      return "";
+    })
+    .titleLabelOffsetX(413)
+    .title(function(d) {
+      if (d.key === true) {
+        return "Success: " + d.value;
+      } else {
+        return "Failure: " + d.value;
+      }
     })
     .group(launchGroup);
 }
 
 // Modal to be shown on click of mission patch in data table
 function showModal(modalImage) {
-// Set modal image attribute to modalImage
+  // Set modal image attribute to modalImage
   $("#launch-image").attr("src", `${modalImage}`);
   // Show modal
   $("#myModal").modal("show");
@@ -496,6 +536,15 @@ function apiCallNextLaunch() {
       populateNextMissionCard(data);
       // compute and populate countdown until next launch
       populateCountDown(data.launch_date_unix);
+    },
+    //  alert user if no reponse
+    function(error) {
+      alert(
+        "Failed to get response from the SpaceX API Next Launch Endpoint.\n\n" +
+          error +
+          "\n\nPlease retry later."
+      );
+      console.warn(error);
     }
   );
 }
@@ -510,23 +559,16 @@ function populateNextMissionCard(data) {
     data.rocket.rocket_name = "New Falcon 9";
   }
 
-  // jQuery to populate card with next launch details
-  $("#nextMissionCard").html(
-    `<div class="card-body">
-<h4 class="card-title">${data.mission_name}</h4>
-<p class="card-text">
-   <ul>
-      <li><strong>Flight Number:</strong> ${data.flight_number}</li>
-      <li><strong>Rocket:</strong> ${data.rocket.rocket_name}</li>
-      <li><strong>Launch Date:</strong> ${data.launch_date_local}</li>
-      <li><strong>Launch Site:</strong> ${data.launch_site.site_name_long}</li>
-      <li><a data-toggle="collapse" href="#collapseDetails" role="button" aria-expanded="false" aria-controls="collapseExample">Show Details >></a>
+  $("#flight-number").text(data.flight_number);
+  $("#mission-name").text(data.mission_name);
+  $("#rocket").text(data.rocket.rocket_name);
+  $("#launch-date").text(data.launch_date_local);
+  $("#launch-site").text(data.launch_site.site_name_long);
+  $("#next-mission-detail")
+    .html(`<a data-toggle="collapse" href="#collapseDetails" role="button"
+      aria-expanded="false" aria-controls="collapseExample" id="show-details">Show Details >></a>
       <div class="collapse" id="collapseDetails">
-      <div class="card card-body details-card">${data.details}</div></div></li>
-  </ul>
-</p>
-</div>`
-  );
+      <div>${data.details}</div></div>`);
 
   // Add To Calendar event details
   $("#addeventatc1 .title").text(`SpaceX Launch - ${data.mission_name}`);
@@ -571,17 +613,26 @@ function populateCountDown(launchDateUnix) {
 
 // API Call to get location of next launch
 function apiCallOneLaunchPad(site_id) {
-  d3.json(`https://api.spacexdata.com/v3/launchpads/${site_id}`).then(function(
-    data
-  ) {
-    // Add marker of next launch to google map
-    addNextLaunchMarkerToMap(data);
-  });
+  d3.json(`https://api.spacexdata.com/v3/launchpads/${site_id}`).then(
+    function(data) {
+      // Add marker of next launch to google map
+      addNextLaunchMarkerToMap(data);
+    },
+    //  alert if no response
+    function(error) {
+      alert(
+        "Failed to get response from the SpaceX API Launchpads Endpoint.\n\n" +
+          error +
+          "\n\nPlease retry later."
+      );
+      console.warn(error);
+    }
+  );
 }
 
 // Adds marker of next launch to google map
 function addNextLaunchMarkerToMap(data) {
-  // Get latitude and longitude
+  // Get latitude and longitude of next launch site
   var launchSite = data.site_name_long;
 
   //   Convert to object, ready for Google Maps API consumption
@@ -591,7 +642,7 @@ function addNextLaunchMarkerToMap(data) {
   };
 
   // Initialise google map, centered on launch site
-  map = new google.maps.Map(document.getElementById("map"), {
+  var map = new google.maps.Map(document.getElementById("map"), {
     center: latLngMarker,
     mapTypeId: "hybrid",
     zoom: 11
@@ -608,23 +659,52 @@ function addNextLaunchMarkerToMap(data) {
 // Roadster API Get Request
 function apiCallRoadster() {
   //   Call Roadster API
-  d3.json("https://api.spacexdata.com/v3/roadster").then(function(data) {
-    showRoadster(data);
-  });
+  d3.json("https://api.spacexdata.com/v3/roadster").then(
+    function(data) {
+      showRoadster(data);
+    },
+    //  alert if no response
+    function(error) {
+      alert(
+        "Failed to get response from the SpaceX API Roadster Endpoint.\n\n" +
+          error +
+          "\n\nPlease retry later."
+      );
+      console.warn(error);
+    }
+  );
 }
 
 // Displays Roadster data in Roadster card
 function showRoadster(data) {
-  $("#speed").text(data.speed_kph.toFixed(2));
-  $("#earth-distance").text(data.earth_distance_km.toFixed(2));
-  $("#days-in-space").text(data.period_days.toFixed(0));
+  $("#speed").text(formatThousandsComma(data.speed_kph.toFixed(2)) + " km/h");
+  $("#earth-distance").text(
+    formatThousandsComma(data.earth_distance_km.toFixed(2)) + " km"
+  );
+  $("#days-in-space").text(data.period_days.toFixed(0) + " days");
+}
+
+// source: https://blog.abelotech.com/posts/number-currency-formatting-javascript/
+function formatThousandsComma(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
 
 // API Call Payloads
 function apiCallPayloads() {
-  d3.json("https://api.spacexdata.com/v3/payloads").then(function(data) {
-    drawPayloadGraphs(data);
-  });
+  d3.json("https://api.spacexdata.com/v3/payloads").then(
+    function(data) {
+      drawPayloadGraphs(data);
+    },
+    //  alert if no reponse
+    function(error) {
+      alert(
+        "Failed to get response from the SpaceX API Payloads Endpoint.\n\n" +
+          error +
+          "\n\nPlease retry later."
+      );
+      console.warn(error);
+    }
+  );
 }
 
 // Draw payload graphs
@@ -658,31 +738,49 @@ function showPayloadGraphs(ndx) {
   var groupManufacturer = manufacturerDimension.group().reduceCount();
   var groupPayloadType = payloadTypeDimension.group().reduceCount();
 
+  // Row Chart, Payload By Orbit
   var rowChartPayloadByOrbit = dc
     .rowChart("#barChartPayloadByOrbit")
     .width(500)
-    .height(300)
+    .height(330)
     .useViewBoxResizing(true)
     .cap(10)
     .gap(2)
+    .renderTitleLabel(true)
+    .titleLabelOffsetX(413)
+    .label(function() {
+      return "";
+    })
     .dimension(orbitDimension)
     .group(groupOrbit);
 
+  // Row Chart, Payload By Manufacturer
   var rowChartPayloadByManufacturer = dc
     .rowChart("#barChartPayloadManufacturer")
     .width(500)
-    .height(300)
+    .height(330)
     .useViewBoxResizing(true)
     .cap(10)
     .gap(2)
+    .renderTitleLabel(true)
+    .titleLabelOffsetX(413)
+    .label(function() {
+      return "";
+    })
     .dimension(manufacturerDimension)
     .group(groupManufacturer);
 
+  // Row Chart, Payload By Type
   var rowChartPayloadByType = dc
     .rowChart("#rowChartPayloadType")
     .width(500)
-    .height(300)
+    .height(330)
     .gap(2)
+    .renderTitleLabel(true)
+    .titleLabelOffsetX(413)
+    .label(function() {
+      return "";
+    })
     .useViewBoxResizing(true)
     .dimension(payloadTypeDimension)
     .group(groupPayloadType);
