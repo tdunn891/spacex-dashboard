@@ -52,7 +52,8 @@ body {
 }
 
 /* Default Font and Colour */
-body, footer {
+body,
+footer {
   font-family: "Share Tech", sans-serif;
   color: whitesmoke;
 }
@@ -63,11 +64,11 @@ body, footer {
   text-align: center;
   display: block;
   width: 180px;
-  margin: 16px auto 4px auto;
+  margin: 16px auto 14px auto;
   font-family: "Share Tech", sans-serif;
   color: whitesmoke !important;
   font-size: 14px;
-  background-color: rgb(30, 144, 255);
+  background-color: #0275d8;
 }
 
 /* Add Launch to Calendar button */
@@ -106,6 +107,7 @@ body, footer {
   text-align: right;
 }
 
+/* Payload data count display */
 .dc-data-count,
 .dc-data-count-payloads {
   float: left;
@@ -138,13 +140,14 @@ ul {
   float: right;
 }
 
-/* Launch Links */
+/* Launch Links list */
 .launch-links {
   margin: 0 !important;
   padding: 0;
   text-align: center;
 }
 
+/* Launch Link list items */
 .launch-links li {
   display: inline;
 }
@@ -188,13 +191,13 @@ ul {
   text-align: justify;
 }
 
+/* Card body */
 .card-body {
   padding: 0 22px;
   font-size: 16px;
   color: whitesmoke;
   background-color: #474b4f;
 }
-
 
 /* Modal content */
 .modal-content {
@@ -225,8 +228,10 @@ ul {
 }
 
 /* Data table links */
-.mission-links, .rocket-link, #show-details {
-   color: deepskyblue;
+.mission-links,
+.rocket-link,
+#show-details {
+  color: deepskyblue;
 }
 
 /* Horizontal Lines */
@@ -258,9 +263,17 @@ h3 {
   font-size: 28px;
 }
 
+/* Rocket Icon */
+#rocket-icon {
+  height: 48px;
+  margin: 2px 0 0 2px;
+  padding: 0 1px 0 4px;
+}
+
 /* Navbar  */
 .navbar {
   background-color: rgba(0, 0, 0, 0.85) !important;
+  padding: 2px 2px;
 }
 
 /* heading icons */
@@ -272,6 +285,16 @@ h3 {
   margin: 12px;
 }
 
+/* Next Mission Table, Next Launch Site Table */
+#next-mission-table tbody,
+#launch-site-table tbody {
+  font-size: 17px;
+}
+
+/* Roadster Table */
+#roadster-table tbody {
+  font-size: 17px;
+}
 /* Roadster image carousel */
 #carouselExampleInterval {
   margin: 10px auto;
@@ -309,42 +332,42 @@ footer {
 /* Pie Chart Labels */
 .pie-label {
   font-size: 25px !important;
-  stroke: rgba(0, 0, 0, 0.6);
+  stroke: rgba(0, 0, 0, 1);
   stroke-width: 1px;
 }
 
 /* Labels for row charts */
 .titlerow {
-   text-anchor: start;
-   font-size: 17px !important;
- }
- 
- /* Launch Success Chart */
- #rowChartLaunchSuccess {
-    margin-top: 10px;
- }
- 
- .x text {
-   fill: whitesmoke;
- }
+  text-anchor: start;
+  font-size: 17px !important;
+}
 
- /* Offset anchors so navbar doesn't overlap headings */
+/* Launch Success Chart */
+#rowChartLaunchSuccess {
+  margin-top: 10px;
+}
+
+.x text {
+  fill: whitesmoke;
+}
+
+/* Offset anchors so navbar doesn't overlap headings */
 a:target {
-   display: block;
-   position: relative;
-   top: -60px;
-   visibility: hidden;
- }
+  display: block;
+  position: relative;
+  top: -74px;
+  visibility: hidden;
+}
 
 /* Meida Queries */
-/* Mobile */
+/* Mobile and above */
 @media (min-width: 320px) {
   .mission-patch-small {
     width: 30px;
   }
 }
 
-/* Medium Tablet */
+/* Medium Tablet and above */
 @media (min-width: 768px) {
   #map {
     height: 40vh;
@@ -361,24 +384,22 @@ a:target {
   }
 }
 
-/* Medium Tablet (max-width) */
+/* Medium Tablet and smaller */
 @media (max-width: 768px) {
-  /* Hide navbar-text on tablets and smaller */
+  /* Hide navbar text */ 
   .navbar-text {
     display: none;
   }
-  /* Decrease table header font size */
-  .dc-table-head {
-    font-size: 12px;
+  /* Decrease rocket-icon width */
+  #rocket-icon {
+     width: 40px;
+     height: auto;
   }
-  /* Decrease table body font size */
-  tbody {
+  /* Decrease table font size */
+  .dc-table-head, tbody {
     font-size: 12px;
   }
 }
-
-
-
 
 * {
   /* outline: 1px solid grey; */

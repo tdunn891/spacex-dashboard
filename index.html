@@ -24,21 +24,32 @@
 <body>
    <!-- Nav Bar -->
    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-      <a class="navbar-brand" href="#">SpaceX Dashboard</a>
-      <span class="navbar-text">Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX
-            API</a></span>
+      <a class="navbar-brand" href="#">
+         <img src="/assets/img/rocket-icon-64.png" id="rocket-icon" />
+         SpaceX Dashboard
+      </a>
+      <span class="navbar-text">
+         Data Source:
+         <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API
+         </a>
+      </span>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
          <!-- Nav links -->
-         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">LAUNCH HISTORY<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#next-launch-anchor">NEXT LAUNCH</a>
-            <a class="nav-item nav-link" href="#payload-analysis-anchor">PAYLOAD ANALYSIS</a>
-            <a class="nav-item nav-link" href="#starman-anchor">ROADSTER</a>
-         </div>
+         <ul class="navbar-nav">
+            <li class="nav-item smooth-scroll active" data-toggle="collapse" data-target=".navbar-collapse.show"><a
+                  class="nav-link" href="#">LAUNCH HISTORY<span class="sr-only">(current)</span>
+               </a></li>
+            <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
+                  class="nav-link" href="#next-launch-anchor">NEXT LAUNCH</a></li>
+            <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
+                  class="nav-link" href="#payload-analysis-anchor">PAYLOAD ANALYSIS</a></li>
+            <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
+                  class="nav-link" href="#starman-anchor">ROADSTER</a></li>
+         </ul>
       </div>
    </nav>
    <div class="container-fluid">
@@ -93,8 +104,9 @@
          </div>
          <div class="col-md-12 col-lg-4">
             <!-- Launches by Site stacked bar chart -->
-            <div data-toggle="tooltip" title="Distribution of launches among SpaceX's four launch sites, grouped by rocket."
-             class="chart" id="chartLaunchesBySiteAndRocket">
+            <div data-toggle="tooltip"
+               title="Distribution of launches among SpaceX's four launch sites, grouped by rocket." class="chart"
+               id="chartLaunchesBySiteAndRocket">
                <h3>Launches by Site</h3>
                <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
@@ -146,29 +158,30 @@
             <p style="margin-left: 20px;">SpaceX streams all launches live via YouTube. Catch the next one... </p>
          </div>
          <div class="col-md-12 col-lg-6">
-            <!-- <h4 class="card-title"></h4> -->
-            <table class="table table-dark" id="next-mission-table">
-               <tr>
-                  <td align="right">Flight Number:</td>
-                  <td id="flight-number"></td>
-               </tr>
-               <tr>
-                  <td align="right">Mission:</td>
-                  <td id="mission-name"></td>
-               </tr>
-               <tr>
-                  <td align="right">Rocket:</td>
-                  <td id="rocket"></td>
-               </tr>
-               <tr>
-                  <td align="right">Launch Window:</td>
-                  <td id="launch-date"></td>
-               </tr>
-               <tr>
-                  <td align="right"></td>
-                  <td id="next-mission-detail"></td>
-               </tr>
-            </table>
+            <div class="table-responsive">
+               <table class="table table-dark" id="next-mission-table">
+                  <tr>
+                     <td align="right">Flight Number:</td>
+                     <td id="flight-number"></td>
+                  </tr>
+                  <tr>
+                     <td align="right">Mission:</td>
+                     <td id="mission-name"></td>
+                  </tr>
+                  <tr>
+                     <td align="right">Rocket:</td>
+                     <td id="rocket"></td>
+                  </tr>
+                  <tr>
+                     <td align="right">Launch Window:</td>
+                     <td id="launch-date"></td>
+                  </tr>
+                  <tr>
+                     <td align="right"></td>
+                     <td id="next-mission-detail"></td>
+                  </tr>
+               </table>
+            </div>
             <!-- Next Launch Countdown -->
             <div data-toggle="tooltip" title="Counting down to the next launch..." id="nextLaunchCountdown">
                <table id="countdown-table">
@@ -203,8 +216,7 @@
          </div>
          <!-- Google Map of next launch pad location -->
          <div class="col-md-12 col-lg-6">
-            <!-- <p style="text-align: center;">Launch Site: Cape Canaveral</p> -->
-            <table class="table table-dark">
+            <table class="table table-dark" id="launch-site-table">
                <tr>
                   <td align="right">Launch Site:</td>
                   <td id="launch-site">
@@ -265,9 +277,8 @@
          </div>
          <div class="col-md-6 col-lg-4">
             <!-- Payloads by Manufacturer Row Chart -->
-            <div data-toggle="tooltip"
-               title="Number of payloads built by each manufacturer."
-               class="chart" id="barChartPayloadManufacturer">
+            <div data-toggle="tooltip" title="Number of payloads built by each manufacturer." class="chart"
+               id="barChartPayloadManufacturer">
                <h3>Payloads by Manufacturer</h3>
                <!-- Bootstrap Loading Spinner -->
                <div class="spinner-grow text-light" role="status">
@@ -322,21 +333,23 @@
             </div>
          </div>
          <div class="col-lg-6">
-            <!-- Roadster Data -->
-            <table class="table table-dark">
-               <tr id="roadster-table">
-                  <td align="right">Current Speed:</td>
-                  <td id="speed"></td>
-               </tr>
-               <tr>
-                  <td align="right">Distance from Earth:</td>
-                  <td id="earth-distance"></td>
-               </tr>
-               <tr>
-                  <td align="right">Days in Orbit:</td>
-                  <td id="days-in-space"></td>
-               </tr>
-            </table>
+            <!-- Roadster Data Table -->
+            <div class="table-responsive">
+               <table class="table table-dark" id="roadster-table">
+                  <tr>
+                     <td align="right">Current Speed:</td>
+                     <td id="speed"></td>
+                  </tr>
+                  <tr>
+                     <td align="right">Distance from Earth:</td>
+                     <td id="earth-distance"></td>
+                  </tr>
+                  <tr>
+                     <td align="right">Days in Orbit:</td>
+                     <td id="days-in-space"></td>
+                  </tr>
+               </table>
+            </div>
          </div>
       </div>
    </div>
@@ -382,9 +395,16 @@
       $(document).ready(function () {
          $("body").tooltip({ selector: '[data-toggle=tooltip]' });
       });
+      //  Change active Navigation Bar Item after click
+      var selector = '.navbar-nav li';
+      $(selector).on('click', function () {
+         $(selector).removeClass('active');
+         $(this).addClass('active');
+      });
    </script>
 </body>
 
+<!-- Footer -->
 <footer>
    <div class="container-fluid">
       <div class="row">
@@ -398,7 +418,7 @@
                         src="assets/img/spacex_logo_white.png" alt="SpaceX Logo" style="padding-bottom: 8px" /></a></li>
             </ul>
             <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank"><img
-                     src="assets/img/GitHub-32.png" alt="GitHub Logo" height="18px" /></a></p>
+                     src="assets/img/github-32.png" alt="GitHub Logo" height="18px" /></a></p>
          </div>
       </div>
    </div>
