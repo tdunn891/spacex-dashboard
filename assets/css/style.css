@@ -322,6 +322,9 @@ footer {
   vertical-align: middle;
   display: inline-block;
 }
+#github-logo {
+   height: 18px;
+}
 
 /* Google Map */
 #map {
