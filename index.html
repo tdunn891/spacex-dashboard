@@ -25,7 +25,7 @@
    <!-- Nav Bar -->
    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
       <a class="navbar-brand" href="#">
-         <img src="assets/img/rocket-icon-64.png" id="rocket-icon" />
+         <img src="assets/img/rocket-icon-64.png" alt="Rocket Icon" id="rocket-icon" />
          SpaceX Dashboard
       </a>
       <span class="navbar-text">
@@ -60,7 +60,8 @@
             <h2>Launch History</h2>
          </div>
          <div class="col-12">
-            <p style="margin-bottom: 0px">Explore SpaceX's launch history. Interact with chart segments to filter all
+            <p class="section-subtext">Explore SpaceX's launch history. Interact with chart
+               segments to filter all
                charts.</p>
             <!-- Data Count: Shows how many launch records are currently filtered  -->
             <div class="dc-data-count">
@@ -132,7 +133,7 @@
             </div>
             <!-- Modal with image of large mission patch, which is activated on click of small mission patch -->
             <!-- Modal also used for image of launch image, which is activated on click of rocket -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modal-content"
                aria-hidden="true">
                <div class="modal-dialog modal-xl">
                   <div class="modal-content" id=modal-content>
@@ -155,7 +156,7 @@
                Next Launch</h2>
          </div>
          <div class="col-12">
-            <p style="margin-left: 20px;">SpaceX streams all launches live via YouTube. Catch the next one... </p>
+            <p class="section-subtext">SpaceX streams all launches live via YouTube. Catch the next one... </p>
          </div>
          <div class="col-md-12 col-lg-6">
             <div class="table-responsive">
@@ -236,10 +237,11 @@
          <!-- Satellite icon source: https://www.iconfinder.com/icons/1587506/internet_line_satellite_icon -->
          <div class="heading-row">
             <img src="assets/img/satellite-icon.svg" class="heading-icon" alt="satellite icon" />
-            <h2 id="payload-analysis">Payload Analysis</h2>
+            <h2>Payload Analysis</h2>
          </div>
          <div class="col-12">
-            <p style="margin-bottom: 0px;"> SpaceX deploys payloads built by various manufacturers into different
+            <p class="section-subtext">SpaceX deploys payloads built by various
+               manufacturers into different
                orbits. Select a bar to filter all
                charts.</p>
             <!-- Data count showing how many payload records are currently filtered -->
@@ -296,13 +298,18 @@
       <div class="row">
          <div class="heading-row">
             <img src="assets/img/starman-icon.svg" class="heading-icon" alt="Starman Icon" />
-            <h2 id="starman">Dude, Where's My Car?</h2>
+            <h2>Dude, Where's My Car?</h2>
          </div>
-         <p style="margin-left: 20px;">Elon Musk's Tesla Roadster served as
-            the dummy payload for the February 2018 Falcon Heavy test flight and is now an artificial
-            satellite of the Sun. Starman, a mannequin dressed in a spacesuit, occupies the driver's seat.</p>
+      </div>
+      <div class="row">
+         <div class="col-12">
+            <p class="section-subtext">Elon Musk's Tesla Roadster served as
+               the dummy payload for the February 2018 Falcon Heavy test flight and is now an artificial
+               satellite of the Sun. Starman, a mannequin dressed in a spacesuit, occupies the driver's seat.</p>
+         </div>
+      </div>
+      <div class="row">
          <div class="col-lg-6">
-
             <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
                <div class="carousel-inner">
                   <div class="carousel-item active" data-interval="3000">
@@ -353,7 +360,6 @@
          </div>
       </div>
    </div>
-   </div>
 
    <!-- SCRIPTS -->
    <!-- d3 -->
@@ -402,26 +408,27 @@
          $(this).addClass('active');
       });
    </script>
-</body>
 
-<!-- Footer -->
-<footer>
-   <div class="container-fluid">
-      <div class="row">
-         <div class="col-12">
-            <!-- Footer list -->
-            <ul id="footer-list">
-               <!-- SpaceX API -->
-               <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
-               <!-- SpaceX Official Website -->
-               <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" title="SpaceX Official"><img
-                        src="assets/img/spacex_logo_white.png" alt="SpaceX Logo" style="padding-bottom: 8px" /></a></li>
-            </ul>
-            <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank"><img
-                     src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
+   <!-- Footer -->
+   <footer>
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-12">
+               <!-- Footer list -->
+               <ul id="footer-list">
+                  <!-- SpaceX API -->
+                  <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
+                  <!-- SpaceX Official Website -->
+                  <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip"
+                        title="SpaceX Official"><img src="assets/img/spacex_logo_white.png" id="spacex-logo"
+                           alt="SpaceX Logo"></a></li>
+               </ul>
+               <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank"><img
+                        src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
+            </div>
          </div>
       </div>
-   </div>
-</footer>
+   </footer>
+</body>
 
 </html>
