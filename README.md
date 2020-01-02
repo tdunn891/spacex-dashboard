@@ -19,12 +19,12 @@ User Needs:
 The target audience is SpaceX and space enthusiasts. Users should be able to:
 
 - Interact with SpaceX's launch and payload data
-- See images, exteral video links relating to each launch
+- See images, external video links relating to each launch
 - Find out about future launch details
 
 The following Opportunities/Problems table was used to determine which strategic priorities the UX efforts should address (in this order):
 
-| Opportunity/Problem                           | Importance     | Viablility/Feasibility  |
+| Opportunity/Problem                           | Importance     | Viability/Feasibility  |
 | --------------------------------------------- |:--------------:|:-----------------------:|
 | A. Display launch and payload data to the user| 5 | 5 |
 | B. Allow interactive filtering of data        | 5 | 5 |
@@ -60,7 +60,7 @@ In order to provide the value of the above features, the following content is re
 
 ##### Interaction Design
 
-The strategic goals of the site rests largely on the user's willingness to interact with the charts and data table. The advantage of a dashboard is being able to view many different dimensions or views of a dataset at the same time. To this end, a single-page structure was selectd as most appropriate. For example, on desktop screen sizes, this structure allows all four charts in the Launch Explorer section to be viewed at once. The user is able to see the effects their filtering has to all four charts at once. For mobile and tablet screens, the navigation bar collapses into a toggler to allow jumping to each section. A 'Reset' button is provided which allows a convenient way to reset filters on all charts.
+The strategic goals of the site rests largely on the user's willingness to interact with the charts and data table. The advantage of a dashboard is being able to view many different dimensions or views of a dataset at the same time. To this end, a single-page structure was selected as most appropriate. For example, on desktop screen sizes, this structure allows all four charts in the Launch Explorer section to be viewed at once. The user is able to see the effects their filtering has to all four charts at once. For mobile and tablet screens, the navigation bar collapses into a toggler to allow jumping to each section. A 'Reset' button is provided which allows a convenient way to reset filters on all charts.
 
 Consistency & Predictability:
 
@@ -83,9 +83,9 @@ The organising principle and order of the content is structured to ensure the us
 
 #### Skeleton
 
-The most easy to understand content - 'Launches By Rocket' - is located the top left of the page where the eye will naturally land first. The next chart - 'Launch Success' features simple, intiuitive two bar chart - green: success, red: failure. Once this foundational understanding is achieved, the user can see that the colours representing the rocket names are synchronised across the the next 2 charts - 'Launches By Year' and 'Launches By Site'. 
+The easiest chart to understand - 'Launches by Rocket' - is located at the top left of the page where the eye will naturally land first. The next chart - 'Launch Success' features simple, intuitive two bar chart - green: success, red: failure. Once this foundational understanding is achieved, the user can see that the colours representing the rocket names are synchronised across the next 2 charts - 'Launches by Year' and 'Launches by Site'. 
 
-Similarly in the Payload Analysis dashboard, the most basic chart 'Payloads by Type' is presented first, followed by 'Payloads by Orbit', then 'Payloads by Manufacturer'
+Similarly, in the Payload Analysis dashboard, the most basic chart 'Payloads by Type' is presented first, followed by 'Payloads by Orbit', then 'Payloads by Manufacturer'.
 
 ##### Wireframes
 
@@ -103,7 +103,7 @@ Fonts: A futuristic typeface was employed consistently for all text to convey a 
 
 User stories:
 
-- User 1 - "As a user interested in exploring the failures of SpaceX, I want to be able to be able to filter the dashboard by launch failures, to see when they happened, where they were and which rockets failed."
+- User 1 - "As a user interested in exploring the failures of SpaceX, I want to be able to be able to filter the dashboard by launch failures, to see when they happened, where they were, and which rockets failed."
 - User 2 - "As a user who loves to watch live streams and videos of SpaceX's launches, I want a way to filter flights to find specific launches and the related SpaceX YouTube links."
 - User 3 - "As a user interested in finding more about what SpaceX actually deploys into orbit, I want to interact with data concerning payloads."
 - User 4 - "As a user who wants to know about the upcoming launch, I want to see the key details, and don't want to miss the next live stream."
@@ -123,17 +123,17 @@ How the needs are met:
 - Feature 2: Interactive stacked bar chart displaying all launches to date year on year, grouped by rocket name
 - Feature 3: Interactive stacked bar chart displaying all launches to date broken down by launch pad site, grouped by rocket name
 - Feature 4: Interactive row chart displaying all launches broken down by launch outcome ie. Success or Failure
-- Feature 5: Paginated data table showing the dataset after any filters are applied (via Features 1,2,3,4). Some additional detail is provided, including an image of the mission patch, which on click, shows a higher resolution version of the image in a modal popup. For each launch, links the YouTube video, Wikipedia article and News Article are also populated. Clicking on the mission name displays launch detail text. Clicking on Rocket Name shows an image from the launch in a modal
+- Feature 5: Paginated data table showing the dataset after any filters are applied (via Features 1,2,3,4). Some additional detail is provided, including an image of the mission patch, which on click, shows a higher resolution version of the image in a modal popup. A Youtube link for each launch is also populated. Clicking on the mission name displays launch detail text. Clicking on Rocket Name shows an image from the launch in a modal
 - Feature 6: Next launch section showing key details, launchpad Google map with marker, and countdown until the next scheduled SpaceX launch. All data in this section is dynamically populated from the 'Upcoming Launch' SpaceX API endpoint
-- Feature 7: An 'Add Launch to Calendar' button is featured below the launch countdown, so that the user won't miss the next launch, and can be reminded to watch SpaceX's live stream. On clicking of this button, the user can select which calendar account the event is to be added to (Apple, Google, Outook, Yahoo). The calendar event fields (ie. Title, Location, Time, Details) are dynamically populated from the 'Upcoming Launch' SpaceX API endpoint.
-- Feature 8: Interactive row chart showing count of payloads SpaceX has deployed into each orbit type (eg Geostationary Transfer Orbit (GTO), Low Earth Ortit (LEO))
+- Feature 7: An 'Add Launch to Calendar' button is featured below the launch countdown, so that the user won't miss the next launch, and can be reminded to watch SpaceX's live stream. On clicking of this button, the user can select which calendar account the event is to be added to (Apple, Google, Outlook, Yahoo). The calendar event fields (ie. Title, Location, Time, Details) are dynamically populated from the 'Upcoming Launch' SpaceX API endpoint.
+- Feature 8: Interactive row chart showing count of payloads SpaceX has deployed into each orbit type (eg Geostationary Transfer Orbit (GTO), Low Earth Orbit (LEO))
 - Feature 9: Interactive row chart showing count of payloads manufactured by each manufacturer (eg SpaceX, Boeing, Airbus)
 - Feature 10: Interactive row chart showing count of payloads by payload type (eg Satellite or SpaceX vehicle)
 - Feature 11: Data table showing details of Elon Musk's Tesla Roadster that was launched into orbit in 2018. Details include the vehicle's current speed, days in orbit and current distance from Earth. This data is dynamically updated every 10 minutes via the SpaceX API Roadster endpoint
 
 ### Features Left to Implement
 
-Potential Feature 1 - A section called Landing Explorer which uses the Landings API endpoint (https://api.spacexdata.com/v3/landpads). This would be a stacked barchart showing the success/failure of landing attempts for each landing pad
+Potential Feature 1 - A section called Landing Explorer which uses the Landings API endpoint (https://api.spacexdata.com/v3/landpads). This would be a stacked bar chart showing the success/failure of landing attempts for each landing pad
 
 Potential Feature 2 - A link in data table to show a gallery of pictures from each launch (source image links available in the Launches API)
 
@@ -185,7 +185,7 @@ The following tests failed:
 | Issue No. | Test Name | Result | Issue | Resolution |
 |:-|:-|:-|:-|:-|
 |1|Data table readable on all devices|FAIL|On mobile devices, data table text was too large, causing table to extend horizontally beyond the viewport.|Font-size was decreased and table element was wrapped in a Bootstrap class 'table-responsive' which allows horizontal scrolling|
-|2|Charts appropriately sized for each device (Tablet)|FAIL|Payload graphs were taking up too much vertical space on a tablet. This was bad UX because the user couldn't see the effect filtering one chart had on the others| Issue:  Fix: This was corrected by using bootstrap responsive column sizing combined with column offsets.|
+|2|Charts appropriately sized for each device (Tablet)|FAIL|Payload graphs were taking up too much vertical space on a tablet. This was bad UX because the user couldn't see the effect filtering one chart had on the others|This was corrected by using bootstrap responsive column sizing combined with column offsets.|
 |3|No excessive amounts of text|FAIL|Next mission detail text was too long, hindering the key takeaway from the section.|This text was collapsed behind a 'Show Details' link, which can be expanded if the user wants to see this detail.
 
 Code Validation
@@ -230,7 +230,7 @@ The 'Print Filter' function was used extensively in ensuring correct dc.js dimen
 
 ### Media
 
-Images of the mission patches, launches and the Tesla Roadster were sourced from the API.
+Images of the mission patches, launches and the Tesla Roadster were sourced from the SpaceX API.
 
 ### Acknowledgements
 
