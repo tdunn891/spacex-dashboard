@@ -162,7 +162,7 @@ function showDataTable(ndx) {
         format: function(d) {
           return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" 
           class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" 
-           title="Click to enlarge" onclick="showModal('${d.links.mission_patch}')" /></a>`;
+           title="Show Large Patch" onclick="showModal('${d.links.mission_patch}')" /></a>`;
         }
       },
       {
@@ -475,7 +475,6 @@ function showModal(modalImage) {
 
 // Print Filter
 // Source: https://gist.github.com/xhinking/9341806
-
 function print_filter(filter) {
   var f = eval(filter);
   if (typeof f.length != "undefined") {
