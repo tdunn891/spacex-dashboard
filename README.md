@@ -1,4 +1,4 @@
-# Milestone Project 2 - SpaceX Dashboard
+# SpaceX Dashboard
 
 ## Project Purpose
 
