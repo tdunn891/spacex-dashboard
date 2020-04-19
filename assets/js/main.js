@@ -2,7 +2,7 @@
 
 function apiCall() {
 	// array of required fields
-	var fields = [
+	let fields = [
 		'flight_number',
 		'launch_year',
 		'launch_success',
@@ -13,7 +13,7 @@ function apiCall() {
 		'launch_site/site_name_long',
 	];
 	//   comma-separate fields, ready to be passed into url
-	var filters = '?filter=' + fields.join(',');
+	let filters = '?filter=' + fields.join(',');
 	filters = '';
 
 	// filters passed into url
@@ -36,7 +36,7 @@ function apiCall() {
 // Draw launch graphs
 function drawGraphs(data) {
 	// If first stage core is reused, change rocket name to 'Used Falcon 9'
-	for (var i = 0; i < getObjectLength(data); i++) {
+	for (let i = 0; i < getObjectLength(data); i++) {
 		if (data[i].rocket.first_stage.cores[0].reused === true) {
 			// change rocket name to Used Falcon 9
 			data[i].rocket.rocket_name = 'Used Falcon 9';
@@ -47,7 +47,7 @@ function drawGraphs(data) {
 	}
 
 	// Crossfilter data
-	var ndx = crossfilter(data);
+	let ndx = crossfilter(data);
 
 	// Pass crossfiltered data to charts and tables
 	showPastLaunches(ndx);
@@ -67,7 +67,7 @@ function drawGraphs(data) {
 // Launches by Site and Rocket
 function showLaunchesBySiteByRocket(ndx) {
 	// Dimension
-	var siteDimension = ndx.dimension(function (d) {
+	let siteDimension = ndx.dimension(function (d) {
 		//   Return shortened site names
 		switch (d.launch_site.site_name) {
 			case 'CCAFS SLC 40':
@@ -81,7 +81,7 @@ function showLaunchesBySiteByRocket(ndx) {
 		}
 	});
 	// Group
-	var rocketGroup = siteDimension
+	let rocketGroup = siteDimension
 		.group()
 		//  Custom reducer
 		.reduce(reduceAdd, reduceRemove, reduceInitial);
@@ -99,7 +99,7 @@ function showLaunchesBySiteByRocket(ndx) {
 	}
 
 	// Bar Chart
-	var barChart = dc
+	let barChart = dc
 		.barChart('#chartLaunchesBySiteAndRocket')
 		.width(500)
 		.height(470)
@@ -140,10 +140,10 @@ function showLaunchesBySiteByRocket(ndx) {
 // Data Table
 
 function showDataTable(ndx) {
-	var dimension1 = ndx.dimension(function (d) {
+	let dimension1 = ndx.dimension(function (d) {
 		return d.dim;
 	});
-	var dataTable = dc
+	let dataTable = dc
 		.dataTable('#dc-data-table')
 		.dimension(dimension1)
 		.height(200)
@@ -185,7 +185,7 @@ function showDataTable(ndx) {
 			{
 				label: 'Launch Site',
 				format: function (d) {
-					var site;
+					let site;
 					switch (d.launch_site.site_name) {
 						case 'CCAFS SLC 40':
 							site = 'Cape Canaveral';
@@ -211,9 +211,8 @@ function showDataTable(ndx) {
 				format: function (d) {
 					// if the flickr image array is not empty, insert link which triggers showModal()
 					if (d.links.flickr_images.length > 0) {
-						var details = d.details;
 						// get first image in array
-						var flickrImage1 = d.links.flickr_images[0];
+						let flickrImage1 = d.links.flickr_images[0];
 						// 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
 						return `<a href=javascript:void(0);
             data-toggle="tooltip" 
@@ -229,9 +228,9 @@ function showDataTable(ndx) {
 			{
 				label: 'Launch Result',
 				format: function (d) {
-					var launchOutcome = d.launch_success ? 'SUCCESS' : 'FAILURE';
-					var launchOutcomeClass = launchOutcome.toLowerCase();
-					var details = d.details;
+					let launchOutcome = d.launch_success ? 'SUCCESS' : 'FAILURE';
+					let launchOutcomeClass = launchOutcome.toLowerCase();
+					let details = d.details;
 					return `<span class='${launchOutcomeClass}' title="${details}">${launchOutcome}</span>`;
 				},
 			},
@@ -254,13 +253,13 @@ function showDataTable(ndx) {
 		.on('pretransition', display);
 
 	// Define how many records to show per page (5)
-	var ofs = 0;
-	var pag = 8;
+	let ofs = 0;
+	let pag = 8;
 
 	//  Pagination based on example: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
 	function update_offset() {
-		var totFilteredRecs = ndx.groupAll().value();
-		var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+		let totFilteredRecs = ndx.groupAll().value();
+		let end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
 		ofs =
 			ofs >= totFilteredRecs
 				? Math.floor((totFilteredRecs - 1) / pag) * pag
@@ -272,8 +271,8 @@ function showDataTable(ndx) {
 
 	//  Pagination based on example: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
 	function display() {
-		var totFilteredRecs = ndx.groupAll().value();
-		var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+		let totFilteredRecs = ndx.groupAll().value();
+		let end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
 		d3.select('#begin').text(end === 0 ? ofs : ofs + 1);
 		d3.select('#end').text(end);
 		d3.select('#last').attr('disabled', ofs - pag < 0 ? 'true' : null);
@@ -307,8 +306,8 @@ function showDataTable(ndx) {
 // Show how many launch records are currently included in crossfilter
 // Based on code from: https://dc-js.github.io/dc.js/docs/stock.html
 function showRowCount(ndx) {
-	var all = ndx.groupAll();
-	var dataCountTest = dc
+	let all = ndx.groupAll();
+	let dataCountTest = dc
 		.dataCount('.dc-data-count')
 		.crossfilter(ndx)
 		.groupAll(all)
@@ -323,8 +322,8 @@ function showRowCount(ndx) {
 // Show how many payload records are currently included in crossfilter
 // Based on code from: https://dc-js.github.io/dc.js/docs/stock.html
 function showRowCountPayloads(ndx) {
-	var all = ndx.groupAll();
-	var dataCountPayloads = dc
+	let all = ndx.groupAll();
+	let dataCountPayloads = dc
 		.dataCount('.dc-data-count-payloads')
 		.crossfilter(ndx)
 		.groupAll(all)
@@ -339,14 +338,14 @@ function showRowCountPayloads(ndx) {
 // Launches by Rocket Pie Chart
 function showPieChartByRocket(ndx) {
 	// Dimension
-	var rocketDimension = ndx.dimension(function (d) {
+	let rocketDimension = ndx.dimension(function (d) {
 		return d.rocket.rocket_name;
 	});
 	//   Group
-	var groupRocket = rocketDimension.group();
+	let groupRocket = rocketDimension.group();
 
 	// Pie Chart
-	var pieChart = dc
+	let pieChart = dc
 		.pieChart('#pieChartLaunchesByRocket')
 		.radius(120)
 		.minAngleForLabel(0.2)
@@ -368,9 +367,9 @@ function showPieChartByRocket(ndx) {
 
 function showPastLaunches(ndx) {
 	// Dimension
-	var yearDimension = ndx.dimension(dc.pluck('launch_year'));
+	let yearDimension = ndx.dimension(dc.pluck('launch_year'));
 	// Group
-	var rocketGroup = yearDimension
+	let rocketGroup = yearDimension
 		.group()
 		//  Custom reducer
 		.reduce(reduceAdd, reduceRemove, reduceInitial);
@@ -388,7 +387,7 @@ function showPastLaunches(ndx) {
 	}
 
 	// Stacked Bar Chart
-	var barChart = dc
+	let barChart = dc
 		.barChart('#chartLaunchesPerYearByVehicle')
 		.width(500)
 		.height(470)
@@ -430,11 +429,11 @@ function showPastLaunches(ndx) {
 
 // Bar chart showing Launch Results
 function showLaunchSuccessRate(ndx) {
-	var launchDimension = ndx.dimension(dc.pluck('launch_success'));
-	var launchGroup = launchDimension.group();
+	let launchDimension = ndx.dimension(dc.pluck('launch_success'));
+	let launchGroup = launchDimension.group();
 
 	// Launch Result row chart
-	var rowChart = dc
+	let rowChart = dc
 		.rowChart('#rowChartLaunchSuccess')
 		.width(500)
 		.height(110)
@@ -468,7 +467,7 @@ function showModal(modalImage) {
 // Print Filter
 // Source: https://gist.github.com/xhinking/9341806
 function print_filter(filter) {
-	var f = eval(filter);
+	let f = eval(filter);
 	if (typeof f.length != 'undefined') {
 	} else {
 	}
@@ -503,7 +502,7 @@ function getObjectLength(data) {
 
 // Upcoming Launh API GET Request
 function apiCallNextLaunch() {
-	var fields = [
+	let fields = [
 		'flight_number',
 		'launch_year',
 		'launch_success',
@@ -517,7 +516,7 @@ function apiCallNextLaunch() {
 		'links',
 		'details',
 	];
-	var filters = '?filter=' + fields.join(',');
+	let filters = '?filter=' + fields.join(',');
 	// append filters to url to minimise response size
 	d3.json(`https://api.spacexdata.com/v3/launches/next${filters}`).then(
 		function (data) {
@@ -573,22 +572,22 @@ function populateNextMissionCard(data) {
 // Populate CountDown until next Launch
 function populateCountDown(launchDateUnix) {
 	// multiple by 1000 to get milliseconds since Unix Epoch
-	var countDownDate = launchDateUnix * 1000;
+	let countDownDate = launchDateUnix * 1000;
 
 	// Below countdown function based on source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
 	// Update the count down every 1 second
-	var x = setInterval(function () {
+	let x = setInterval(function () {
 		// Get today's date and time
-		var now = new Date().getTime();
+		let now = new Date().getTime();
 		// Find the distance between now and the count down date
-		var distance = countDownDate - now;
+		let distance = countDownDate - now;
 		// Time calculations for days, hours, minutes and seconds
-		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-		var hours = Math.floor(
+		let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		let hours = Math.floor(
 			(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
 		);
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 		// Output the result in an element with id="demo"
 		document.getElementById('days').innerHTML = days;
 		document.getElementById('minutes').innerHTML = minutes;
@@ -624,23 +623,23 @@ function apiCallOneLaunchPad(site_id) {
 // Adds marker of next launch to google map
 function addNextLaunchMarkerToMap(data) {
 	// Get latitude and longitude of next launch site
-	var launchSite = data.site_name_long;
+	let launchSite = data.site_name_long;
 
 	//   Convert to object, ready for Google Maps API consumption
-	var latLngMarker = {
+	let latLngMarker = {
 		lat: data.location.latitude,
 		lng: data.location.longitude,
 	};
 
 	// Initialise google map, centered on launch site
-	var map = new google.maps.Map(document.getElementById('map'), {
+	let map = new google.maps.Map(document.getElementById('map'), {
 		center: latLngMarker,
 		mapTypeId: 'hybrid',
 		zoom: 11,
 	});
 
 	// create marker of launch site
-	var marker = new google.maps.Marker({
+	let marker = new google.maps.Marker({
 		position: latLngMarker,
 		map: map,
 		title: launchSite,
@@ -706,7 +705,7 @@ function apiCallPayloads() {
 // Draw payload graphs
 function drawPayloadGraphs(data) {
 	// Crossfilter payload data
-	var ndx = crossfilter(data);
+	let ndx = crossfilter(data);
 	//   Show graphs
 	showPayloadGraphs(ndx);
 	// Show count of currently filtered payload records
@@ -720,22 +719,22 @@ function drawPayloadGraphs(data) {
 // Show 3 Payload Graphs - Payload by Orbit, Payloads by Manufacturer, Payloads by Type
 function showPayloadGraphs(ndx) {
 	// Dimensions
-	var orbitDimension = ndx.dimension(dc.pluck('orbit'));
+	let orbitDimension = ndx.dimension(dc.pluck('orbit'));
 	// if null, return "N/A"
-	var manufacturerDimension = ndx.dimension(function (d) {
+	let manufacturerDimension = ndx.dimension(function (d) {
 		return d.manufacturer || 'N/A';
 	});
-	var payloadTypeDimension = ndx.dimension(function (d) {
+	let payloadTypeDimension = ndx.dimension(function (d) {
 		return d.payload_type || 'N/A';
 	});
 
 	// Groups
-	var groupOrbit = orbitDimension.group().reduceCount();
-	var groupManufacturer = manufacturerDimension.group().reduceCount();
-	var groupPayloadType = payloadTypeDimension.group().reduceCount();
+	let groupOrbit = orbitDimension.group().reduceCount();
+	let groupManufacturer = manufacturerDimension.group().reduceCount();
+	let groupPayloadType = payloadTypeDimension.group().reduceCount();
 
 	// Row Chart, Payload By Orbit
-	var rowChartPayloadByOrbit = dc
+	let rowChartPayloadByOrbit = dc
 		.rowChart('#barChartPayloadByOrbit')
 		.width(500)
 		.height(330)
@@ -751,7 +750,7 @@ function showPayloadGraphs(ndx) {
 		.group(groupOrbit);
 
 	// Row Chart, Payload By Manufacturer
-	var rowChartPayloadByManufacturer = dc
+	let rowChartPayloadByManufacturer = dc
 		.rowChart('#barChartPayloadManufacturer')
 		.width(500)
 		.height(330)
@@ -767,7 +766,7 @@ function showPayloadGraphs(ndx) {
 		.group(groupManufacturer);
 
 	// Row Chart, Payload By Type
-	var rowChartPayloadByType = dc
+	let rowChartPayloadByType = dc
 		.rowChart('#rowChartPayloadType')
 		.width(500)
 		.height(330)
