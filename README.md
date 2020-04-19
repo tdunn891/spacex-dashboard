@@ -1,8 +1,8 @@
-# Milestone Project 2 - SpaceX Dashboard
+# [SpaceX Dashboard](https://tdunn891.github.io/spacex-dashboard)
 
 ## Project Purpose
 
-This project aims to display data from the [SpaceX API](https://github.com/r-spacex/SpaceX-API) in an accessible, informative and interactive format. 
+This project aims to display data from the SpaceX [API](https://github.com/r-spacex/SpaceX-API) in an accessible, informative and interactive format. 
 
 
 ## User Experience Design
