@@ -240,8 +240,8 @@ function showDataTable(ndx) {
 					//   Youtube link
 					// icon source: https://www.iconspedia.com/icon/news-icon-22850.html
 					return `<a href='${d.links.video_link}' target="_blank">
-                  <img src="assets/img/youtube_social_red.png" class="link-icon-small" data-toggle="tooltip"
-                  alt="YouTube Link" title="Watch on YouTube"/></a>`;
+                  <img src="assets/img/youtube_social_red.png" class="link-icon-small" 
+                  alt="YouTube Link" /></a>`;
 				},
 			},
 		])
