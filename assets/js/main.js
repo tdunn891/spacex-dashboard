@@ -80,6 +80,7 @@ function showLaunchesBySiteByRocket(ndx) {
 				return d.launch_site.site_name;
 		}
 	});
+
 	// Group
 	let rocketGroup = siteDimension
 		.group()
@@ -161,18 +162,22 @@ function showDataTable(ndx) {
 				// anchor has href attribute of void(0) to force hand cursor on mouseover
 				format: function (d) {
 					return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" 
-          class='mission-patch-small menu_links' alt="Mission Patch" data-toggle="tooltip" 
-           title="Show Large Patch" onclick="showModal('${d.links.mission_patch}')" /></a>`;
+                  class='mission-patch-small menu_links' alt="Mission Patch"  
+                  onclick="showModal('${d.links.mission_patch}')" /></a>`;
 				},
 			},
 			{
 				label: 'Mission',
 				//   Function allows mission detail dropdown on click of mission name
 				format: function (d) {
-					return `<a class="mission-links" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
-           aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.mission_name}<span>
-           </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
-          ${d.details}</div></div>`;
+					if (d.details) {
+						return `<a class="mission-links" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
+                  aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.mission_name}</span>
+                  </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
+                  ${d.details}</div></div>`;
+					} else {
+						return `<span>${d.mission_name}</span>`;
+					}
 				},
 			},
 			{
@@ -202,7 +207,7 @@ function showDataTable(ndx) {
 					}
 
 					return `<span data-toggle="tooltip" title="${d.launch_site.site_name_long}">
-          ${site}</span>`;
+                  ${site}</span>`;
 				},
 			},
 
@@ -215,10 +220,9 @@ function showDataTable(ndx) {
 						let flickrImage1 = d.links.flickr_images[0];
 						// 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
 						return `<a href=javascript:void(0);
-            data-toggle="tooltip" 
-            class="rocket-link"
-            title="Show Launch Image" onclick="showModal('${flickrImage1}')">
-            ${d.rocket.rocket_name}</a>`;
+                     class="rocket-link"
+                     onclick="showModal('${flickrImage1}')">
+                     ${d.rocket.rocket_name}</a>`;
 					} else {
 						// else return without any link
 						return d.rocket.rocket_name;
@@ -500,12 +504,12 @@ function getObjectLength(data) {
 	return Object.keys(data).length;
 }
 
-// Upcoming Launh API GET Request
+// Upcoming Launch API GET Request
 function apiCallNextLaunch() {
 	let fields = [
 		'flight_number',
 		'launch_year',
-		'launch_success',
+		// 'launch_success',
 		'launch_date_local',
 		'launch_date_unix',
 		'launch_date_utc',
