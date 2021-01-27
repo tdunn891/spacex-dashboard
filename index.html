@@ -393,11 +393,11 @@
    <script>
       // Call APIs
       apiCallPastLaunches();
-      apiCallNextLaunch();
-      apiCallPayloads();
-      apiCallRoadster();
       // Activate tooltips
-      $(document).ready(function () {
+      $(document).ready(() => {
+         apiCallNextLaunch();
+         apiCallPayloads();
+         apiCallRoadster();
          $("body").tooltip({ selector: '[data-toggle=tooltip]' });
       });
       //  Change active Navigation Bar Item after click

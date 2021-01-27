@@ -37,15 +37,6 @@ const drawGraphs = (data) => {
 			data[i].rocket,
 			data[i].cores
 		);
-
-		// Previous
-		// if (data[i].rocket.first_stage.cores[0].reused === true) {
-		// change rocket name to Used Falcon 9
-		// data[i].rocket.rocket_name = 'Used Falcon 9';
-		// else if rocket name is Falcon 9, rename to New Falcon 9
-		// } else if (data[i].rocket.rocket_name === 'Falcon 9') {
-		// data[i].rocket.rocket_name = 'New Falcon 9';
-		// }
 	}
 	console.log(data);
 
@@ -57,8 +48,8 @@ const drawGraphs = (data) => {
 	showLaunchSuccessRate(ndx);
 	showPieChartByRocket(ndx);
 	showLaunchesBySiteByRocket(ndx);
-	// showDataTable(ndx);
-	// showRowCount(ndx);
+	showDataTable(ndx);
+	showRowCount(ndx);
 
 	// Hide loading spinners
 	$('.spinner-grow').hide();
@@ -168,9 +159,11 @@ const showDataTable = (ndx) => {
 				label: 'Patch',
 				// anchor has href attribute of void(0) to force hand cursor on mouseover
 				format: (d) => {
-					return `<a href=javascript:void(0);><img src="${d.links.mission_patch_small}" 
+					let pic = d.links.patch.small;
+					setTimeout(() => {}, 1000);
+					return `<a href=javascript:void(0);><img src="${pic}" 
                   class='mission-patch-small menu_links' alt="Mission Patch"  
-                  onclick="showModal('${d.links.mission_patch}')" /></a>`;
+                  onclick="showModal('${d.links.patch.large}')" /></a>`;
 				},
 			},
 			{
@@ -179,39 +172,25 @@ const showDataTable = (ndx) => {
 				format: (d) => {
 					if (d.details) {
 						return `<a class="mission-links" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
-                  aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.mission_name}</span>
+                  aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.name}</span>
                   </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
                   ${d.details}</div></div>`;
 					} else {
-						return `<span>${d.mission_name}</span>`;
+						return `<span>${d.name}</span>`;
 					}
 				},
 			},
 			{
 				label: 'Launch Date',
 				// Display first 10 characters of launch_date_local, to ignore the time
-				format: (d) => d.launch_date_local.substring(0, 10),
+				format: (d) => d.date_utc.substring(0, 10),
 			},
 			{
 				label: 'Launch Site',
 				format: (d) => {
-					let site;
-					switch (d.launch_site.site_name) {
-						case 'CCAFS SLC 40':
-							site = 'Cape Canaveral';
-							break;
-						case 'KSC LC 39A':
-							site = 'Kennedy Space Center';
-							break;
-						case 'VAFB SLC 4E':
-							site = 'Vandenburg';
-							break;
-						default:
-							site = d.launch_site.site_name;
-							break;
-					}
-					return `<span data-toggle="tooltip" title="${d.launch_site.site_name_long}">
-                  ${site}</span>`;
+					let siteName = convertLaunchpadIdToSiteName(d.launchpad);
+					return `<span data-toggle="tooltip" title="${siteName}">
+                  ${siteName}</span>`;
 				},
 			},
 
@@ -219,24 +198,24 @@ const showDataTable = (ndx) => {
 				label: 'Rocket',
 				format: (d) => {
 					// if the flickr image array is not empty, insert link which triggers showModal()
-					if (d.links.flickr_images.length > 0) {
+					if (d.links.flickr.original.length > 0) {
 						// get first image in array
-						let flickrImage1 = d.links.flickr_images[0];
+						let flickrImage1 = d.links.flickr.original[0];
 						// 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
 						return `<a href=javascript:void(0);
                      class="rocket-link"
                      onclick="showModal('${flickrImage1}')">
-                     ${d.rocket.rocket_name}</a>`;
+                     ${d.rocket_name}</a>`;
 					} else {
 						// else return without any link
-						return d.rocket.rocket_name;
+						return d.rocket_name;
 					}
 				},
 			},
 			{
 				label: 'Launch Result',
 				format: function (d) {
-					let launchOutcome = d.launch_success ? 'SUCCESS' : 'FAILURE';
+					let launchOutcome = d.success ? 'SUCCESS' : 'FAILURE';
 					let launchOutcomeClass = launchOutcome.toLowerCase();
 					let details = d.details;
 					return `<span class='${launchOutcomeClass}' title="${details}">${launchOutcome}</span>`;
@@ -247,7 +226,7 @@ const showDataTable = (ndx) => {
 				format: (d) => {
 					//   Youtube link
 					// icon source: https://www.iconspedia.com/icon/news-icon-22850.html
-					return `<a href='${d.links.video_link}' target="_blank">
+					return `<a href='${d.links.webcast}' target="_blank">
                   <img src="assets/img/youtube_social_red.png" class="link-icon-small" 
                   alt="YouTube Link" /></a>`;
 				},
