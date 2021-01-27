@@ -1,6 +1,6 @@
 // API Launches GET Request
 
-const apiCall = () => {
+const apiCallPastLaunches = () => {
 	const fields = [
 		'flight_number',
 		'launch_year',
@@ -14,6 +14,7 @@ const apiCall = () => {
 		'launch_site',
 	];
 
+	// TODO: update to past launches to v4
 	const filters = '?filter=' + fields.join(',');
 	const launchesURL = 'https://api.spacexdata.com/v3/launches/past';
 
@@ -463,8 +464,6 @@ const getObjectLength = (data) => Object.keys(data).length;
 const apiCallNextLaunch = () => {
 	const fields = [
 		'flight_number',
-		// 'launch_year',
-		// 'launch_success',
 		'launch_date_local',
 		'launch_date_unix',
 		'launch_date_utc',
@@ -532,7 +531,6 @@ const populateNextMissionCard = (data) => {
 			break;
 		case '5e9d0d95eda69973a809d1ec':
 			rocket_name =
-				// If rocket is reused, rename rocket to "Used Falcon 9"
 				(data.cores[0].reused === true ? 'Used' : 'New') + ' Falcon 9';
 			break;
 		case '5e9d0d95eda69974db09d1ed':
@@ -686,7 +684,7 @@ const formatThousandsComma = (num) =>
 
 // API Call Payloads
 const apiCallPayloads = () => {
-	payloadsURL = 'https://api.spacexdata.com/v3/payloads';
+	payloadsURL = 'https://api.spacexdata.com/v4/payloads';
 	fetch(payloadsURL)
 		.then((data) => data.json())
 		.then((data) => drawPayloadGraphs(data))
@@ -719,8 +717,10 @@ const showPayloadGraphs = (ndx) => {
 	// Dimensions
 	const orbitDimension = ndx.dimension(dc.pluck('orbit'));
 	// if null, return "N/A"
-	const manufacturerDimension = ndx.dimension((d) => d.manufacturer || 'N/A');
-	const payloadTypeDimension = ndx.dimension((d) => d.payload_type || 'N/A');
+	const manufacturerDimension = ndx.dimension(
+		(d) => d.manufacturers[0] || 'N/A'
+	);
+	const payloadTypeDimension = ndx.dimension((d) => d.type || 'N/A');
 
 	// Groups
 	const groupOrbit = orbitDimension.group().reduceCount();
