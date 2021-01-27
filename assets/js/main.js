@@ -16,7 +16,7 @@ const apiCallPastLaunches = () => {
 
 	// TODO: update to past launches to v4
 	const filters = '?filter=' + fields.join(',');
-	const launchesURL = 'https://api.spacexdata.com/v3/launches/past';
+	const launchesURL = 'https://api.spacexdata.com/v4/launches/past';
 
 	fetch(launchesURL + filters)
 		.then((data) => data.json())
@@ -33,14 +33,21 @@ const apiCallPastLaunches = () => {
 const drawGraphs = (data) => {
 	// If first stage core is reused, change rocket name to 'Used Falcon 9'
 	for (let i = 0; i < getObjectLength(data); i++) {
-		if (data[i].rocket.first_stage.cores[0].reused === true) {
-			// change rocket name to Used Falcon 9
-			data[i].rocket.rocket_name = 'Used Falcon 9';
-			// else if rocket name is Falcon 9, rename to New Falcon 9
-		} else if (data[i].rocket.rocket_name === 'Falcon 9') {
-			data[i].rocket.rocket_name = 'New Falcon 9';
-		}
+		data[i]['rocket_name'] = convertRocketIdToRocketName(
+			data[i].rocket,
+			data[i].cores
+		);
+
+		// Previous
+		// if (data[i].rocket.first_stage.cores[0].reused === true) {
+		// change rocket name to Used Falcon 9
+		// data[i].rocket.rocket_name = 'Used Falcon 9';
+		// else if rocket name is Falcon 9, rename to New Falcon 9
+		// } else if (data[i].rocket.rocket_name === 'Falcon 9') {
+		// data[i].rocket.rocket_name = 'New Falcon 9';
+		// }
 	}
+	console.log(data);
 
 	// Crossfilter data
 	const ndx = crossfilter(data);
@@ -50,8 +57,8 @@ const drawGraphs = (data) => {
 	showLaunchSuccessRate(ndx);
 	showPieChartByRocket(ndx);
 	showLaunchesBySiteByRocket(ndx);
-	showDataTable(ndx);
-	showRowCount(ndx);
+	// showDataTable(ndx);
+	// showRowCount(ndx);
 
 	// Hide loading spinners
 	$('.spinner-grow').hide();
@@ -60,30 +67,48 @@ const drawGraphs = (data) => {
 	dc.renderAll();
 };
 
+const convertLaunchpadIdToSiteName = (launchPadId) => {
+	let siteName;
+	switch (launchPadId) {
+		case '5e9e4502f509092b78566f87':
+			siteName = 'Vandenburg';
+			break;
+		case '5e9e4501f5090910d4566f83':
+			siteName = 'Vandenburg';
+			break;
+		case '5e9e4501f509094ba4566f84':
+			siteName = 'Cape Canaveral';
+			break;
+		case '5e9e4502f5090927f8566f85':
+			siteName = 'STLS';
+			break;
+		case '5e9e4502f5090995de566f86':
+			siteName = 'Kwajalein Atoll';
+			break;
+		case '5e9e4502f509094188566f88':
+			siteName = 'Kennedy Space Center';
+			break;
+		default:
+			siteName = 'Unknown';
+			break;
+	}
+	return siteName;
+};
+
 // Launches by Site and Rocket
 const showLaunchesBySiteByRocket = (ndx) => {
 	// Dimension
-	const siteDimension = ndx.dimension((d) => {
-		//   Return shortened site names
-		switch (d.launch_site.site_name) {
-			case 'CCAFS SLC 40':
-				return 'Cape Canaveral';
-			case 'KSC LC 39A':
-				return 'Kennedy Space Center';
-			case 'VAFB SLC 4E':
-				return 'Vandenberg';
-			default:
-				return d.launch_site.site_name;
-		}
-	});
+	const siteDimension = ndx.dimension((d) =>
+		convertLaunchpadIdToSiteName(d.launchpad)
+	);
 
 	// Custom Reducer
 	const reduceAdd = (i, d) => {
-		i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
+		i[d.rocket_name] = (i[d.rocket_name] || 0) + 1;
 		return i;
 	};
 	const reduceRemove = (i, d) => {
-		i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) - 1;
+		i[d.rocket_name] = (i[d.rocket_name] || 0) - 1;
 		return i;
 	};
 	const reduceInitial = () => ({});
@@ -321,7 +346,7 @@ const showRowCountPayloads = (ndx) => {
 // Launches by Rocket Pie Chart
 const showPieChartByRocket = (ndx) => {
 	// Dimension
-	const rocketDimension = ndx.dimension((d) => d.rocket.rocket_name);
+	const rocketDimension = ndx.dimension((d) => d.rocket_name);
 	//   Group
 	const groupRocket = rocketDimension.group();
 
@@ -346,15 +371,18 @@ const showPieChartByRocket = (ndx) => {
 
 const showPastLaunches = (ndx) => {
 	// Dimension
-	const yearDimension = ndx.dimension(dc.pluck('launch_year'));
+	// const yearDimension = ndx.dimension(dc.pluck('date_utc'));
+	const yearDimension = ndx.dimension((d) => {
+		return d.date_utc.slice(0, 4);
+	});
 
 	// Reducer
 	const reduceAdd = (i, d) => {
-		i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) + 1;
+		i[d.rocket_name] = (i[d.rocket_name] || 0) + 1;
 		return i;
 	};
 	const reduceRemove = (i, d) => {
-		i[d.rocket.rocket_name] = (i[d.rocket.rocket_name] || 0) - 1;
+		i[d.rocket_name] = (i[d.rocket_name] || 0) - 1;
 		return i;
 	};
 	const reduceInitial = (i, d) => ({});
@@ -364,7 +392,7 @@ const showPastLaunches = (ndx) => {
 		.group()
 		//  Custom reducer
 		.reduce(reduceAdd, reduceRemove, reduceInitial);
-
+	print_filter(rocketGroup);
 	// Stacked Bar Chart
 	const barChart = dc
 		.barChart('#chartLaunchesPerYearByVehicle')
@@ -384,7 +412,7 @@ const showPastLaunches = (ndx) => {
 		.gap(6)
 		.ordinalColors(['#FAF3DD', '#0D324D', '#73EEDC', '#A4A8D1'])
 		.renderTitle(true)
-		.title(function (d) {
+		.title((d) => {
 			return [
 				d.key,
 				'New Falcon 9: ' + (d.value['New Falcon 9'] || '0'),
@@ -400,7 +428,7 @@ const showPastLaunches = (ndx) => {
 
 // Bar chart showing Launch Results
 const showLaunchSuccessRate = (ndx) => {
-	const launchDimension = ndx.dimension(dc.pluck('launch_success'));
+	const launchDimension = ndx.dimension(dc.pluck('success'));
 	const launchGroup = launchDimension.group();
 
 	// Launch Result row chart
@@ -521,17 +549,15 @@ const apiGetOneRocket = (rocketId) => {
 		});
 };
 
-// Populate Next Mission Card
-const populateNextMissionCard = (data) => {
-	console.log('SWITCH: ' + data.rocket);
-	let rocket_name = '';
-	switch (data.rocket) {
+const convertRocketIdToRocketName = (rocketId, cores) => {
+	let rocket_name;
+	console.log(rocketId);
+	switch (rocketId) {
 		case '5e9d0d95eda69955f709d1eb':
 			rocket_name = 'Falcon 1';
 			break;
 		case '5e9d0d95eda69973a809d1ec':
-			rocket_name =
-				(data.cores[0].reused === true ? 'Used' : 'New') + ' Falcon 9';
+			rocket_name = (cores[0].reused === true ? 'Used' : 'New') + ' Falcon 9';
 			break;
 		case '5e9d0d95eda69974db09d1ed':
 			rocket_name = 'Falcon Heavy';
@@ -541,7 +567,15 @@ const populateNextMissionCard = (data) => {
 			break;
 		default:
 			rocket_name = 'NA';
+			break;
 	}
+	console.log('return: ' + rocket_name);
+	return rocket_name;
+};
+
+// Populate Next Mission Card
+const populateNextMissionCard = (data) => {
+	let rocket_name = convertRocketIdToRocketName(data.rocket, data.cores);
 
 	$('#flight-number').text(data.flight_number);
 	$('#mission-name').text(data.name);
