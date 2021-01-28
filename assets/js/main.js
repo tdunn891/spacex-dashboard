@@ -1,26 +1,44 @@
 // API Launches GET Request
 
 const apiCallPastLaunches = () => {
-	const fields = [
-		'flight_number',
-		'launch_year',
-		'launch_success',
-		'mission_name',
-		'launch_date_local',
-		'launch_date_utc',
-		'links',
-		'rocket',
-		'launch_site/site_name_long',
-		'launch_site',
-	];
+	// Specified Fields
+	const options = {
+		select: [
+			'cores',
+			'date_utc',
+			'date_local',
+			'details',
+			'flight_number',
+			'id',
+			'rocket',
+			'launchpad',
+			'links',
+			'name',
+			'success',
+		],
+		limit: 1000,
+	};
 
-	// TODO: update to past launches to v4
-	const filters = '?filter=' + fields.join(',');
-	const launchesURL = 'https://api.spacexdata.com/v4/launches/past';
+	const query = {
+		upcoming: false,
+	};
 
-	fetch(launchesURL + filters)
+	const pastLaunchesBody = {
+		query,
+		options,
+	};
+
+	const launchesURL = 'https://api.spacexdata.com/v4/launches/query';
+
+	fetch(launchesURL, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(pastLaunchesBody),
+	})
 		.then((data) => data.json())
-		.then((res) => drawGraphs(res))
+		.then((res) => drawGraphs(res.docs))
 		.catch((error) => {
 			alert(
 				'SpaceX API Launches Endpoint.\n\n' + error + '\n\nPlease retry later.'
