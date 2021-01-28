@@ -56,7 +56,6 @@ const drawGraphs = (data) => {
 			data[i].cores
 		);
 	}
-	console.log(data);
 
 	// Crossfilter data
 	const ndx = crossfilter(data);
@@ -498,7 +497,6 @@ const apiCallNextLaunch = () => {
 		'mission_id',
 		'links',
 		'details',
-		// V4
 		'launchpad',
 	];
 	const filters = '?filter=' + fields.join(',');
@@ -507,10 +505,7 @@ const apiCallNextLaunch = () => {
 	fetch(nextLaunchURL + filters)
 		.then((data) => data.json())
 		.then((res) => {
-			console.log('NEXTLAUNCH');
-			console.log(res);
 			// get details (lat/long) of launch pad
-			// apiCallOneLaunchPad(data.launch_site.site_id);
 			apiCallOneLaunchPad(res.launchpad);
 			// populate next mission's details
 			populateNextMissionCard(res);
@@ -534,8 +529,6 @@ const apiGetOneRocket = (rocketId) => {
 	fetch(oneRocketURL + rocketId)
 		.then((data) => data.json())
 		.then((res) => {
-			console.log('apiGETONEROCKET');
-			console.log(res);
 			return res;
 		})
 		.catch((error) => {
@@ -548,7 +541,6 @@ const apiGetOneRocket = (rocketId) => {
 
 const convertRocketIdToRocketName = (rocketId, cores) => {
 	let rocket_name;
-	console.log(rocketId);
 	switch (rocketId) {
 		case '5e9d0d95eda69955f709d1eb':
 			rocket_name = 'Falcon 1';
@@ -566,7 +558,6 @@ const convertRocketIdToRocketName = (rocketId, cores) => {
 			rocket_name = 'NA';
 			break;
 	}
-	console.log('return: ' + rocket_name);
 	return rocket_name;
 };
 
@@ -632,7 +623,6 @@ const apiCallOneLaunchPad = (site_id) => {
 	fetch(oneLaunchPadURL + site_id)
 		.then((data) => data.json())
 		.then((res) => {
-			console.log('ONELAUNCHPAD: ', res);
 			// Add marker of next launch to google map
 			addNextLaunchMarkerToMap(res);
 
@@ -652,13 +642,10 @@ const apiCallOneLaunchPad = (site_id) => {
 // Adds marker of next launch to google map
 const addNextLaunchMarkerToMap = (data) => {
 	// Get latitude and longitude of next launch site
-	// let launchSite = data.site_name_long;
 	const launchSite = data.name;
 
 	//   Convert to object, ready for Google Maps API consumption
 	const latLngMarker = {
-		// lat: data.location.latitude,
-		// lng: data.location.longitude,
 		lat: data.latitude,
 		lng: data.longitude,
 	};
@@ -715,10 +702,27 @@ const formatThousandsComma = (num) =>
 
 // API Call Payloads
 const apiCallPayloads = () => {
-	payloadsURL = 'https://api.spacexdata.com/v4/payloads';
-	fetch(payloadsURL)
+	//
+	const options = {
+		select: ['name', 'type', 'manufacturers', 'orbit'],
+		limit: 1000,
+	};
+
+	const payloadsBody = {
+		options,
+	};
+
+	payloadsURL = 'https://api.spacexdata.com/v4/payloads/query';
+
+	fetch(payloadsURL, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(payloadsBody),
+	})
 		.then((data) => data.json())
-		.then((data) => drawPayloadGraphs(data))
+		.then((data) => drawPayloadGraphs(data.docs))
 		.catch((error) => {
 			alert(
 				'Failed to get response from the SpaceX API Payloads Endpoint.\n\n' +
