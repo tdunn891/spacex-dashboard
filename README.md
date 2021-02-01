@@ -1,5 +1,9 @@
 # [SpaceX Dashboard](https://tdunn891.github.io/spacex-dashboard)
 
+[1]: https://tdunn891.github.io/spacex-dashboard
+[2]: https://github.com/tdunn891/spacex-dashboard/blob/master/assets/img/space-x.gif
+[![SpaceX Dashboard GIF][2]][1]
+
 ## Project Purpose
 
 This project aims to display data from the SpaceX [API](https://github.com/r-spacex/SpaceX-API) in an accessible, informative and interactive format. 
