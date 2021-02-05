@@ -174,13 +174,11 @@ const showDataTable = (ndx) => {
 			},
 			{
 				label: 'Patch',
-				// anchor has href attribute of void(0) to force hand cursor on mouseover
 				format: (d) => {
 					let pic = d.links.patch.small;
-					setTimeout(() => {}, 1000);
-					return `<a href=javascript:void(0); rel='noreferrer'><img src="${pic}" 
-                  class='mission-patch-small menu_links' alt="Mission Patch" width="50px" height="auto"  
-                  onclick="showModal('${d.links.patch.large}')" /></a>`;
+					return `<img src="${pic}" 
+                  class='mission-patch-small menu_links' alt="Mission Patch" height="50px"  
+                  onclick="showModal('${d.links.patch.large}')" />`;
 				},
 			},
 			{
@@ -188,10 +186,7 @@ const showDataTable = (ndx) => {
 				//   Function allows mission detail dropdown on click of mission name
 				format: (d) => {
 					if (d.details) {
-						return `<a class="mission-links" rel="noreferrer" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
-                  aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.name}</span>
-                  </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
-                  ${d.details}</div></div>`;
+						return `<span class="mission-links" data-toggle="tooltip" data-placement="right" title="${d.details}">${d.name}</span>`;
 					} else {
 						return `<span>${d.name}</span>`;
 					}
@@ -206,11 +201,9 @@ const showDataTable = (ndx) => {
 				label: 'Launch Site',
 				format: (d) => {
 					const siteName = convertLaunchpadIdToSiteName(d.launchpad);
-					return `<span data-toggle="tooltip" title="${siteName}">
-                  ${siteName}</span>`;
+					return `<span>${siteName}</span>`;
 				},
 			},
-
 			{
 				label: 'Rocket',
 				format: (d) => {
@@ -218,10 +211,7 @@ const showDataTable = (ndx) => {
 					if (d.links.flickr.original.length > 0) {
 						// get first image in array
 						const flickrImage1 = d.links.flickr.original[0];
-						// 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
-						return `<a href=javascript:void(0);
-                     rel="noreferrer"
-                     class="rocket-link"
+						return `<a class="rocket-link"
                      onclick="showModal('${flickrImage1}')">
                      ${d.rocket_name}</a>`;
 					} else {
@@ -530,10 +520,35 @@ const convertRocketIdToRocketName = (rocketId, cores) => {
 	return rocket_name;
 };
 
+const getNextLaunchRocketImage = (rocket_name) => {
+	let nextLaunchRocketImage;
+	switch (rocket_name) {
+		case 'Used Falcon 9' || 'Used Falcon 9':
+			nextLaunchRocketImage = 'assets/img/falcon9.png';
+			break;
+		case 'Falcon Heavy':
+			nextLaunchRocketImage = 'assets/img/falcon-heavy.png';
+			break;
+		case 'Starship':
+			nextLaunchRocketImage = 'assets/img/starship.png';
+			break;
+		default:
+			nextLaunchRocketImage = 'assets/img/falcon9.png';
+			break;
+	}
+	return nextLaunchRocketImage;
+};
+
 // Populate Next Mission Card
 const populateNextMissionCard = (data) => {
 	const rocket_name = convertRocketIdToRocketName(data.rocket, data.cores);
+	const nextLaunchRocketImage = getNextLaunchRocketImage(rocket_name);
 
+	$('#next-launch-rocket-image').attr('src', `${nextLaunchRocketImage}`);
+	$('#next-launch-patch').attr(
+		'onclick',
+		`showModal('${data.links.patch.large}')`
+	);
 	$('#flight-number').text(data.flight_number);
 	$('#mission-name').text(data.name);
 	$('#rocket').text(rocket_name);
@@ -667,7 +682,7 @@ const formatThousandsComma = (num) =>
 
 // API Call Payloads
 const apiCallPayloads = () => {
-	//
+	// Specified fields
 	const options = {
 		select: ['name', 'type', 'manufacturers', 'orbit'],
 		limit: 1000,
@@ -770,13 +785,19 @@ const showPayloadGraphs = (ndx) => {
 };
 
 apiCallPastLaunches();
-
 apiCallNextLaunch();
 apiCallPayloads();
 apiCallRoadster();
 $('body').tooltip({ selector: '[data-toggle=tooltip]' });
 
+// Toggle active link in nav bar
 $('.navbar-nav li').click((e) => {
 	$(e.currentTarget).addClass('active');
 	$(e.currentTarget).siblings().removeClass('active');
+});
+
+// Reset charts
+$('.filter-button').click(() => {
+	dc.filterAll();
+	dc.redrawAll();
 });

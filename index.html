@@ -5,6 +5,8 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <meta name="description"
+      content="SpaceX interactive dashboard for exploring Launch History, Next Launch, Payload Analysis and Roadster stats.">
 
    <!-- bootstrap -->
    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
@@ -67,8 +69,7 @@
                <span class="filter-count"></span>
                <span class="total-count"></span>
             </div>
-            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary filter-button"
-               rel="noreferrer">Reset</a>
+            <button class="btn btn-primary filter-button">Reset</button>
          </div>
       </div>
       <div class="row">
@@ -152,39 +153,27 @@
       <div class="row">
          <div class="heading-row">
             <img src="assets/img/falcon-heavy-icon.svg" class="heading-icon" alt="Falcon Heavy at Launchpad Icon" />
-            <h2>Next Launch</h2>
+            <h2>Next on the Launchpad</h2>
          </div>
          <div class="col-12">
             <p class="section-subtext">SpaceX streams all launches live via YouTube. Catch the next one... </p>
          </div>
-         <div class="col-md-12 col-lg-6">
-            <img id="next-launch-patch" src="" width="200" alt="Next Launch Patch">
-            <div class="table-responsive">
-               <table class="table table-dark" id="next-mission-table">
-                  <tr>
-                     <td align="right">Flight Number:</td>
-                     <td id="flight-number"></td>
-                  </tr>
-                  <tr>
-                     <td align="right">Mission:</td>
-                     <td id="mission-name"></td>
-                  </tr>
-                  <tr>
-                     <td align="right">Rocket:</td>
-                     <td id="rocket"></td>
-                  </tr>
-                  <tr>
-                     <td align="right">Launch Window:</td>
-                     <td id="launch-date"></td>
-                  </tr>
-                  <tr>
-                     <td align="right">Details:</td>
-                     <td>
-                        <div id="next-mission-detail"></div>
-                     </td>
-                  </tr>
-               </table>
-            </div>
+
+         <!-- Next Launch Rocket Image-->
+         <div class="col-md-1">
+            <img id="next-launch-rocket-image" src="" height="440px" alt="Next Launch Rocket">
+         </div>
+
+         <div class="col-md-11 col-lg-5">
+            <img id="next-launch-patch" src="" width="180" alt="Next Launch Patch">
+            <p>
+               Flight Number: <span id="flight-number"></span><br>
+               Rocket: <span id="rocket"></span><br>
+               Mission: <span id="mission-name"></span><br>
+               Launch Window: <span id="launch-date"></span>
+            </p>
+            <p id="next-mission-detail"></p>
+
             <!-- Next Launch Countdown -->
             <div data-toggle="tooltip" title="Counting down to the next launch..." id="nextLaunchCountdown">
                <table id="countdown-table">
@@ -217,6 +206,7 @@
                <span class="description"></span>
             </div>
          </div>
+
          <!-- Google Map of next launch pad location -->
          <div class="col-md-12 col-lg-6">
             <table class="table table-dark" id="launch-site-table">
@@ -244,14 +234,13 @@
          <div class="col-12">
             <p class="section-subtext">SpaceX deploys payloads built by various
                manufacturers into different
-               orbits. Select a bar to filter all
-               charts.</p>
+               orbits.</p>
             <!-- Data count showing how many payload records are currently filtered -->
             <div class="dc-data-count-payloads">
                <span class="filter-count"></span>
                <span class="total-count"></span>
             </div>
-            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary filter-button">Reset</a>
+            <button class="btn btn-primary filter-button">Reset</button>
          </div>
       </div>
       <div class="row">
@@ -371,11 +360,12 @@
                   <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" rel="noreferrer"
                         target="_blank">SpaceX API</a></li>
                   <!-- SpaceX Official Website -->
-                  <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" rel="noreferrer"
-                        title="SpaceX Official"><img src="assets/img/spacex_logo_white.png" id="spacex-logo"
-                           alt="SpaceX Logo"></a></li>
+                  <li>Rocket Images: <a href="https://www.spacex.com" target="_blank" data-toggle="tooltip"
+                        rel="noreferrer" title="SpaceX Official"><img src="assets/img/spacex_logo_white.png"
+                           id="spacex-logo" alt="SpaceX Logo"></a></li>
                </ul>
-               <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank" rel="noreferrer">
+               <p>Developed by Thomas Dunn for Educational Purposes <a href="https://github.com/tdunn891"
+                     target="_blank" rel="noreferrer">
                      <img src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
                <br>
             </div>
