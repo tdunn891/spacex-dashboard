@@ -24,13 +24,13 @@
 <body>
    <!-- Nav Bar -->
    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="#" rel="noreferrer">
          <img src="assets/img/rocket-icon-64.png" alt="Rocket Icon" id="rocket-icon" />
          SpaceX Dashboard
       </a>
       <span class="navbar-text">
          Data Source:
-         <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API
+         <a href="https://github.com/r-spacex/SpaceX-API" target="_blank" rel="noreferrer">SpaceX API
          </a>
       </span>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -41,10 +41,10 @@
          <!-- Nav links -->
          <ul class="navbar-nav">
             <li class="nav-item smooth-scroll active" data-toggle="collapse" data-target=".navbar-collapse.show"><a
-                  class="nav-link" href="#">LAUNCH HISTORY<span class="sr-only">(current)</span>
+                  class="nav-link" href="#" rel="noreferrer">LAUNCH HISTORY<span class="sr-only">(current)</span>
                </a></li>
             <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
-                  class="nav-link" href="#next-launch">NEXT LAUNCH</a></li>
+                  class="nav-link" href="#next-launch" rel="noreferrer">NEXT LAUNCH</a></li>
             <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
                   class="nav-link" href="#payload-analysis">PAYLOAD ANALYSIS</a></li>
             <li class="nav-item smooth-scroll" data-toggle="collapse" data-target=".navbar-collapse.show"><a
@@ -67,7 +67,8 @@
                <span class="filter-count"></span>
                <span class="total-count"></span>
             </div>
-            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary filter-button">Reset</a>
+            <a href="javascript:dc.filterAll(); dc.redrawAll();" class="btn btn-primary filter-button"
+               rel="noreferrer">Reset</a>
          </div>
       </div>
       <div class="row">
@@ -150,14 +151,14 @@
       <!-- Next Launch -->
       <div class="row">
          <div class="heading-row">
-            <img src="assets/img/falcon-heavy-icon.svg" class="heading-icon" alt="Falconn Heavy at Launchpad Icon" />
-            <h2>
-               Next Launch</h2>
+            <img src="assets/img/falcon-heavy-icon.svg" class="heading-icon" alt="Falcon Heavy at Launchpad Icon" />
+            <h2>Next Launch</h2>
          </div>
          <div class="col-12">
             <p class="section-subtext">SpaceX streams all launches live via YouTube. Catch the next one... </p>
          </div>
          <div class="col-md-12 col-lg-6">
+            <img id="next-launch-patch" src="" width="200" alt="Next Launch Patch">
             <div class="table-responsive">
                <table class="table table-dark" id="next-mission-table">
                   <tr>
@@ -177,8 +178,10 @@
                      <td id="launch-date"></td>
                   </tr>
                   <tr>
-                     <td align="right"></td>
-                     <td id="next-mission-detail"></td>
+                     <td align="right">Details:</td>
+                     <td>
+                        <div id="next-mission-detail"></div>
+                     </td>
                   </tr>
                </table>
             </div>
@@ -356,29 +359,49 @@
       </div>
    </div>
 
+   <!-- Footer -->
+   <footer>
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-12">
+               <br>
+               <!-- Footer list -->
+               <ul id="footer-list">
+                  <!-- SpaceX API -->
+                  <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" rel="noreferrer"
+                        target="_blank">SpaceX API</a></li>
+                  <!-- SpaceX Official Website -->
+                  <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip" rel="noreferrer"
+                        title="SpaceX Official"><img src="assets/img/spacex_logo_white.png" id="spacex-logo"
+                           alt="SpaceX Logo"></a></li>
+               </ul>
+               <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank" rel="noreferrer">
+                     <img src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
+               <br>
+            </div>
+         </div>
+      </div>
+   </footer>
+
    <!-- SCRIPTS -->
    <!-- d3 -->
-   <script src="https://d3js.org/d3.v5.min.js"></script>
+   <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+   <script src="assets/js/d3.v5.min.js"></script>
    <!-- crossfilter -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.0/crossfilter.min.js"
       integrity="sha256-se5X4Z76HEuvDAemWFPeAT8JQ9lSjCLxK2JMmlEH/1Q=" crossorigin="anonymous"></script>
-   <!-- dc.js -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.1.8/dc.min.js"
-      integrity="sha256-of0ppkk8kx6hoZFwjArlspZWjkNdWR/NUbGbQVvWr/c=" crossorigin="anonymous"></script>
-   <!-- jquery -->
-   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"></script>
+   <!-- dc.js 3.1.8 -->
+   <script src="assets/js/dc.min.js"></script>
+   <!-- jquery 3.5.1 -->
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
    <!-- popper.js -->
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"></script>
-   <!-- bootstrap -->
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"></script>
+   <!-- bootstrap 4.4.1 js-->
+   <script src="assets/js/bootstrap.min.js"></script>
    <!-- Google Maps API -->
-   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0&callback=initMap" -->
    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAL9c7KZMQ6Bxqj7xLL5JSCF3OwWgHuN0" async
       defer></script>
    <!-- calendar js -->
@@ -387,44 +410,7 @@
    <script src="https://apis.google.com/js/platform.js"></script>
    <!-- main.js -->
    <script src="assets/js/main.js"></script>
-   <script>
-      // Call APIs
-      apiCallPastLaunches();
-      // Activate tooltips
-      $(document).ready(() => {
-         apiCallNextLaunch();
-         apiCallPayloads();
-         apiCallRoadster();
-         $("body").tooltip({ selector: '[data-toggle=tooltip]' });
-      });
-      //  Change active Navigation Bar Item after click
-      var selector = '.navbar-nav li';
-      $(selector).on('click', function () {
-         $(selector).removeClass('active');
-         $(this).addClass('active');
-      });
-   </script>
 
-   <!-- Footer -->
-   <footer>
-      <div class="container-fluid">
-         <div class="row">
-            <div class="col-12">
-               <!-- Footer list -->
-               <ul id="footer-list">
-                  <!-- SpaceX API -->
-                  <li> Data Source: <a href="https://github.com/r-spacex/SpaceX-API" target="_blank">SpaceX API</a></li>
-                  <!-- SpaceX Official Website -->
-                  <li><a href="https://www.spacex.com" target="_blank" data-toggle="tooltip"
-                        title="SpaceX Official"><img src="assets/img/spacex_logo_white.png" id="spacex-logo"
-                           alt="SpaceX Logo"></a></li>
-               </ul>
-               <p>Developed by Thomas Dunn <a href="https://github.com/tdunn891" target="_blank"><img
-                        src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
-            </div>
-         </div>
-      </div>
-   </footer>
 </body>
 
 </html>

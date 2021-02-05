@@ -1,431 +1,434 @@
 /* HTML */
 html {
-   height: 100%;
-   scroll-behavior: smooth;
- }
- 
- /* Body Background  */
- body {
-   background-color: #222629;
-   background-attachment: fixed;
- }
- 
- /* Navbar Text */
- .navbar-text {
-   font-size: 14px;
- }
- 
- /* Column Padding */
- .col-lg-4 {
-   padding: 4px 5px;
- }
- 
- /* Charts */
- .chart {
-   background-color: #474b4f;
-   margin: 3px 1px;
-   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-           box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-   text-align: center;
- }
- 
- /* Axis tick lines, chart ticks */
- .axis path,
- .tick line {
-   stroke: whitesmoke !important;
- }
- 
- /* y-axis tick text */
- .tick text {
-   fill: whitesmoke;
-   font-size: 13px !important;
-   font-family: "Share Tech", sans-serif !important;
- }
- 
- /* Launch Success chart text */
- .dc-chart g.row text {
-   fill: whitesmoke;
- }
- 
- /* Axis Labels */
- .y-axis-label,
- .x-axis-label {
-   fill: whitesmoke !important;
-   font-size: 22px;
- }
- 
- /* Body & Footer Font and Colour */
- body,
- footer {
-   font-family: "Share Tech", sans-serif;
-   color: whitesmoke;
- }
- 
- /* Add Launch to Calendar Button */
- #addeventatc1 {
-   z-index: 0;
-   text-align: center;
-   display: block;
-   width: 180px;
-   margin: 16px auto 14px auto;
-   font-family: "Share Tech", sans-serif;
-   color: whitesmoke !important;
-   font-size: 14px;
-   background-color: #0275d8;
- }
- 
- /* Add Launch to Calendar button */
- #addeventatc1 .addeventatc_icon {
-   background-color: whitesmoke !important;
- }
- 
- /* Data Table */
- #dc-data-table {
-   text-align: center;
- }
- 
- /* Table Column Padding */
- .dc-table-column {
-   padding: 0 0 !important;
- }
- 
- /* Data Table content */
- .table td {
-   vertical-align: middle;
- }
- 
- /* Primary Buttons */
- .btn-primary {
-   text-transform: uppercase;
- }
- 
- /* Pagination buttons */
- #prev,
- #next {
-   margin-bottom: 2px;
-   padding: 0px 3px;
- }
- 
- /* Pagination button container */
- #paging {
-   text-align: right;
- }
- 
- /* Payload data count display */
- .dc-data-count,
- .dc-data-count-payloads {
-   float: left;
-   margin-top: 15px;
-   margin-right: 15px;
- }
- 
- .dc-legend-item text {
-   font-size: 15px;
-   fill: whitesmoke !important;
- }
- /* Launches by Site text */
- #chartLaunchesBySiteAndRocket .x.axis text {
-   font-size: 10px;
- }
- 
- /* countdown table */
- #countdown-table col {
-   width: 80px;
- }
- 
- /* unordered lists  */
- ul {
-   list-style-type: none;
- }
- 
- /* Reset button */
- .filter-button {
-   margin-top: 14px;
-   margin-right: 8px !important;
-   float: right;
- }
- 
- /* Launch Links list */
- .launch-links {
-   margin: 0 !important;
-   padding: 0;
-   text-align: center;
- }
- 
- /* Launch Link list items */
- .launch-links li {
-   display: inline;
- }
- 
- /* Data table link icons */
- .link-icon-small {
-   height: 20px;
- }
- 
- /* Data table mission patch images */
- .mission-patch-small {
-   width: 50px;
- }
- 
- /* Modal large mission patch images */
- .large-modal-image {
-   max-height: 400px;
-   width: auto;
- }
- 
- /* Launch success text */
- .success {
-   border: 1px solid whitesmoke;
-   padding: 2px 4px;
-   text-align: center;
-   background-color: green;
- }
- 
- /* Launch failure text */
- .failure {
-   border: 1px solid whitesmoke;
-   padding: 2px 4px;
-   background-color: darkred;
-   text-align: center;
- }
- 
- /* launch details */
- .details-card {
-   color: black;
-   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-           box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-   text-align: justify;
- }
- 
- /* Card body */
- .card-body {
-   padding: 0 22px;
-   font-size: 16px;
-   color: whitesmoke;
-   background-color: #474b4f;
- }
- 
- /* Modal content */
- .modal-content {
-   -webkit-box-align: center;
-       -ms-flex-align: center;
-           align-items: center;
-   background-color: black;
- }
- 
- /* padding around large mission patch in modal */
- .modal-content img {
-   margin: 20px auto;
- }
- 
- /* Next launch coundown */
- #nextLaunchCountdown table {
-   margin: 2px auto;
-   text-align: center;
-   font-size: 22px;
- }
- 
- /* Section subtext */
- .section-subtext{
-    margin-left: 0px;
- }
- 
- /* Countdown table */
- #counter td {
-   font-size: 2rem;
- }
- 
- /* Section Row */
- .heading-row {
-   width: 100%;
-   margin: 4px auto;
- }
- 
- /* Data table links */
- .mission-links,
- .rocket-link,
- #show-details {
-   color: deepskyblue;
- }
- 
- /* Horizontal Lines */
- hr {
-   color: whitesmoke;
-   border-color: whitesmoke;
-   background-color: whitesmoke;
- }
- 
- /* Section headings */
- h2 {
-   font-size: 26px;
-   text-transform: uppercase;
-   display: inline-block;
- }
- 
- /* Chart titles */
- h3 {
-   text-align: center;
-   display: block;
-   font-size: 22px;
-   margin: 4px auto;
-   padding-top: 10px;
-   padding-bottom: 2px;
- }
- 
- /* Navbar title */
- .navbar-brand {
-   font-size: 28px;
- }
- 
- /* Rocket Icon */
- #rocket-icon {
-   height: 48px;
-   margin: 2px 0 0 2px;
-   padding: 0 1px 0 4px;
- }
- 
- /* Navbar  */
- .navbar {
-   background-color: rgba(0, 0, 0, 0.85) !important;
-   padding: 2px 2px;
- }
- 
- /* heading icons */
- .heading-icon {
-   -webkit-filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg)
-     brightness(118%) contrast(100%);
-           filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg)
-     brightness(118%) contrast(100%);
-   margin-right: 12px;
-   width: 44px;
-   margin: 12px;
- }
- 
- /* Next Mission Table, Next Launch Site Table */
- #next-mission-table tbody,
- #launch-site-table tbody {
-   font-size: 17px;
- }
- 
- /* Roadster Table */
- #roadster-table tbody {
-   font-size: 17px;
- }
- 
- /* Roadster image carousel */
- #carouselExampleInterval {
-   margin: 10px auto;
- }
- 
- /* Footer */
- footer {
-   width: 100%;
-   bottom: 0;
-   background-color: black;
-   margin: auto;
-   height: -webkit-fit-content;
-   height: -moz-fit-content;
-   height: fit-content;
-   text-align: center;
- }
- 
- /* Footer list */
- #footer-list {
-   list-style-type: none;
-   padding: 16px 2px 0 2px;
- }
- 
- /* Footer list items */
- #footer-list li {
-   padding: 0 16px;
-   vertical-align: middle;
-   display: inline-block;
- }
- 
- /* Github Logo */
- #github-logo {
-    height: 18px;
- }
- 
- #spacex-logo {
-    padding-bottom: 8px;
- }
- 
- /* Google Map */
- #map {
-   width: 100%;
-   height: 50vh !important;
- }
- 
- /* Pie Chart Labels */
- .pie-label {
-   font-size: 25px !important;
-   stroke: rgba(0, 0, 0, 1);
-   stroke-width: 1px;
- }
- 
- /* Labels for row charts */
- .titlerow {
-   text-anchor: start;
-   font-size: 17px !important;
- }
- 
- /* Launch Success Chart */
- #rowChartLaunchSuccess {
-   margin-top: 10px;
- }
- 
- /* Axis label */
- .x text {
-   fill: whitesmoke;
- }
- 
- /* Offset anchors so navbar doesn't overlap headings */
- a:target {
-   display: block;
-   position: relative;
-   top: -74px;
-   visibility: hidden;
- }
- 
- /* Meida Queries */
- /* Mobile and above */
- @media (min-width: 320px) {
-   .mission-patch-small {
-     width: 30px;
-   }
- }
- 
- /* Medium Tablet and above */
- @media (min-width: 768px) {
-   #map {
-     height: 40vh;
-   }
-   .mission-patch-small {
-     width: 50px;
-   }
- }
- 
- /* Large Tablet, Small Laptops and above */
- @media (min-width: 992px) {
-   #map {
-     height: 100%;
-   }
- }
- 
- /* Medium Tablet and smaller */
- @media (max-width: 768px) {
-   /* Hide navbar text */ 
-   .navbar-text {
-     display: none;
-   }
-   /* Decrease rocket-icon width */
-   #rocket-icon {
-      width: 40px;
-      height: auto;
-   }
-   /* Decrease table font size */
-   .dc-table-head, tbody {
-     font-size: 12px;
-   }
- }
+	height: 100%;
+	scroll-behavior: smooth;
+}
+
+/* Body Background  */
+body {
+	background-color: #222629;
+	background-attachment: fixed;
+}
+
+/* Navbar Text */
+.navbar-text {
+	font-size: 14px;
+}
+
+/* Column Padding */
+.col-lg-4 {
+	padding: 4px 5px;
+}
+
+/* Charts */
+.chart {
+	background-color: #474b4f;
+	margin: 3px 1px;
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+	text-align: center;
+}
+
+/* Axis tick lines, chart ticks */
+.axis path,
+.tick line {
+	stroke: whitesmoke !important;
+}
+
+/* y-axis tick text */
+.tick text {
+	fill: whitesmoke;
+	font-size: 13px !important;
+	font-family: 'Share Tech', sans-serif !important;
+}
+
+/* Launch Success chart text */
+.dc-chart g.row text {
+	fill: whitesmoke;
+}
+
+/* Axis Labels */
+.y-axis-label,
+.x-axis-label {
+	fill: whitesmoke !important;
+	font-size: 22px;
+}
+
+/* Body & Footer Font and Colour */
+body,
+footer {
+	font-family: 'Share Tech', sans-serif;
+	color: whitesmoke;
+}
+
+/* Add Launch to Calendar Button */
+#addeventatc1 {
+	z-index: 0;
+	text-align: center;
+	display: block;
+	width: 180px;
+	margin: 16px auto 14px auto;
+	font-family: 'Share Tech', sans-serif;
+	color: whitesmoke !important;
+	font-size: 14px;
+	background-color: #0275d8;
+}
+
+/* Add Launch to Calendar button */
+#addeventatc1 .addeventatc_icon {
+	background-color: whitesmoke !important;
+}
+
+/* Data Table */
+#dc-data-table {
+	text-align: center;
+}
+
+/* Table Column Padding */
+.dc-table-column {
+	padding: 0 0 !important;
+}
+
+/* Data Table content */
+.table td {
+	vertical-align: middle;
+}
+
+/* Primary Buttons */
+.btn-primary {
+	text-transform: uppercase;
+}
+
+/* Pagination buttons */
+#prev,
+#next {
+	margin-bottom: 2px;
+	padding: 0px 3px;
+}
+
+/* Pagination button container */
+#paging {
+	text-align: right;
+}
+
+/* Payload data count display */
+.dc-data-count,
+.dc-data-count-payloads {
+	float: left;
+	margin-top: 15px;
+	margin-right: 15px;
+}
+
+.dc-legend-item text {
+	font-size: 15px;
+	fill: whitesmoke !important;
+}
+/* Launches by Site text */
+#chartLaunchesBySiteAndRocket .x.axis text {
+	font-size: 10px;
+}
+
+/* countdown table */
+#countdown-table col {
+	width: 80px;
+}
+
+/* unordered lists  */
+ul {
+	list-style-type: none;
+}
+
+/* Reset button */
+.filter-button {
+	margin-top: 14px;
+	margin-right: 8px !important;
+	float: right;
+}
+
+/* Launch Links list */
+.launch-links {
+	margin: 0 !important;
+	padding: 0;
+	text-align: center;
+}
+
+/* Launch Link list items */
+.launch-links li {
+	display: inline;
+}
+
+/* Data table link icons */
+.link-icon-small {
+	height: 20px;
+	width: 20px;
+}
+
+/* Data table mission patch images */
+.mission-patch-small {
+	width: 50px;
+	margin: 6px auto;
+}
+
+/* Modal large mission patch images */
+.large-modal-image {
+	max-height: 400px;
+	width: auto;
+}
+
+/* Launch success text */
+.success {
+	border: 1px solid whitesmoke;
+	padding: 2px 4px;
+	text-align: center;
+	background-color: green;
+}
+
+/* Launch failure text */
+.failure {
+	border: 1px solid whitesmoke;
+	padding: 2px 4px;
+	background-color: darkred;
+	text-align: center;
+}
+
+/* launch details */
+.details-card {
+	color: black;
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+	text-align: justify;
+}
+
+/* Card body */
+.card-body {
+	padding: 0 22px;
+	font-size: 16px;
+	color: whitesmoke;
+	background-color: #474b4f;
+}
+
+/* Modal content */
+.modal-content {
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	background-color: black;
+}
+
+/* padding around large mission patch in modal */
+.modal-content img {
+	margin: 20px auto;
+}
+
+/* Next launch coundown */
+#nextLaunchCountdown table {
+	margin: 2px auto;
+	text-align: center;
+	font-size: 22px;
+}
+
+/* Section subtext */
+.section-subtext {
+	margin-left: 0px;
+}
+
+/* Countdown table */
+#counter td {
+	font-size: 2rem;
+}
+
+/* Section Row */
+.heading-row {
+	width: 100%;
+	margin: 4px auto;
+}
+
+/* Data table links */
+.mission-links,
+.rocket-link,
+#show-details {
+	color: deepskyblue;
+}
+
+/* Horizontal Lines */
+hr {
+	color: whitesmoke;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}
+
+/* Section headings */
+h2 {
+	font-size: 26px;
+	text-transform: uppercase;
+	display: inline-block;
+}
+
+/* Chart titles */
+h3 {
+	text-align: center;
+	display: block;
+	font-size: 22px;
+	margin: 4px auto;
+	padding-top: 10px;
+	padding-bottom: 2px;
+}
+
+/* Navbar title */
+.navbar-brand {
+	font-size: 28px;
+}
+
+/* Rocket Icon */
+#rocket-icon {
+	height: 48px;
+	margin: 2px 0 0 2px;
+	padding: 0 1px 0 4px;
+}
+
+/* Navbar  */
+.navbar {
+	background-color: rgba(0, 0, 0, 0.85) !important;
+	padding: 2px 2px;
+}
+
+/* heading icons */
+.heading-icon {
+	-webkit-filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg)
+		brightness(118%) contrast(100%);
+	filter: invert(99%) sepia(36%) saturate(2%) hue-rotate(285deg)
+		brightness(118%) contrast(100%);
+	margin-right: 12px;
+	width: 44px;
+	margin: 12px;
+}
+
+/* Next Mission Table, Next Launch Site Table */
+#next-mission-table tbody,
+#launch-site-table tbody {
+	font-size: 17px;
+}
+
+/* Roadster Table */
+#roadster-table tbody {
+	font-size: 17px;
+}
+
+/* Roadster image carousel */
+#carouselExampleInterval {
+	margin: 10px auto;
+}
+
+/* Footer */
+footer {
+	width: 100%;
+	bottom: 0;
+	background-color: black;
+	margin: auto;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
+	height: fit-content;
+	text-align: center;
+}
+
+/* Footer list */
+#footer-list {
+	list-style-type: none;
+	padding: 16px 2px 0 2px;
+}
+
+/* Footer list items */
+#footer-list li {
+	padding: 0 16px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+/* Github Logo */
+#github-logo {
+	height: 18px;
+}
+
+#spacex-logo {
+	padding-bottom: 8px;
+}
+
+/* Google Map */
+#map {
+	width: 100%;
+	height: 50vh !important;
+}
+
+/* Pie Chart Labels */
+.pie-label {
+	font-size: 25px !important;
+	stroke: rgba(0, 0, 0, 1);
+	stroke-width: 1px;
+}
+
+/* Labels for row charts */
+.titlerow {
+	text-anchor: start;
+	font-size: 17px !important;
+}
+
+/* Launch Success Chart */
+#rowChartLaunchSuccess {
+	margin-top: 10px;
+}
+
+/* Axis label */
+.x text {
+	fill: whitesmoke;
+}
+
+/* Offset anchors so navbar doesn't overlap headings */
+a:target {
+	display: block;
+	position: relative;
+	top: -74px;
+	visibility: hidden;
+}
+
+/* Meida Queries */
+/* Mobile and above */
+@media (min-width: 320px) {
+	.mission-patch-small {
+		width: 30px;
+	}
+}
+
+/* Medium Tablet and above */
+@media (min-width: 768px) {
+	#map {
+		height: 40vh;
+	}
+	.mission-patch-small {
+		width: 50px;
+	}
+}
+
+/* Large Tablet, Small Laptops and above */
+@media (min-width: 992px) {
+	#map {
+		height: 100%;
+	}
+}
+
+/* Medium Tablet and smaller */
+@media (max-width: 768px) {
+	/* Hide navbar text */
+	.navbar-text {
+		display: none;
+	}
+	/* Decrease rocket-icon width */
+	#rocket-icon {
+		width: 40px;
+		height: auto;
+	}
+	/* Decrease table font size */
+	.dc-table-head,
+	tbody {
+		font-size: 12px;
+	}
+}

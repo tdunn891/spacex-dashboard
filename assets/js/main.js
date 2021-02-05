@@ -1,4 +1,4 @@
-// API Launches GET Request
+// API Past Launches POST Request
 
 const apiCallPastLaunches = () => {
 	// Specified Fields
@@ -154,14 +154,14 @@ const showLaunchesBySiteByRocket = (ndx) => {
 			].join('\n');
 		})
 		.margins({ top: 30, left: 60, right: 20, bottom: 70 })
-		.x(d3.scaleOrdinal());
+		.x(d3.scaleBand());
 };
 
 // Data Table
 
 const showDataTable = (ndx) => {
 	const dimension1 = ndx.dimension((d) => d.dim);
-	let dataTable = dc
+	const dataTable = dc
 		.dataTable('#dc-data-table')
 		.dimension(dimension1)
 		.height(200)
@@ -178,8 +178,8 @@ const showDataTable = (ndx) => {
 				format: (d) => {
 					let pic = d.links.patch.small;
 					setTimeout(() => {}, 1000);
-					return `<a href=javascript:void(0);><img src="${pic}" 
-                  class='mission-patch-small menu_links' alt="Mission Patch"  
+					return `<a href=javascript:void(0); rel='noreferrer'><img src="${pic}" 
+                  class='mission-patch-small menu_links' alt="Mission Patch" width="50px" height="auto"  
                   onclick="showModal('${d.links.patch.large}')" /></a>`;
 				},
 			},
@@ -188,7 +188,7 @@ const showDataTable = (ndx) => {
 				//   Function allows mission detail dropdown on click of mission name
 				format: (d) => {
 					if (d.details) {
-						return `<a class="mission-links" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
+						return `<a class="mission-links" rel="noreferrer" data-toggle="collapse" href="#collapse${d.flight_number}" aria-expanded="false"
                   aria-controls="collapseExample"><span data-toggle="tooltip" title="Show Details">${d.name}</span>
                   </a><div class="collapse" id="collapse${d.flight_number}"><div class="card card-body details-card">
                   ${d.details}</div></div>`;
@@ -205,7 +205,7 @@ const showDataTable = (ndx) => {
 			{
 				label: 'Launch Site',
 				format: (d) => {
-					let siteName = convertLaunchpadIdToSiteName(d.launchpad);
+					const siteName = convertLaunchpadIdToSiteName(d.launchpad);
 					return `<span data-toggle="tooltip" title="${siteName}">
                   ${siteName}</span>`;
 				},
@@ -217,9 +217,10 @@ const showDataTable = (ndx) => {
 					// if the flickr image array is not empty, insert link which triggers showModal()
 					if (d.links.flickr.original.length > 0) {
 						// get first image in array
-						let flickrImage1 = d.links.flickr.original[0];
+						const flickrImage1 = d.links.flickr.original[0];
 						// 'javascript: void(0)' ensures that the cursor changes to a hand, to indicate clickability
 						return `<a href=javascript:void(0);
+                     rel="noreferrer"
                      class="rocket-link"
                      onclick="showModal('${flickrImage1}')">
                      ${d.rocket_name}</a>`;
@@ -231,10 +232,10 @@ const showDataTable = (ndx) => {
 			},
 			{
 				label: 'Launch Result',
-				format: function (d) {
-					let launchOutcome = d.success ? 'SUCCESS' : 'FAILURE';
-					let launchOutcomeClass = launchOutcome.toLowerCase();
-					let details = d.details;
+				format: (d) => {
+					const launchOutcome = d.success ? 'SUCCESS' : 'FAILURE';
+					const launchOutcomeClass = launchOutcome.toLowerCase();
+					const details = d.details;
 					return `<span class='${launchOutcomeClass}' title="${details}">${launchOutcome}</span>`;
 				},
 			},
@@ -243,8 +244,9 @@ const showDataTable = (ndx) => {
 				format: (d) => {
 					//   Youtube link
 					// icon source: https://www.iconspedia.com/icon/news-icon-22850.html
-					return `<a href='${d.links.webcast}' target="_blank">
-                  <img src="assets/img/youtube_social_red.png" class="link-icon-small" 
+					return `<a href='${d.links.webcast}' target="_blank" rel="noreferrer">
+                  <img src="assets/img/youtube_social_red.png" class="link-icon-small"
+                  width="20px" height="20px"
                   alt="YouTube Link" /></a>`;
 				},
 			},
@@ -263,7 +265,7 @@ const showDataTable = (ndx) => {
 	//  Pagination based on example: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
 	function update_offset() {
 		let totFilteredRecs = ndx.groupAll().value();
-		let end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+		// let end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
 		ofs =
 			ofs >= totFilteredRecs
 				? Math.floor((totFilteredRecs - 1) / pag) * pag
@@ -293,14 +295,14 @@ const showDataTable = (ndx) => {
 	}
 
 	//  Go to Next page
-	$('#next').on('click', function () {
+	$('#next').on('click', () => {
 		ofs += pag;
 		update_offset();
 		dataTable.redraw();
 	});
 
 	//  Go to Previous
-	$('#prev').on('click', function () {
+	$('#prev').on('click', () => {
 		ofs -= pag;
 		update_offset();
 		dataTable.redraw();
@@ -318,7 +320,7 @@ const showRowCount = (ndx) => {
 		.html({
 			some:
 				'<strong>%filter-count</strong> of <strong>%total-count</strong> launches selected' +
-				" | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset</a>",
+				" | <a href='javascript:dc.filterAll(); dc.redrawAll();' rel='noreferrer'>Reset</a>",
 			all: 'Showing all launches',
 		});
 };
@@ -334,7 +336,7 @@ const showRowCountPayloads = (ndx) => {
 		.html({
 			some:
 				'<strong>%filter-count</strong> of <strong>%total-count</strong> payloads selected' +
-				" | <a href='javascript:dc.filterAll(); dc.redrawAll();'>Reset</a>",
+				" | <a href='javascript:dc.filterAll(); dc.redrawAll();' rel='noreferrer'>Reset</a>",
 			all: 'Showing all payloads',
 		});
 };
@@ -367,7 +369,6 @@ const showPieChartByRocket = (ndx) => {
 
 const showPastLaunches = (ndx) => {
 	// Dimension
-	// const yearDimension = ndx.dimension(dc.pluck('date_utc'));
 	const yearDimension = ndx.dimension((d) => {
 		return d.date_utc.slice(0, 4);
 	});
@@ -388,7 +389,6 @@ const showPastLaunches = (ndx) => {
 		.group()
 		//  Custom reducer
 		.reduce(reduceAdd, reduceRemove, reduceInitial);
-	print_filter(rocketGroup);
 	// Stacked Bar Chart
 	const barChart = dc
 		.barChart('#chartLaunchesPerYearByVehicle')
@@ -417,7 +417,7 @@ const showPastLaunches = (ndx) => {
 				'Falcon 1: ' + (d.value['Falcon 1'] || '0'),
 			].join('\n');
 		})
-		.x(d3.scaleOrdinal())
+		.x(d3.scaleBand())
 		.xAxis()
 		.tickFormat(d3.format('0000'));
 };
@@ -486,23 +486,9 @@ const getObjectLength = (data) => Object.keys(data).length;
 
 // Upcoming Launch API GET Request
 const apiCallNextLaunch = () => {
-	const fields = [
-		'flight_number',
-		'launch_date_local',
-		'launch_date_unix',
-		'launch_date_utc',
-		'rocket',
-		'launch_site',
-		'mission_name',
-		'mission_id',
-		'links',
-		'details',
-		'launchpad',
-	];
-	const filters = '?filter=' + fields.join(',');
 	const nextLaunchURL = 'https://api.spacexdata.com/v4/launches/next';
 
-	fetch(nextLaunchURL + filters)
+	fetch(nextLaunchURL)
 		.then((data) => data.json())
 		.then((res) => {
 			// get details (lat/long) of launch pad
@@ -517,23 +503,6 @@ const apiCallNextLaunch = () => {
 				'SpaceX API Next Launch Endpoint Error.\n\n' +
 					error +
 					'\n\nPlease retry later.'
-			);
-			console.warn(error);
-		});
-};
-
-// v4 TEST
-// currently not used
-const apiGetOneRocket = (rocketId) => {
-	oneRocketURL = 'https://api.spacexdata.com/v4/rockets/';
-	fetch(oneRocketURL + rocketId)
-		.then((data) => data.json())
-		.then((res) => {
-			return res;
-		})
-		.catch((error) => {
-			alert(
-				'SpaceX API One Rocket Endpoint. Please try against later.' + error
 			);
 			console.warn(error);
 		});
@@ -563,19 +532,15 @@ const convertRocketIdToRocketName = (rocketId, cores) => {
 
 // Populate Next Mission Card
 const populateNextMissionCard = (data) => {
-	let rocket_name = convertRocketIdToRocketName(data.rocket, data.cores);
+	const rocket_name = convertRocketIdToRocketName(data.rocket, data.cores);
 
 	$('#flight-number').text(data.flight_number);
 	$('#mission-name').text(data.name);
 	$('#rocket').text(rocket_name);
 	$('#launch-date').text(data.date_local);
 	// $('#launch-site').text(data.launch_site.site_name_long);
-	$('#next-mission-detail')
-		.html(`<a data-toggle="collapse" href="#collapseDetails" role="button"
-      aria-expanded="false" aria-controls="collapseExample" id="show-details">Show Details >></a>
-      <div class="collapse" id="collapseDetails">
-      <div>${data.details}</div></div>`);
-
+	$('#next-mission-detail').text(data.details);
+	$('#next-launch-patch').attr('src', `${data.links.patch.small}`);
 	// Add To Calendar event details
 	$('#addeventatc1 .title').text(`SpaceX Launch - ${data.name}`);
 	$('#addeventatc1 .start').text(data.date_utc);
@@ -586,13 +551,13 @@ const populateNextMissionCard = (data) => {
 };
 
 // Populate CountDown until next Launch
-function populateCountDown(launchDateUnix) {
+const populateCountDown = (launchDateUnix) => {
 	// multiple by 1000 to get milliseconds since Unix Epoch
 	let countDownDate = launchDateUnix * 1000;
 
 	// Below countdown function based on source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown
 	// Update the count down every 1 second
-	let x = setInterval(function () {
+	let x = setInterval(() => {
 		// Get today's date and time
 		let now = new Date().getTime();
 		// Find the distance between now and the count down date
@@ -615,7 +580,7 @@ function populateCountDown(launchDateUnix) {
 			document.getElementById('nextLaunchCountdown').innerHTML = 'Expired';
 		}
 	}, 1000);
-}
+};
 
 // API Call to get location of next launch
 const apiCallOneLaunchPad = (site_id) => {
@@ -803,3 +768,15 @@ const showPayloadGraphs = (ndx) => {
 		.dimension(payloadTypeDimension)
 		.group(groupPayloadType);
 };
+
+apiCallPastLaunches();
+
+apiCallNextLaunch();
+apiCallPayloads();
+apiCallRoadster();
+$('body').tooltip({ selector: '[data-toggle=tooltip]' });
+
+$('.navbar-nav li').click((e) => {
+	$(e.currentTarget).addClass('active');
+	$(e.currentTarget).siblings().removeClass('active');
+});
