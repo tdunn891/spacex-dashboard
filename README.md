@@ -1,5 +1,9 @@
 # [SpaceX Dashboard](https://tdunn891.github.io/spacex-dashboard)
 
+[1]: https://tdunn891.github.io/spacex-dashboard
+[2]: https://github.com/tdunn891/spacex-dashboard/blob/master/assets/img/space-x.gif
+[![SpaceX Dashboard GIF][2]][1]
+
 ## Project Purpose
 
 This project aims to display data from the SpaceX [API](https://github.com/r-spacex/SpaceX-API) in an accessible, informative and interactive format. 
@@ -144,18 +148,18 @@ Potential Feature 2 - A link in data table to show a gallery of pictures from ea
 - [Chrome Developer Tools](https://developers.google.com/web/tools/chrome-devtools) : used extensively to ensure device responsiveness.
 - [Crossfilter](https://github.com/crossfilter/crossfilter) : used to filter and manipulate data before it is fed into dc.js charts. 
 - [CSS3](https://www.w3.org/Style/CSS/Overview.en.html) : styling language.
-- [d3.js](https://d3js.org/) : javascript library for manipulating documents based on data.
-- [dc.js](https://dc-js.github.io/dc.js/) : javascript charting library working on top of d3.js, used to create all charts and data table.
+- [d3.js](https://d3js.org/) : JavaScript library for manipulating documents based on data.
+- [dc.js](https://dc-js.github.io/dc.js/) : JavaScript charting library working on top of d3.js, used to create all charts and data table.
 - [Favicon Generator](https://www.favicon-generator.org) : used to create a 16x16 icon, displayed next to page title in browser.
 - [Git](https://git-scm.com/) : used for version control.
 - [GitHub](https://github.com) : used to host code repository and to deploy project (via GitHub Pages).
 - [Google Fonts](https://fonts.google.com/) : used for the main font - 'Share Tech'.
-- [Google Maps Javascript API](https://developers.google.com/maps/documentation) : used to display Google Map and add marker at the site of the next launch.
+- [Google Maps JavaScript API](https://developers.google.com/maps/documentation) : used to display Google Map and add marker at the site of the next launch.
 - [HTML5](https://www.w3.org/html) : used for page structure.
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) : used for to show modal on form submission, dynamically resize navbar height
 - [jQuery](https://jquery.com/) : used to select and manipulate HTML elements.
 - [Paint S](https://apps.apple.com/us/app/paint-s/id736473980?mt=12) : used for wireframe development.
-- [popper.js](https://popper.js.org/) : javascript library required to allow Bootstrap tooltips.
+- [popper.js](https://popper.js.org/) : JavaScript library required to allow Bootstrap tooltips.
 - [Postman](https://www.getpostman.com/) : used extensively for developing and refining the API GET Requests.
 - [SpaceX API](https://github.com/r-spacex/SpaceX-API) : used as source data for dashboards.
 - [VSCode](https://code.visualstudio.com) : preferred code editor.
@@ -194,7 +198,7 @@ Code Validation
 |:-|:-|
 CSS ([W3C](https://jigsaw.w3.org/css-validator/))|PASS|
 HTML ([W3C](https://validator.w3.org/))|PASS|
-Javascript with no major errors ([jshint](https://jshint.com/))|PASS|
+JavaScript with no major errors ([jshint](https://jshint.com/))|PASS|
 
 
 ## Deployment
@@ -220,7 +224,7 @@ The underlying data for all charts is sourced from the SpaceX API, using the fol
 
 The 'Add to Calendar' functionality in the 'Next Launch' section was sourced from: https://www.addevent.com/add-to-calendar-button
 
-The Javascript controlling the Countdown to Next Launch was sourced from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown 
+The JavaScript controlling the Countdown to Next Launch was sourced from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_countdown 
 
 The pagination of the data table in the 'Launch Explorer' section was sourced from: https://github.com/dc-js/dc.js/blob/master/web/examples/table-pagination.html
 
