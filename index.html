@@ -161,11 +161,11 @@
 
          <!-- Next Launch Rocket Image-->
          <div class="col-md-1">
-            <img id="next-launch-rocket-image" src="" height="440px" alt="Next Launch Rocket">
+            <img id="next-launch-rocket-image" class="lazyload" data-src="" height="440px" alt="Next Launch Rocket">
          </div>
 
          <div class="col-md-11 col-lg-5">
-            <img id="next-launch-patch" src="" width="180" alt="Next Launch Patch">
+            <img id="next-launch-patch" class="lazyload" data-src="" width="180" alt="Next Launch Patch">
             <p>
                Flight Number: <span id="flight-number"></span><br>
                Rocket: <span id="rocket"></span><br>
@@ -301,26 +301,30 @@
       </div>
       <div class="row">
          <div class="col-lg-6">
-            <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+            <div id="carouselInterval" class="carousel slide" data-ride="carousel">
                <div class="carousel-inner">
                   <div class="carousel-item active" data-interval="3000">
-                     <img src="assets/img/roadster/roadster-1.jpg" class="d-block w-100" alt="Elon's Tesla Roadster">
+                     <img data-src="assets/img/roadster/roadster-1.jpg" class="d-block w-100 lazyload"
+                        alt="Elon's Tesla Roadster">
                   </div>
                   <div class="carousel-item" data-interval="3000">
-                     <img src="assets/img/roadster/roadster-2.jpg" class="d-block w-100" alt="Elon's Tesla Roadster">
+                     <img data-src="assets/img/roadster/roadster-2.jpg" class="d-block w-100 lazyload"
+                        alt="Elon's Tesla Roadster">
                   </div>
                   <div class="carousel-item" data-interval="3000">
-                     <img src="assets/img/roadster/roadster-3.jpg" class="d-block w-100" alt="Elon's Tesla Roadster">
+                     <img data-src="assets/img/roadster/roadster-3.jpg" class="d-block w-100 lazyload"
+                        alt="Elon's Tesla Roadster">
                   </div>
                   <div class="carousel-item" data-interval="3000">
-                     <img src="assets/img/roadster/roadster-4.jpg" class="d-block w-100" alt="Elon's Tesla Roadster">
+                     <img data-src="assets/img/roadster/roadster-4.jpg" class="d-block w-100 lazyload"
+                        alt="Elon's Tesla Roadster">
                   </div>
                </div>
-               <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+               <a class="carousel-control-prev" href="#carouselInterval" role="button" data-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="sr-only">Previous</span>
                </a>
-               <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+               <a class="carousel-control-next" href="#carouselInterval" role="button" data-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="sr-only">Next</span>
                </a>
@@ -361,12 +365,13 @@
                         target="_blank">SpaceX API</a></li>
                   <!-- SpaceX Official Website -->
                   <li>Rocket Images: <a href="https://www.spacex.com" target="_blank" data-toggle="tooltip"
-                        rel="noreferrer" title="SpaceX Official"><img src="assets/img/spacex_logo_white.png"
-                           id="spacex-logo" alt="SpaceX Logo"></a></li>
+                        rel="noreferrer" title="SpaceX Official"><img data-src="assets/img/spacex_logo_white.png"
+                           id="spacex-logo" class="lazyload" alt="SpaceX Logo"></a></li>
                </ul>
                <p>Developed by Thomas Dunn for Educational Purposes <a href="https://github.com/tdunn891"
                      target="_blank" rel="noreferrer">
-                     <img src="assets/img/github-32.png" id="github-logo" alt="GitHub Logo" /></a></p>
+                     <img data-src="assets/img/github-32.png" id="github-logo" class="lazyload" alt="GitHub Logo" /></a>
+               </p>
                <br>
             </div>
          </div>
@@ -398,6 +403,8 @@
    <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
    <!-- YouTube -->
    <script src="https://apis.google.com/js/platform.js"></script>
+   <!-- lazysizes -->
+   <script src="assets/js/lazysizes.min.js" async=""></script>
    <!-- main.js -->
    <script src="assets/js/main.js"></script>
 

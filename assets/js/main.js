@@ -47,6 +47,9 @@ const apiCallPastLaunches = () => {
 		});
 };
 
+// SpaceX API Call Past Launches
+apiCallPastLaunches();
+
 // Draw launch graphs
 const drawGraphs = (data) => {
 	// If first stage core is reused, change rocket name to 'Used Falcon 9'
@@ -62,9 +65,9 @@ const drawGraphs = (data) => {
 
 	// Pass crossfiltered data to charts and tables
 	showPastLaunches(ndx);
-	showLaunchSuccessRate(ndx);
 	showPieChartByRocket(ndx);
 	showLaunchesBySiteByRocket(ndx);
+	showLaunchSuccessRate(ndx);
 	showDataTable(ndx);
 	showRowCount(ndx);
 
@@ -176,8 +179,8 @@ const showDataTable = (ndx) => {
 				label: 'Patch',
 				format: (d) => {
 					let pic = d.links.patch.small;
-					return `<img src="${pic}" 
-                  class='mission-patch-small menu_links' alt="Mission Patch" height="50px"  
+					return `<img data-src="${pic}" 
+                  class='mission-patch-small menu_links lazyload' alt="Mission Patch" height="50px"  
                   onclick="showModal('${d.links.patch.large}')" />`;
 				},
 			},
@@ -235,7 +238,7 @@ const showDataTable = (ndx) => {
 					//   Youtube link
 					// icon source: https://www.iconspedia.com/icon/news-icon-22850.html
 					return `<a href='${d.links.webcast}' target="_blank" rel="noreferrer">
-                  <img src="assets/img/youtube_social_red.png" class="link-icon-small"
+                  <img data-src="assets/img/youtube_social_red.png" class="link-icon-small lazyload"
                   width="20px" height="20px"
                   alt="YouTube Link" /></a>`;
 				},
@@ -544,7 +547,7 @@ const populateNextMissionCard = (data) => {
 	const rocket_name = convertRocketIdToRocketName(data.rocket, data.cores);
 	const nextLaunchRocketImage = getNextLaunchRocketImage(rocket_name);
 
-	$('#next-launch-rocket-image').attr('src', `${nextLaunchRocketImage}`);
+	$('#next-launch-rocket-image').attr('data-src', `${nextLaunchRocketImage}`);
 	$('#next-launch-patch').attr(
 		'onclick',
 		`showModal('${data.links.patch.large}')`
@@ -555,7 +558,7 @@ const populateNextMissionCard = (data) => {
 	$('#launch-date').text(data.date_local);
 	// $('#launch-site').text(data.launch_site.site_name_long);
 	$('#next-mission-detail').text(data.details);
-	$('#next-launch-patch').attr('src', `${data.links.patch.small}`);
+	$('#next-launch-patch').attr('data-src', `${data.links.patch.small}`);
 	// Add To Calendar event details
 	$('#addeventatc1 .title').text(`SpaceX Launch - ${data.name}`);
 	$('#addeventatc1 .start').text(data.date_utc);
@@ -784,10 +787,11 @@ const showPayloadGraphs = (ndx) => {
 		.group(groupPayloadType);
 };
 
-apiCallPastLaunches();
+// Calls to SpaceX-API
 apiCallNextLaunch();
 apiCallPayloads();
 apiCallRoadster();
+
 $('body').tooltip({ selector: '[data-toggle=tooltip]' });
 
 // Toggle active link in nav bar
